@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { SlidingImageObject } from "../domain";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 function Slider() {
-  const slides = [
+  const slides: Array<SlidingImageObject> = [
     {
       URL: "https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg?size=626&ext=jpg&ga=GA1.1.1880011253.1699315200&semt=sph",
     },
