@@ -14,8 +14,9 @@ function CardSection() {
       <div className="flex flex-wrap -mx-1 lg:-mx-4">
         {Array(10)
           .fill(5)
-          .map((x) => (
+          .map((x, index) => (
             <Card
+              key={index}
               cardId={"1"}
               URL={"https://picsum.photos/600/400/?random"}
               venue={"Jawpur, Dumdum"}
