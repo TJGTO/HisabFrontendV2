@@ -18,7 +18,7 @@ function CustomTable({ tablehead, tablerows }: TableProps) {
               >
                 <Typography
                   color="blue-gray"
-                  className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
+                  className="flex items-center justify-between gap-2 font-normal leading-none opacity-70 dark:text-white"
                 >
                   {head.label}{" "}
                   {index !== tablehead.length - 1 && (

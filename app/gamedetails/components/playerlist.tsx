@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import CreateIcon from "@mui/icons-material/Create";
 import AddIcon from "@mui/icons-material/Add";
+import Tabs from "./tabs";
 import {
   Card,
   CardHeader,
@@ -13,27 +14,12 @@ import {
   Typography,
   Button,
   Chip,
-  Tabs,
   Tab,
   Avatar,
   IconButton,
   Tooltip,
 } from "@mui/material";
 
-const TABS = [
-  {
-    label: "All",
-    value: "all",
-  },
-  {
-    label: "Monitored",
-    value: "monitored",
-  },
-  {
-    label: "Unmonitored",
-    value: "unmonitored",
-  },
-];
 const TableheaderArr = [
   { id: 1, label: "Member" },
   { id: 2, label: "Function" },
@@ -109,12 +95,15 @@ function Playerist() {
               <div className="flex items-center gap-3">
                 <Avatar src={img} alt={name} />
                 <div className="flex flex-col">
-                  <Typography color="blue-gray" className="font-normal">
+                  <Typography
+                    color="blue-gray"
+                    className="font-normal dark:text-white"
+                  >
                     {name}
                   </Typography>
                   <Typography
                     color="blue-gray"
-                    className="font-normal opacity-70"
+                    className="font-normal opacity-70 dark:text-white"
                   >
                     {email}
                   </Typography>
@@ -123,12 +112,15 @@ function Playerist() {
             </td>
             <td className={classes}>
               <div className="flex flex-col">
-                <Typography color="blue-gray" className="font-normal">
+                <Typography
+                  color="blue-gray"
+                  className="font-normal dark:text-white"
+                >
                   {job}
                 </Typography>
                 <Typography
                   color="blue-gray"
-                  className="font-normal opacity-70"
+                  className="font-normal opacity-70 dark:text-white"
                 >
                   {org}
                 </Typography>
@@ -138,13 +130,16 @@ function Playerist() {
               <div className="w-max">{/*chip section*/}</div>
             </td>
             <td className={classes}>
-              <Typography color="blue-gray" className="font-normal">
+              <Typography
+                color="blue-gray"
+                className="font-normal dark:text-white"
+              >
                 {date}
               </Typography>
             </td>
             <td className={classes}>
               <Tooltip title="Edit User">
-                <CreateIcon className="h-4 w-4" />
+                <CreateIcon className="h-4 w-4 dark:text-white" />
               </Tooltip>
             </td>
           </tr>
@@ -155,36 +150,39 @@ function Playerist() {
     settablerows([...arr]);
   };
   return (
-    <Card className="h-full w-full">
-      <div>
-        <div className="mb-8 flex items-center justify-between gap-8">
+    <Card className="h-full w-full dark:bg-slate-800">
+      <div className="ml-2 mr-2 mt-2">
+        <div className="mb-4 flex items-center justify-between gap-8">
           <div>
-            <Typography variant="h5" color="blue-gray">
-              Members list
+            <Typography
+              variant="h5"
+              color="blue-gray"
+              className="dark:text-white"
+            >
+              Jawpur , Dumdum Turf
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-              See information about all members
+              Date - 11/11/23 , 7:00PM - 9:00PM
+            </Typography>
+            <Typography color="gray" className="mt-1 font-normal">
+              Total Member - 18
             </Typography>
           </div>
           <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-            <Button variant="outlined">view all</Button>
+            <Button variant="outlined">Register</Button>
             <Button className="flex items-center gap-3">
               <AddIcon className="h-4 w-4" /> Add member
             </Button>
           </div>
         </div>
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          <Tabs value="all" className="w-full md:w-max">
-            {TABS.map(({ label, value }) => (
-              <Tab key={value} label={label} />
-            ))}
-          </Tabs>
-          <div className="w-full md:w-72">
+          <Tabs />
+          {/* <div className="w-full md:w-72">
             <Input placeholder="Search" />
-          </div>
+          </div> */}
         </div>
       </div>
-      <div className="overflow-scroll px-0">
+      <div className="overflow-x-scroll px-0 ml-2 mr-2 mt-2">
         {tablerows.length > 0 && (
           <CustomTable tablehead={TableheaderArr} tablerows={tablerows} />
         )}
