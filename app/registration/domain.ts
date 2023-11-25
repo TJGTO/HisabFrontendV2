@@ -10,5 +10,6 @@ export const registrationSchema = yup
     cpassword: yup
       .string()
       .oneOf([yup.ref("password")], "Your passwords do not match."),
+    checked: yup.boolean(),
   })
   .required();
