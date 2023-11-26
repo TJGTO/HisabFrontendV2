@@ -1,5 +1,8 @@
+"use client";
+
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { usePathname } from "next/navigation";
 import NavBar from "./nav/nav";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -14,10 +17,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
   return (
     <html lang="en">
       <body>
-        <NavBar />
+        {pathname != "/registration" && <NavBar />}
         <div>{children}</div>
       </body>
     </html>
