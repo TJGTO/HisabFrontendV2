@@ -1,9 +1,13 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Errormessage from "../../Common/FormComponents/errormessage";
 import { registrationSchema } from "../domain";
+import { increment } from "../../../lib/slices/authorization";
+import { RootState, AppDispatch } from "../../../lib/store";
 
 function RegistrationForm() {
   const {
@@ -16,7 +20,12 @@ function RegistrationForm() {
   });
 
   const checked = watch("checked");
+  const counter = useSelector((state: RootState) => state.authorization.count);
+  const dispatch = useDispatch<AppDispatch>();
   const onSubmit = (data: any) => console.log(data);
+  useEffect(() => {
+    console.log(counter);
+  }, [counter]);
 
   return (
     <div>
@@ -152,6 +161,9 @@ function RegistrationForm() {
                 <button
                   type="submit"
                   disabled={!checked}
+                  onClick={(e) => {
+                    e.preventDefault(), dispatch(increment());
+                  }}
                   className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Create an account
