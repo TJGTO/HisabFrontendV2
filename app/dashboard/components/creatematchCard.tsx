@@ -1,13 +1,22 @@
-"use client";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../../../lib/store";
+import { openDialog } from "../../../lib/slices/dashboard";
 
-import { CardObject, Creator } from "../domain";
-
-function Card({ cardId, URL, venue, date, creator }: CardObject) {
+function CreatematchCard() {
+  const dispatch = useDispatch<AppDispatch>();
+  const openMatchCreateDialog = () => {
+    dispatch(openDialog());
+  };
   return (
     <div className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
       <article className="overflow-hidden rounded-lg shadow-lg">
         <a href="#">
-          <img alt="Placeholder" className="block h-40 w-full" src={URL} />
+          <img
+            alt="Placeholder"
+            className="block h-40 w-full"
+            src={"https://picsum.photos/32/32/?random"}
+          />
         </a>
 
         <header className="flex items-center justify-between dark:bg-slate-800 bg-white leading-tight p-2 md:p-4">
@@ -16,24 +25,20 @@ function Card({ cardId, URL, venue, date, creator }: CardObject) {
               className="no-underline hover:underline text-black dark:text-white"
               href="#"
             >
-              {venue}
+              {"Weekend Football Community"}
             </a>
           </h1>
-          <p className="text-black dark:text-white text-sm">{date}</p>
+          <p className="text-black dark:text-white text-sm">{""}</p>
         </header>
 
         <footer className="flex items-center justify-between dark:bg-slate-800 bg-white leading-none p-2 md:p-4">
           <a
             className="flex items-center no-underline hover:underline text-black dark:text-white"
-            href="#"
+            onClick={(e) => openMatchCreateDialog()}
           >
-            <img
-              alt="Placeholder"
-              className="block rounded-full"
-              src={creator.profileImageURL}
-            />
+            <AddCircleOutlineIcon />
             <p className="ml-2 text-sm text-black dark:text-white">
-              {creator.firstName}
+              {"Create a Match"}
             </p>
           </a>
           <a
@@ -49,4 +54,4 @@ function Card({ cardId, URL, venue, date, creator }: CardObject) {
   );
 }
 
-export default Card;
+export default CreatematchCard;

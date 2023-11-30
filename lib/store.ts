@@ -1,9 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authorizationReducer from "./slices/authorization";
+import dashboardReducer from "./slices/dashboard";
 
 export const makeStore = () => {
   return configureStore({
-    reducer: { authorization: authorizationReducer },
+    reducer: {
+      authorization: authorizationReducer,
+      dashboard: dashboardReducer,
+    },
   });
 };
 

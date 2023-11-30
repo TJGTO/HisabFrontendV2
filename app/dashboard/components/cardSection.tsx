@@ -1,9 +1,19 @@
 "use client";
 
 import Card from "./card";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../../../lib/store";
+import CreateMatchDialog from "./createMatchDialog";
 import { Creator } from "../domain";
+import { openDialog, closeDialog } from "../../../lib/slices/dashboard";
+import CreatematchCard from "./creatematchCard";
 
 function CardSection() {
+  const openFlag = useSelector((state: RootState) => state.dashboard.open);
+  const dispatch = useDispatch<AppDispatch>();
+  const handleClose = () => {
+    dispatch(closeDialog());
+  };
   const creator: Creator = {
     firstName: "Tathagata Mondal",
     profileImageURL: "https://picsum.photos/32/32/?random",
@@ -24,7 +34,9 @@ function CardSection() {
               creator={creator}
             />
           ))}
+        <CreatematchCard />
       </div>
+      <CreateMatchDialog open={openFlag} onClose={handleClose} />
     </div>
   );
 }
