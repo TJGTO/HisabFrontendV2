@@ -22,3 +22,11 @@ export const registrationSchema = yup
     checked: yup.boolean(),
   })
   .required();
+
+export type registrationObj = {
+  firstName: string;
+  lastName: string;
+  phoneNo: string;
+  email: string;
+  password: string;
+};

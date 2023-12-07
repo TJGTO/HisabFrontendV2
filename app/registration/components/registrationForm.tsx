@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Errormessage from "../../Common/FormComponents/errormessage";
 import { registrationSchema } from "../domain";
-import { increment } from "../../../lib/slices/authorization";
+import CircularProgress from "@mui/material/CircularProgress";
+import { registerTheUser } from "../../../lib/slices/authorization";
 import { RootState, AppDispatch } from "../../../lib/store";
 
 function RegistrationForm() {
@@ -20,13 +23,44 @@ function RegistrationForm() {
   });
 
   const checked = watch("checked");
-  const counter = useSelector((state: RootState) => state.authorization.count);
+  const router = useRouter();
+  const [submitted, setsubmitted] = useState<boolean>(false);
+  const registrationLoader = useSelector(
+    (state: RootState) => state.authorization.registrationLoader
+  );
+  const registrationSuccess = useSelector(
+    (state: RootState) => state.authorization.registrationSuccess
+  );
+  const registrationMessage = useSelector(
+    (state: RootState) => state.authorization.registrationMessage
+  );
   const dispatch = useDispatch<AppDispatch>();
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: any) => {
+    setsubmitted(true);
+    dispatch(registerTheUser(data));
+  };
   useEffect(() => {
-    console.log(counter);
-  }, [counter]);
-
+    console.log(registrationLoader, registrationSuccess);
+    if (submitted && !registrationLoader && registrationSuccess) {
+      Swal.fire({
+        icon: "success",
+        title: registrationMessage,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setsubmitted(false);
+      router.push("/dashboard");
+    }
+    if (submitted && !registrationLoader && !registrationSuccess) {
+      Swal.fire({
+        icon: "error",
+        title: registrationMessage,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setsubmitted(false);
+    }
+  }, [registrationLoader, registrationSuccess]);
   return (
     <div>
       <section className="bg-gray-50 dark:bg-gray-900">
@@ -158,16 +192,23 @@ function RegistrationForm() {
                     </label>
                   </div>
                 </div>
-                <button
-                  type="submit"
-                  disabled={!checked}
-                  onClick={(e) => {
-                    e.preventDefault(), dispatch(increment());
-                  }}
-                  className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Create an account
-                </button>
+                {registrationLoader ? (
+                  <button
+                    type="submit"
+                    disabled={true}
+                    className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <CircularProgress color="secondary" size={20} />
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    disabled={!checked}
+                    className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Create an account
+                  </button>
+                )}
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{" "}
                   <a
