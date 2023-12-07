@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export const Axios = axios.create({
-  baseURL: "http://localhost:8000/",
+  baseURL: "https://wfg-kol-backend.onrender.com/",
   timeout: 10000,
 });

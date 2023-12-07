@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
@@ -211,12 +212,13 @@ function RegistrationForm() {
                 )}
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{" "}
-                  <a
-                    href="#"
+                  <Link
+                    href="/login"
                     className="font-medium text-blue-700 hover:underline"
                   >
+                    {" "}
                     Login here
-                  </a>
+                  </Link>
                 </p>
               </form>
             </div>
