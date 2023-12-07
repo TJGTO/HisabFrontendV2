@@ -2,11 +2,14 @@
 
 import { useState, useEffect } from "react";
 import CustomTable from "../../Common/Table/CustomTable";
+import SettingsIcon from "@mui/icons-material/Settings";
 import SearchIcon from "@mui/icons-material/Search";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import CreateIcon from "@mui/icons-material/Create";
 import AddIcon from "@mui/icons-material/Add";
 import Tabs from "./tabs";
+import SettingDialog from "./settingDialog";
+
 import {
   Card,
   CardHeader,
@@ -78,6 +81,11 @@ const TABLE_ROWS = [
 
 function Playerist() {
   const [tablerows, settablerows] = useState<Array<JSX.Element>>([]);
+  const [openDialog, setopenDialog] = useState<boolean>(false);
+
+  const closeSettingDialog = () => {
+    setopenDialog(false);
+  };
 
   useEffect(() => {
     createTableRows();
@@ -176,7 +184,17 @@ function Playerist() {
           </div>
         </div>
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          <Tabs />
+          {/* <Tabs /> */}
+          <Button
+            className="flex items-center gap-2"
+            variant="outlined"
+            onClick={(e) => {
+              e.preventDefault();
+              setopenDialog(true);
+            }}
+          >
+            Settings <SettingsIcon className="h-4 w-4" />
+          </Button>
           {/* <div className="w-full md:w-72">
             <Input placeholder="Search" />
           </div> */}
@@ -187,6 +205,7 @@ function Playerist() {
           <CustomTable tablehead={TableheaderArr} tablerows={tablerows} />
         )}
       </div>
+      <SettingDialog open={openDialog} onClose={closeSettingDialog} />
     </Card>
   );
 }

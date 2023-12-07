@@ -3,6 +3,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { usePathname } from "next/navigation";
+import Provider from "./storeProvider";
 import NavBar from "./nav/nav";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,7 +23,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {pathname != "/registration" && <NavBar />}
-        <div>{children}</div>
+        <Provider>
+          <div>{children}</div>
+        </Provider>
       </body>
     </html>
   );
