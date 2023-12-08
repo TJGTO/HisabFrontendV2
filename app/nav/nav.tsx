@@ -1,6 +1,11 @@
 "use client";
-import React, { useState } from "react";
 
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+
+const logopng =
+  "https://drive.google.com/uc?export=view&id=10ROLMv8jcIpmnLJlKC0vZ0ubQVsGHhTz";
 export default function NavBar() {
   let Links = [
     { name: "HOME", link: "/home" },
@@ -9,12 +14,14 @@ export default function NavBar() {
     { name: "BLOG'S", link: "/" },
     { name: "CONTACT", link: "/" },
   ];
-  let [open, setOpen] = useState<boolean>(false);
+  const router = useRouter();
+  const [open, setOpen] = useState<boolean>(false);
   return (
     <>
       <div className="shadow-md w-full staic top-0 left-0 ">
-        <div className="md:flex items-center justify-between bg-[#c8d6e1] py-4 md:px-10 px-7">
-          <div
+        <div className="flex items-center justify-between bg-[#c8d6e1] py-4 md:px-10 px-7">
+          <Image src={logopng} width={40} height={40} alt="WFG_LOGO" />
+          {/* <div
             onClick={() => setOpen(!open)}
             className="text-3xl absolute right-8 top-6 cursor-pointer md:hidden"
           >
@@ -36,9 +43,14 @@ export default function NavBar() {
                 </a>
               </li>
             ))}
-          </ul>
-          <button className="bg-sky-500 hover:bg-cyan-600 p-2 rounded-lg space-x-1.5">
-            Get Started
+          </ul> */}
+          <button
+            className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 p-2 space-x-1.5"
+            onClick={(e) => {
+              router.push("/login");
+            }}
+          >
+            Login
           </button>
         </div>
       </div>

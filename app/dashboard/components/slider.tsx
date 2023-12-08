@@ -9,13 +9,13 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 function Slider() {
   const slides: Array<SlidingImageObject> = [
     {
-      URL: "https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg?size=626&ext=jpg&ga=GA1.1.1880011253.1699315200&semt=sph",
+      URL: "https://drive.google.com/uc?export=view&id=1u1H8Uqej_vo-Ds-q-0uOmwC_Npt2klxc",
     },
     {
-      URL: "https://media.istockphoto.com/id/636379014/photo/hands-forming-a-heart-shape-with-sunset-silhouette.jpg?s=612x612&w=0&k=20&c=CgjWWGEasjgwia2VT7ufXa10azba2HXmUDe96wZG8F0=",
+      URL: "https://drive.google.com/uc?export=view&id=1CCH3r5NTjfMNJcBTC0G4CFc8MO1awi7w",
     },
     {
-      URL: "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW58ZW58MHx8MHx8fDA%3D",
+      URL: "https://drive.google.com/uc?export=view&id=1pdlSVvOsFvLBMvWXVYP7SkHL7AprIwGO",
     },
   ];
 
