@@ -3,8 +3,11 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import Link from "next/link";
+import useAuth from "@/app/Common/customHooks/useAuth";
+import WFGLogo from "../../Common/logo";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { redirect } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Errormessage from "../../Common/FormComponents/errormessage";
@@ -26,6 +29,12 @@ function RegistrationForm() {
   const checked = watch("checked");
   const router = useRouter();
   const [submitted, setsubmitted] = useState<boolean>(false);
+  const [isLoggedIn, token] = useAuth();
+  useEffect(() => {
+    if (isLoggedIn) {
+      redirect("/dashboard");
+    }
+  }, [isLoggedIn]);
   const registrationLoader = useSelector(
     (state: RootState) => state.authorization.registrationLoader
   );
@@ -72,11 +81,7 @@ function RegistrationForm() {
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                   Create an account
                 </h1>
-                <img
-                  className="w-8 h-8 mr-2"
-                  src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-                  alt="logo"
-                />
+                <WFGLogo />
               </div>
 
               <form

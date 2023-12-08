@@ -22,6 +22,7 @@ function CardSection() {
   return (
     <div className="container my-12 mx-auto px-4 md:px-12">
       <div className="flex flex-wrap -mx-1 lg:-mx-4">
+        <CreatematchCard />
         {Array(10)
           .fill(5)
           .map((x, index) => (
@@ -34,7 +35,6 @@ function CardSection() {
               creator={creator}
             />
           ))}
-        <CreatematchCard />
       </div>
       <CreateMatchDialog open={openFlag} onClose={handleClose} />
     </div>
