@@ -11,7 +11,7 @@ type logoProps = {
 
 function WFGLogo(props: logoProps) {
   return (
-    <Image
+    <img
       src={logopng}
       width={props.width || 40}
       height={props.height || 40}
