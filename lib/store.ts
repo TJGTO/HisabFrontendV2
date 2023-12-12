@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authorizationReducer from "./slices/authorization";
 import dashboardReducer from "./slices/dashboard";
+import profileSectionReducer from "./slices/profileSection";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       authorization: authorizationReducer,
       dashboard: dashboardReducer,
+      profileSection: profileSectionReducer,
     },
   });
 };
