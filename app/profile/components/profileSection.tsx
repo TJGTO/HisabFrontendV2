@@ -1,13 +1,35 @@
+import { useState, useEffect } from "react";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
+import EditProfileDialog from "./editProfileDialog";
+import EditAddressDialog from "./editAddressDialog";
 
 function ProfileSection() {
+  const [openSocialMediaDialog, setopenSocialMediaDialog] =
+    useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const [openAddressDialog, setopenAddressDialog] = useState<boolean>(false);
+  const handleClickOnEdit = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const closeEditSocialMediaDialog = () => {
+    setopenSocialMediaDialog(false);
+  };
+  const closeEditAddressDialog = () => {
+    setopenAddressDialog(false);
+  };
   return (
     <div className="h-screen flex justify-center mt-6 ">
       <div className="flex-col gap-6">
@@ -21,8 +43,27 @@ function ProfileSection() {
         <div className="flex justify-center gap-2 mt-4 w-60">
           John Doe{" "}
           <Tooltip title="Edit Profile">
-            <EditIcon className="cursor-pointer" />
+            <div onClick={handleClickOnEdit}>
+              {" "}
+              <EditIcon className="cursor-pointer" />
+            </div>
           </Tooltip>
+          <Menu
+            anchorEl={anchorEl}
+            id="account-menu"
+            open={open}
+            onClose={handleClose}
+            onClick={handleClose}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          >
+            <MenuItem onClick={(e) => setopenAddressDialog(true)}>
+              Edit Addrerss & Name
+            </MenuItem>
+            <MenuItem onClick={(e) => setopenSocialMediaDialog(true)}>
+              Edit Social Media
+            </MenuItem>
+          </Menu>
         </div>
         <div className="flex justify-center gap-2 mt-4 w-60">
           <MailOutlineIcon />
@@ -45,6 +86,14 @@ function ProfileSection() {
           scrambled it to make a type specimen book.
         </div>
       </div>
+      <EditProfileDialog
+        open={openSocialMediaDialog}
+        onClose={closeEditSocialMediaDialog}
+      />
+      <EditAddressDialog
+        open={openAddressDialog}
+        onClose={closeEditAddressDialog}
+      />
     </div>
   );
 }
