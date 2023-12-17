@@ -8,6 +8,7 @@ export interface updateProfileObj {
   lastName?: String;
   phone_no?: String;
   email?: String;
+  academic?: String;
   facebook?: String;
   instagram?: String;
   youtube?: String;
@@ -19,5 +20,6 @@ export interface ProfileSectionState {
   open: boolean;
   updateLoader: boolean;
   updateMessage: String;
+  errorOnUpdate: boolean;
   userProfile: updateProfileObj;
 }

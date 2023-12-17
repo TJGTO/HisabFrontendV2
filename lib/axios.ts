@@ -1,12 +1,14 @@
 import axios from "axios";
 
+//const URL = "https://wfg-kol-backend.onrender.com/";
+const URL = "http://localhost:8000/";
 const Axios = axios.create({
-  baseURL: "https://wfg-kol-backend.onrender.com/",
+  baseURL: URL,
   timeout: 10000,
 });
 
 const AxiosWithAuth = axios.create({
-  baseURL: "https://wfg-kol-backend.onrender.com/",
+  baseURL: URL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",

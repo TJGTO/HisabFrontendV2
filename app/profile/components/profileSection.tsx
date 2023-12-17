@@ -6,7 +6,10 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
 import Menu from "@mui/material/Menu";
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+import SchoolIcon from "@mui/icons-material/School";
 import MenuItem from "@mui/material/MenuItem";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EditProfileDialog from "./editProfileDialog";
@@ -42,6 +45,16 @@ function ProfileSection() {
         </div>
         <div className="flex justify-center gap-2 mt-4 w-60">
           John Doe{" "}
+          <Tooltip title="Working Professional">
+            <div>
+              <WorkOutlineIcon />
+            </div>
+          </Tooltip>
+          <Tooltip title="Student">
+            <div>
+              <SchoolIcon />
+            </div>
+          </Tooltip>
           <Tooltip title="Edit Profile">
             <div onClick={handleClickOnEdit}>
               {" "}
@@ -73,11 +86,16 @@ function ProfileSection() {
           <LocalPhoneIcon />
           7047241849
         </div>
+
         <div className="flex justify-center gap-5 mt-4 w-60">
           <FacebookIcon style={{ color: "#1877f2" }} />
           <InstagramIcon style={{ color: "#833AB4" }} />
           <YouTubeIcon style={{ color: "#FF0000" }} />
           <LocationOnIcon />
+        </div>
+        <div className="flex justify-center gap-2 mt-4 w-60">
+          <CalendarMonthIcon />
+          19/03/1998
         </div>
         <div className="flex flex-wrap gap-5 mt-4 w-60">
           Lorem Ipsum is simply dummy text of the printing and typesetting

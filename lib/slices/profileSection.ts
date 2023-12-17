@@ -9,12 +9,14 @@ const initialState: ProfileSectionState = {
   open: false,
   updateLoader: false,
   updateMessage: "",
+  errorOnUpdate: false,
   userProfile: {
     firstName: "",
     lastName: "",
     DOB: "",
     phone_no: "",
     email: "",
+    academic: "",
     facebook: "",
     instagram: "",
     youtube: "",
@@ -42,6 +44,7 @@ const profileSectionSlice = createSlice({
       state.updateLoader = true;
     });
     builder.addCase(updateTheUser.fulfilled, (state, action) => {
+      state.updateLoader = false;
       if (action.payload && action.payload.success) {
         state.updateMessage = action.payload.message;
         if (action.payload.userdata) {
@@ -54,6 +57,7 @@ const profileSectionSlice = createSlice({
         }
       } else if (action.payload) {
         state.updateMessage = action.payload.message;
+        state.errorOnUpdate = true;
       }
       state.updateLoader = false;
     });

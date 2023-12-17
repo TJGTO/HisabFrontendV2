@@ -2,7 +2,7 @@ import { AxiosWithAuth } from "../../lib/axios";
 import { updateProfileObj } from "./domain";
 
 async function updateUser(data: updateProfileObj) {
-  let response: any = await AxiosWithAuth.post("user/login", data);
+  let response: any = await AxiosWithAuth.patch("user/update", data);
 
   if (response.data && response.data.success) {
     return {
