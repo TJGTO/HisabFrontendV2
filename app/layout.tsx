@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { usePathname } from "next/navigation";
 import Provider from "./storeProvider";
 import NavBar from "./nav/nav";
+import ProfileAvatar from "./nav/profilrAvatar";
 
 const inter = Inter({ subsets: ["latin"] });
 

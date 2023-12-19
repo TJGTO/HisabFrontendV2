@@ -27,6 +27,7 @@ function LoginForm() {
   const router = useRouter();
   const [submitted, setsubmitted] = useState<boolean>(false);
   const [isLoggedIn, token] = useAuth();
+
   useEffect(() => {
     if (isLoggedIn) {
       redirect("/dashboard");

@@ -65,7 +65,6 @@ const authorizationSlice = createSlice({
       state.loginLoader = true;
     });
     builder.addCase(loginOfUser.fulfilled, (state, action) => {
-      console.log("jwbefj");
       if (action.payload && action.payload.success) {
         state.userDetail = action.payload.userdata;
         state.loginMessage = action.payload.message;

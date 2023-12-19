@@ -6,6 +6,9 @@ async function loginUser(data: loginObj) {
 
   if (response.data && response.data.success) {
     localStorage.setItem("token", response.data.data.token);
+    localStorage.setItem("fullname", response.data.data.fullname);
+    localStorage.setItem("email", response.data.data.email);
+
     return {
       success: true,
       message: "Login is successfull",
