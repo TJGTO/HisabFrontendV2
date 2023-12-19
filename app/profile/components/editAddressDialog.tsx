@@ -9,6 +9,9 @@ import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 
 function EditAddressDialog({ open, onClose }: settingDialogProps) {
+  const userProfile = useSelector(
+    (state: RootState) => state.profileSection.userProfile
+  );
   const dispatch = useDispatch<AppDispatch>();
   const [firstName, setfirstName] = useState<string>("");
   const [lastName, setlastName] = useState<string>("");
@@ -32,6 +35,23 @@ function EditAddressDialog({ open, onClose }: settingDialogProps) {
   const errorOnUpdate = useSelector(
     (state: RootState) => state.profileSection.errorOnUpdate
   );
+  useEffect(() => {
+    if (userProfile) {
+      if (userProfile.firstName) setfirstName(userProfile.firstName.toString());
+      if (userProfile.lastName) setlastName(userProfile.lastName.toString());
+      if (userProfile.address?.address_line_1)
+        setaddress_line_1(userProfile.address.address_line_1.toString());
+      if (userProfile.address?.address_line_2)
+        setaddress_line_2(userProfile.address.address_line_2.toString());
+      if (userProfile.address?.pincode)
+        setpincode(userProfile.address.pincode.toString());
+      if (userProfile.address?.city)
+        setcity(userProfile.address.city.toString());
+      if (userProfile.address?.state) {
+        setstate(userProfile.address?.state.state_id.toString());
+      }
+    }
+  }, [userProfile]);
   const handleClose = () => {
     onClose();
   };
@@ -66,8 +86,8 @@ function EditAddressDialog({ open, onClose }: settingDialogProps) {
       pincode: pincode,
       city: city,
       state: {
-        state_id: JSON.parse(state)._id,
-        state_name: JSON.parse(state).stateName,
+        state_id: state,
+        state_name: allStates?.find((x) => x._id == state)?.stateName || "",
       },
     };
     requestObj.isAddress = true;
@@ -102,6 +122,7 @@ function EditAddressDialog({ open, onClose }: settingDialogProps) {
                     onChange={(e) => {
                       setfirstName(e.target.value);
                     }}
+                    value={firstName}
                   />
                 </div>
                 <div>
@@ -114,6 +135,7 @@ function EditAddressDialog({ open, onClose }: settingDialogProps) {
                     onChange={(e) => {
                       setlastName(e.target.value);
                     }}
+                    value={lastName}
                   />
                 </div>
               </div>
@@ -127,6 +149,7 @@ function EditAddressDialog({ open, onClose }: settingDialogProps) {
                   onChange={(e) => {
                     setaddress_line_1(e.target.value);
                   }}
+                  value={address_line_1}
                 />
               </div>
               <div>
@@ -139,6 +162,7 @@ function EditAddressDialog({ open, onClose }: settingDialogProps) {
                   onChange={(e) => {
                     setaddress_line_2(e.target.value);
                   }}
+                  value={address_line_2}
                 />
               </div>
               <div>
@@ -151,13 +175,14 @@ function EditAddressDialog({ open, onClose }: settingDialogProps) {
                   onChange={(e) => {
                     setstate(e.target.value);
                   }}
+                  value={state}
                 >
                   <option value={""} key={0}>
                     Please Select
                   </option>
                   {allStates &&
                     allStates.map((x, index) => (
-                      <option value={JSON.stringify(x)} key={index + 1}>
+                      <option value={x._id.toString()} key={index + 1}>
                         {x.stateName}
                       </option>
                     ))}
@@ -174,6 +199,7 @@ function EditAddressDialog({ open, onClose }: settingDialogProps) {
                     onChange={(e) => {
                       setcity(e.target.value);
                     }}
+                    value={city}
                   />
                 </div>
                 <div>
@@ -186,6 +212,7 @@ function EditAddressDialog({ open, onClose }: settingDialogProps) {
                     onChange={(e) => {
                       setpincode(e.target.value);
                     }}
+                    value={pincode}
                   />
                 </div>
               </div>

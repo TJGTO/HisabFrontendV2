@@ -15,15 +15,22 @@ import MenuItem from "@mui/material/MenuItem";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
-import { fetchAllStates } from "../../../lib/slices/profileSection";
+import Swal from "sweetalert2";
+import {
+  fetchAllStates,
+  fetchUserDetails,
+} from "../../../lib/slices/profileSection";
 import EditProfileDialog from "./editProfileDialog";
 import EditAddressDialog from "./editAddressDialog";
-import { AppDispatch } from "../../../lib/store";
-import { useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../../../lib/store";
+import { useSelector, useDispatch } from "react-redux";
 
 function ProfileSection() {
   const [openSocialMediaDialog, setopenSocialMediaDialog] =
     useState<boolean>(false);
+  const userProfile = useSelector(
+    (state: RootState) => state.profileSection.userProfile
+  );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch<AppDispatch>();
@@ -35,6 +42,7 @@ function ProfileSection() {
       redirect("/dashboard");
     }
     dispatch(fetchAllStates());
+    dispatch(fetchUserDetails());
   }, []);
 
   const handleClickOnEdit = (event: React.MouseEvent<HTMLElement>) => {
@@ -49,6 +57,9 @@ function ProfileSection() {
   const closeEditAddressDialog = () => {
     setopenAddressDialog(false);
   };
+  const fireALertWithValue = (value: string | undefined) => {
+    Swal.fire(value ? value : "");
+  };
   return (
     <div className="h-screen flex justify-center mt-6 ">
       <div className="flex-col gap-6">
@@ -60,17 +71,21 @@ function ProfileSection() {
           />
         </div>
         <div className="flex justify-center gap-2 mt-4 w-60">
-          John Doe{" "}
-          <Tooltip title="Working Professional">
-            <div>
-              <WorkOutlineIcon />
-            </div>
-          </Tooltip>
-          <Tooltip title="Student">
-            <div>
-              <SchoolIcon />
-            </div>
-          </Tooltip>
+          {userProfile?.firstName + " " + userProfile?.lastName}
+          {userProfile?.academic == "Working Professional" && (
+            <Tooltip title="Working Professional">
+              <div>
+                <WorkOutlineIcon />
+              </div>
+            </Tooltip>
+          )}
+          {userProfile?.academic == "Student" && (
+            <Tooltip title="Student">
+              <div>
+                <SchoolIcon />
+              </div>
+            </Tooltip>
+          )}
           <Tooltip title="Edit Profile">
             <div onClick={handleClickOnEdit}>
               {" "}
@@ -96,28 +111,62 @@ function ProfileSection() {
         </div>
         <div className="flex justify-center gap-2 mt-4 w-60">
           <MailOutlineIcon />
-          john@gmail.com
+          {userProfile?.email}
         </div>
         <div className="flex justify-center gap-2 mt-4 w-60">
           <LocalPhoneIcon />
-          7047241849
+          {userProfile?.phone_no}
         </div>
 
         <div className="flex justify-center gap-5 mt-4 w-60">
-          <FacebookIcon style={{ color: "#1877f2" }} />
-          <InstagramIcon style={{ color: "#833AB4" }} />
-          <YouTubeIcon style={{ color: "#FF0000" }} />
-          <LocationOnIcon />
+          {userProfile?.facebook && (
+            <FacebookIcon
+              style={{ color: "#1877f2" }}
+              onClick={(e) => {
+                fireALertWithValue(userProfile?.facebook?.toString());
+              }}
+            />
+          )}
+          {userProfile?.instagram && (
+            <InstagramIcon
+              style={{ color: "#833AB4" }}
+              onClick={(e) => {
+                fireALertWithValue(userProfile?.instagram?.toString());
+              }}
+            />
+          )}
+          {userProfile?.youtube && (
+            <YouTubeIcon
+              style={{ color: "#FF0000" }}
+              onClick={(e) => {
+                fireALertWithValue(userProfile?.youtube?.toString());
+              }}
+            />
+          )}
+          {userProfile?.address && (
+            <LocationOnIcon
+              onClick={(e) => {
+                let address =
+                  userProfile.address?.address_line_1 +
+                  "," +
+                  userProfile.address?.address_line_2 +
+                  "," +
+                  userProfile.address?.city +
+                  "," +
+                  userProfile.address?.pincode +
+                  "," +
+                  userProfile.address?.state?.state_name;
+                fireALertWithValue(address.toString());
+              }}
+            />
+          )}
         </div>
         <div className="flex justify-center gap-2 mt-4 w-60">
           <CalendarMonthIcon />
           19/03/1998
         </div>
         <div className="flex flex-wrap gap-5 mt-4 w-60">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book.
+          {userProfile?.about}
         </div>
       </div>
       <EditProfileDialog

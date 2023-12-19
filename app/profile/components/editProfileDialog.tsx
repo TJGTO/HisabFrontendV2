@@ -9,6 +9,9 @@ import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 
 function EditProfileDialog({ open, onClose }: settingDialogProps) {
+  const userProfile = useSelector(
+    (state: RootState) => state.profileSection.userProfile
+  );
   const dispatch = useDispatch<AppDispatch>();
   const [academic, setacademic] = useState<string>("");
   const [facebook, setfacebook] = useState<string>("");
@@ -29,7 +32,17 @@ function EditProfileDialog({ open, onClose }: settingDialogProps) {
   const errorOnUpdate = useSelector(
     (state: RootState) => state.profileSection.errorOnUpdate
   );
-
+  useEffect(() => {
+    if (userProfile) {
+      if (userProfile.academic) setacademic(userProfile.academic.toString());
+      if (userProfile.facebook) setfacebook(userProfile.facebook.toString());
+      if (userProfile.instagram) setinstagram(userProfile.instagram.toString());
+      if (userProfile.youtube) setyoutube(userProfile.youtube.toString());
+      if (userProfile.phone_no) setphone_no(userProfile.phone_no.toString());
+      if (userProfile.email) setemail(userProfile.email.toString());
+      if (userProfile.about) setabout(userProfile.about.toString());
+    }
+  }, [userProfile]);
   const handleClose = () => {
     onClose();
   };
@@ -98,6 +111,7 @@ function EditProfileDialog({ open, onClose }: settingDialogProps) {
                     onChange={(e) => {
                       setacademic(e.target.value);
                     }}
+                    value={academic}
                   >
                     <option value="">{"Please Select"}</option>
                     <option value="Working Professional">
@@ -127,6 +141,7 @@ function EditProfileDialog({ open, onClose }: settingDialogProps) {
                     onChange={(e) => {
                       setfacebook(e.target.value);
                     }}
+                    value={facebook}
                   />
                   <button
                     onClick={(e) => {
@@ -150,6 +165,7 @@ function EditProfileDialog({ open, onClose }: settingDialogProps) {
                     onChange={(e) => {
                       setinstagram(e.target.value);
                     }}
+                    value={instagram}
                   />
                   <button
                     onClick={(e) => {
@@ -173,6 +189,7 @@ function EditProfileDialog({ open, onClose }: settingDialogProps) {
                     onChange={(e) => {
                       setyoutube(e.target.value);
                     }}
+                    value={youtube}
                   />
                   <button
                     onClick={(e) => {
@@ -196,6 +213,7 @@ function EditProfileDialog({ open, onClose }: settingDialogProps) {
                     onChange={(e) => {
                       setemail(e.target.value);
                     }}
+                    value={email}
                   />
                   <button
                     onClick={(e) => {
@@ -219,6 +237,7 @@ function EditProfileDialog({ open, onClose }: settingDialogProps) {
                     onChange={(e) => {
                       setphone_no(e.target.value);
                     }}
+                    value={phone_no}
                   />
                   <button
                     onClick={(e) => {
@@ -242,6 +261,7 @@ function EditProfileDialog({ open, onClose }: settingDialogProps) {
                     onChange={(e) => {
                       setabout(e.target.value);
                     }}
+                    value={about}
                   />
                   <button
                     onClick={(e) => {

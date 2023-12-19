@@ -3,7 +3,11 @@ import {
   updateProfileObj,
   ProfileSectionState,
 } from "../../app/profile/domain";
-import { updateUser, getStates } from "../../app/profile/service";
+import {
+  updateUser,
+  getStates,
+  getUserDetails,
+} from "../../app/profile/service";
 
 const initialState: ProfileSectionState = {
   open: false,
@@ -22,6 +26,16 @@ const initialState: ProfileSectionState = {
     instagram: "",
     youtube: "",
     about: "",
+    address: {
+      address_line_1: "",
+      address_line_2: "",
+      pincode: "",
+      city: "",
+      state: {
+        state_id: "",
+        state_name: "",
+      },
+    },
   },
 };
 
@@ -41,6 +55,17 @@ export const fetchAllStates = createAsyncThunk(
   async () => {
     try {
       const response = await getStates();
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+export const fetchUserDetails = createAsyncThunk(
+  "profileSection/fetchUserDetails",
+  async () => {
+    try {
+      const response = await getUserDetails();
       return response;
     } catch (err) {
       console.log(err);
@@ -75,8 +100,12 @@ const profileSectionSlice = createSlice({
     });
     builder.addCase(fetchAllStates.fulfilled, (state, action) => {
       if (action.payload && action.payload.success) {
-        console.log("action.payload.states", action.payload.states);
         state.states = action.payload.states;
+      }
+    });
+    builder.addCase(fetchUserDetails.fulfilled, (state, action) => {
+      if (action.payload && action.payload.user) {
+        state.userProfile = action.payload.user as updateProfileObj;
       }
     });
   },
