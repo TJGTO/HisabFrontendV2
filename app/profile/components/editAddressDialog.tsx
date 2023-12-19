@@ -2,6 +2,7 @@ import { settingDialogProps } from "../domain";
 import { updateTheUser } from "../../../lib/slices/profileSection";
 import { useState, useEffect } from "react";
 import { updateProfileObj } from "../domain";
+import WFGLogo from "../../Common/logo";
 import Swal from "sweetalert2";
 import Dialog from "@mui/material/Dialog";
 import { RootState, AppDispatch } from "../../../lib/store";
@@ -16,8 +17,6 @@ function EditAddressDialog({ open, onClose }: settingDialogProps) {
   const [pincode, setpincode] = useState<string>("");
   const [city, setcity] = useState<string>("");
   const [state, setstate] = useState<string>("");
-
-  console.log("fbwejhbgueg");
 
   const allStates = useSelector(
     (state: RootState) => state.profileSection.states
@@ -89,11 +88,7 @@ function EditAddressDialog({ open, onClose }: settingDialogProps) {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Edit Profile
               </h1>
-              <img
-                className="w-8 h-8 mr-2"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-                alt="logo"
-              />
+              <WFGLogo />
             </div>
             <div className="space-y-4 md:space-y-6">
               <div className="flex gap-3">

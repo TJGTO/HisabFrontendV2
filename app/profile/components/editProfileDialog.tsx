@@ -3,6 +3,7 @@ import { updateProfileObj } from "../domain";
 import { updateTheUser } from "../../../lib/slices/profileSection";
 import Dialog from "@mui/material/Dialog";
 import Swal from "sweetalert2";
+import WFGLogo from "../../Common/logo";
 import { useState, useEffect } from "react";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
@@ -83,11 +84,7 @@ function EditProfileDialog({ open, onClose }: settingDialogProps) {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Edit Profile
               </h1>
-              <img
-                className="w-8 h-8 mr-2"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-                alt="logo"
-              />
+              <WFGLogo />
             </div>
             <div className="space-y-4 md:space-y-6">
               <div>
