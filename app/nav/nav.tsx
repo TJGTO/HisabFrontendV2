@@ -18,7 +18,7 @@ export default function NavBar() {
     { name: "CONTACT", link: "/" },
   ];
   const router = useRouter();
-  const [isLoggedIn, token] = useAuth();
+  const [isLoggedIn, token, fullname, email] = useAuth();
   const [open, setOpen] = useState<boolean>(false);
   return (
     <>
@@ -58,7 +58,7 @@ export default function NavBar() {
               Login
             </button>
           ) : (
-            <ProfileAvatar />
+            <ProfileAvatar username={fullname} useremail={email} />
           )}
         </div>
       </div>

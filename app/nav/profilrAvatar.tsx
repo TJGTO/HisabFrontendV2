@@ -7,7 +7,10 @@ import { useRouter } from "next/navigation";
 import MenuItem from "@mui/material/MenuItem";
 import Logout from "@mui/icons-material/Logout";
 
-function ProfileAvatar() {
+function ProfileAvatar(props: {
+  username: String | boolean | null;
+  useremail: String | boolean | null;
+}) {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -22,6 +25,11 @@ function ProfileAvatar() {
   };
   const gotoDashboardPage = () => {
     router.push("/dashboard");
+  };
+  const logout = () => {
+    localStorage.removeItem("token");
+    window.location.reload();
+    handleClose();
   };
   return (
     <div>
@@ -41,14 +49,16 @@ function ProfileAvatar() {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <div className="px-4 py-3 text-sm text-gray-900">
-          <div>Bonnie Green</div>
-          <div className="font-medium truncate">name@flowbite.com</div>
+          <div>{props.username && props.username}</div>
+          <div className="font-medium truncate">
+            {props.useremail && props.useremail}
+          </div>
         </div>
         <Divider />
         <MenuItem onClick={gotoDashboardPage}>Dashboard</MenuItem>
         <MenuItem onClick={gotoProfilePage}>Profile</MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={logout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

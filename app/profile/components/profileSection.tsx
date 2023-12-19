@@ -1,4 +1,6 @@
+"use client";
 import { useState, useEffect } from "react";
+import useAuth from "@/app/Common/customHooks/useAuth";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -6,21 +8,35 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
 import Menu from "@mui/material/Menu";
+import { redirect } from "next/navigation";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import SchoolIcon from "@mui/icons-material/School";
 import MenuItem from "@mui/material/MenuItem";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
+import { fetchAllStates } from "../../../lib/slices/profileSection";
 import EditProfileDialog from "./editProfileDialog";
 import EditAddressDialog from "./editAddressDialog";
+import { AppDispatch } from "../../../lib/store";
+import { useDispatch } from "react-redux";
 
 function ProfileSection() {
   const [openSocialMediaDialog, setopenSocialMediaDialog] =
     useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const dispatch = useDispatch<AppDispatch>();
+  const [isLoggedIn, token] = useAuth();
   const [openAddressDialog, setopenAddressDialog] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      redirect("/dashboard");
+    }
+    dispatch(fetchAllStates());
+  }, []);
+
   const handleClickOnEdit = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };

@@ -1,5 +1,4 @@
 import { settingDialogProps } from "../domain";
-import DialogTitle from "@mui/material/DialogTitle";
 import { updateProfileObj } from "../domain";
 import { updateTheUser } from "../../../lib/slices/profileSection";
 import Dialog from "@mui/material/Dialog";
@@ -47,7 +46,7 @@ function EditProfileDialog({ open, onClose }: settingDialogProps) {
     let reqObj: updateProfileObj = {};
     switch (Type) {
       case "academic":
-        reqObj.academic = facebook;
+        reqObj.academic = academic;
         break;
       case "facebook":
         reqObj.facebook = facebook;

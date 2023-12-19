@@ -3,6 +3,17 @@ export interface settingDialogProps {
   onClose: () => void;
 }
 
+export interface addressObj {
+  address_line_1: String;
+  address_line_2?: String;
+  pincode: String;
+  city: String;
+  state: {
+    state_id: String;
+    state_name: String;
+  };
+}
+
 export interface updateProfileObj {
   firstName?: String;
   lastName?: String;
@@ -14,6 +25,13 @@ export interface updateProfileObj {
   youtube?: String;
   DOB?: String;
   about?: String;
+  address?: addressObj;
+  isAddress?: boolean;
+}
+
+export interface stateObj {
+  _id: String;
+  stateName: String;
 }
 
 export interface ProfileSectionState {
@@ -21,5 +39,6 @@ export interface ProfileSectionState {
   updateLoader: boolean;
   updateMessage: String;
   errorOnUpdate: boolean;
+  states: Array<stateObj> | null;
   userProfile: updateProfileObj;
 }

@@ -19,4 +19,20 @@ async function updateUser(data: updateProfileObj) {
   };
 }
 
-export { updateUser };
+async function getStates() {
+  let response: any = await AxiosWithAuth.get("states");
+
+  if (response.data && response.data.success) {
+    return {
+      success: true,
+      states: response.data.data,
+    };
+  }
+  return {
+    success: false,
+    message: `${
+      response.data.message ? response.data.message : "Failed to fetch states"
+    }`,
+  };
+}
+export { updateUser, getStates };

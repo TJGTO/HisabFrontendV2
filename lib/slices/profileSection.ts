@@ -3,13 +3,14 @@ import {
   updateProfileObj,
   ProfileSectionState,
 } from "../../app/profile/domain";
-import { updateUser } from "../../app/profile/service";
+import { updateUser, getStates } from "../../app/profile/service";
 
 const initialState: ProfileSectionState = {
   open: false,
   updateLoader: false,
   updateMessage: "",
   errorOnUpdate: false,
+  states: null,
   userProfile: {
     firstName: "",
     lastName: "",
@@ -29,6 +30,17 @@ export const updateTheUser = createAsyncThunk(
   async (data: updateProfileObj) => {
     try {
       const response = await updateUser(data);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+export const fetchAllStates = createAsyncThunk(
+  "profileSection/fetchAllStates",
+  async () => {
+    try {
+      const response = await getStates();
       return response;
     } catch (err) {
       console.log(err);
@@ -60,6 +72,12 @@ const profileSectionSlice = createSlice({
         state.errorOnUpdate = true;
       }
       state.updateLoader = false;
+    });
+    builder.addCase(fetchAllStates.fulfilled, (state, action) => {
+      if (action.payload && action.payload.success) {
+        console.log("action.payload.states", action.payload.states);
+        state.states = action.payload.states;
+      }
     });
   },
 });
