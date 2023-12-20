@@ -1,4 +1,5 @@
 import { addressObj } from "../profile/domain";
+import moment from "moment";
 
 export const createAddressStringFromObj = (address: addressObj | undefined) => {
   if (address) {
@@ -40,4 +41,12 @@ export const stringToColor = (string: string) => {
   }
 
   return color;
+};
+
+export const fromatDate = (
+  date: string | Date,
+  formatOfDate: string = "DD/MM/YYYY"
+) => {
+  const momentDate = moment(date);
+  return momentDate.format(formatOfDate);
 };

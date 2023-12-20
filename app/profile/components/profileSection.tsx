@@ -14,7 +14,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import MenuItem from "@mui/material/MenuItem";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { createAddressStringFromObj } from "../../Common/functions";
+import { createAddressStringFromObj, fromatDate } from "../../Common/functions";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import Swal from "sweetalert2";
 import {
@@ -163,10 +163,13 @@ function ProfileSection() {
             />
           )}
         </div>
-        <div className="flex justify-center gap-2 mt-4 w-60">
-          <CalendarMonthIcon />
-          19/03/1998
-        </div>
+        {userProfile?.DOB && (
+          <div className="flex justify-center gap-2 mt-4 w-60">
+            <CalendarMonthIcon />
+            {fromatDate(userProfile?.DOB.toString())}
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-5 mt-4 w-60">
           {userProfile?.about}
         </div>
