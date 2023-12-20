@@ -4,7 +4,7 @@ export const loginSchema = yup
   .object({
     email: yup
       .string()
-      .email("Please enter a valie email Id")
+      .email("Please enter a valid email Id")
       .required("Email is required"),
     password: yup.string().min(8, "Password shoule have minimum 8 characters"),
   })

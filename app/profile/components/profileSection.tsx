@@ -20,6 +20,7 @@ import Swal from "sweetalert2";
 import {
   fetchAllStates,
   fetchUserDetails,
+  resetFlags,
 } from "../../../lib/slices/profileSection";
 import EditProfileDialog from "./editProfileDialog";
 import EditAddressDialog from "./editAddressDialog";
@@ -41,6 +42,9 @@ function ProfileSection() {
   useEffect(() => {
     dispatch(fetchAllStates());
     dispatch(fetchUserDetails());
+    return () => {
+      dispatch(resetFlags());
+    };
   }, []);
 
   useEffect(() => {

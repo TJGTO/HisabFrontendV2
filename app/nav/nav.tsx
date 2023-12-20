@@ -24,7 +24,14 @@ export default function NavBar() {
     <>
       <div className="shadow-md w-full staic top-0 left-0 ">
         <div className="flex items-center justify-between bg-[#c8d6e1] py-4 md:px-10 px-7">
-          <WFGLogo />
+          <div
+            onClick={(e) => {
+              router.push("/dashboard");
+            }}
+            className="cursor-pointer"
+          >
+            <WFGLogo />
+          </div>
           {/* <div
             onClick={() => setOpen(!open)}
             className="text-3xl absolute right-8 top-6 cursor-pointer md:hidden"

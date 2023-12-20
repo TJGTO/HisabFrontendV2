@@ -76,7 +76,14 @@ export const fetchAllStates = createAsyncThunk(
 const profileSectionSlice = createSlice({
   name: "profileSection",
   initialState,
-  reducers: {},
+  reducers: {
+    resetFlags: (state) => {
+      state.errorOnUpdate = false;
+      state.updateMessage = "";
+      state.updateLoader = false;
+      state.states = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(updateTheUser.pending, (state) => {
       state.updateLoader = true;
@@ -105,5 +112,7 @@ const profileSectionSlice = createSlice({
     });
   },
 });
+
+export const { resetFlags } = profileSectionSlice.actions;
 
 export default profileSectionSlice.reducer;
