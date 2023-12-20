@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 function useAuth() {
-  const [isLoggedIn, setisLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setisLoggedIn] = useState<boolean | undefined>(undefined);
   const [token, settoken] = useState<string | null>(null);
   const [fullname, setfullname] = useState<string | null>(null);
   const [email, setemail] = useState<string | null>(null);

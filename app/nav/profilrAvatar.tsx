@@ -1,4 +1,5 @@
 import React from "react";
+import { createSortFromForAvator, stringToColor } from "../Common/functions";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -8,8 +9,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Logout from "@mui/icons-material/Logout";
 
 function ProfileAvatar(props: {
-  username: String | boolean | null;
-  useremail: String | boolean | null;
+  username: string | boolean | null | undefined;
+  useremail: string | boolean | null | undefined;
 }) {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -38,7 +39,14 @@ function ProfileAvatar(props: {
         onClick={handleClick}
         alt="Remy Sharp"
         src="/static/images/avatar/1.jpg"
-      />
+        sx={{
+          bgcolor: props.username
+            ? stringToColor(props.username.toString())
+            : "",
+        }}
+      >
+        {props.username && createSortFromForAvator(props.username.toString())}
+      </Avatar>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"

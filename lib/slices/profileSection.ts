@@ -39,11 +39,23 @@ const initialState: ProfileSectionState = {
   },
 };
 
+export const fetchUserDetails = createAsyncThunk(
+  "profileSection/fetchUserDetails",
+  async () => {
+    try {
+      const response = await getUserDetails();
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 export const updateTheUser = createAsyncThunk(
   "profileSection/updateUser",
-  async (data: updateProfileObj) => {
+  async (data: updateProfileObj, { getState, dispatch }) => {
     try {
       const response = await updateUser(data);
+      dispatch(fetchUserDetails());
       return response;
     } catch (err) {
       console.log(err);
@@ -61,17 +73,6 @@ export const fetchAllStates = createAsyncThunk(
     }
   }
 );
-export const fetchUserDetails = createAsyncThunk(
-  "profileSection/fetchUserDetails",
-  async () => {
-    try {
-      const response = await getUserDetails();
-      return response;
-    } catch (err) {
-      console.log(err);
-    }
-  }
-);
 const profileSectionSlice = createSlice({
   name: "profileSection",
   initialState,
@@ -82,16 +83,10 @@ const profileSectionSlice = createSlice({
     });
     builder.addCase(updateTheUser.fulfilled, (state, action) => {
       state.updateLoader = false;
+      state.errorOnUpdate = false;
+      state.updateMessage = "";
       if (action.payload && action.payload.success) {
         state.updateMessage = action.payload.message;
-        if (action.payload.userdata) {
-          let Obj = JSON.parse(JSON.stringify(state));
-          let keyNames = Object.keys(action.payload.userdata);
-          keyNames.forEach((x) => {
-            Obj.userProfile[x] = action.payload?.userdata[x];
-          });
-          state = JSON.parse(JSON.stringify(Obj));
-        }
       } else if (action.payload) {
         state.updateMessage = action.payload.message;
         state.errorOnUpdate = true;

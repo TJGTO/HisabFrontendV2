@@ -4,7 +4,7 @@ export const registrationSchema = yup
   .object({
     firstName: yup.string().required("Firstname is required"),
     lastName: yup.string().required("Lastname is required"),
-    phoneNo: yup
+    phone_no: yup
       .string()
       .matches(/^[6-9]\d{9}$/, {
         message: "Please enter valid number.",

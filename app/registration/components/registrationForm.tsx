@@ -137,12 +137,12 @@ function RegistrationForm() {
                       Phone No
                     </label>
                     <input
-                      id="phoneNo"
+                      id="phone_no"
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      {...register("phoneNo")}
+                      {...register("phone_no")}
                     />
-                    {errors && errors.phoneNo && (
-                      <Errormessage message={errors.phoneNo.message} />
+                    {errors && errors.phone_no && (
+                      <Errormessage message={errors.phone_no.message} />
                     )}
                   </div>
                 </div>

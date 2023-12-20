@@ -14,6 +14,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import MenuItem from "@mui/material/MenuItem";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { createAddressStringFromObj } from "../../Common/functions";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import Swal from "sweetalert2";
 import {
@@ -38,12 +39,18 @@ function ProfileSection() {
   const [openAddressDialog, setopenAddressDialog] = useState<boolean>(false);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      redirect("/dashboard");
-    }
     dispatch(fetchAllStates());
     dispatch(fetchUserDetails());
   }, []);
+
+  useEffect(() => {
+    if (isLoggedIn != undefined) {
+      if (!isLoggedIn) {
+        redirect("/dashboard");
+      }
+    }
+    console.log("isLoggedIn", isLoggedIn);
+  }, [isLoggedIn]);
 
   const handleClickOnEdit = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -109,15 +116,18 @@ function ProfileSection() {
             </MenuItem>
           </Menu>
         </div>
-        <div className="flex justify-center gap-2 mt-4 w-60">
-          <MailOutlineIcon />
-          {userProfile?.email}
-        </div>
-        <div className="flex justify-center gap-2 mt-4 w-60">
-          <LocalPhoneIcon />
-          {userProfile?.phone_no}
-        </div>
-
+        {userProfile?.email && (
+          <div className="flex justify-center gap-2 mt-4 w-60">
+            <MailOutlineIcon />
+            {userProfile?.email}
+          </div>
+        )}
+        {userProfile?.phone_no && (
+          <div className="flex justify-center gap-2 mt-4 w-60">
+            <LocalPhoneIcon />
+            {userProfile?.phone_no}
+          </div>
+        )}
         <div className="flex justify-center gap-5 mt-4 w-60">
           {userProfile?.facebook && (
             <FacebookIcon
@@ -146,17 +156,9 @@ function ProfileSection() {
           {userProfile?.address && (
             <LocationOnIcon
               onClick={(e) => {
-                let address =
-                  userProfile.address?.address_line_1 +
-                  "," +
-                  userProfile.address?.address_line_2 +
-                  "," +
-                  userProfile.address?.city +
-                  "," +
-                  userProfile.address?.pincode +
-                  "," +
-                  userProfile.address?.state?.state_name;
-                fireALertWithValue(address.toString());
+                fireALertWithValue(
+                  createAddressStringFromObj(userProfile?.address)
+                );
               }}
             />
           )}
