@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 import { usePathname } from "next/navigation";
 import Provider from "./storeProvider";
 import NavBar from "./nav/nav";
-import ProfileAvatar from "./nav/profilrAvatar";
+import Footer from "./Footer/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +23,7 @@ export default function RootLayout({
         {!authorizationRoutes.includes(pathname) && <NavBar />}
         <Provider>
           <div>{children}</div>
+          <Footer />
         </Provider>
       </body>
     </html>
