@@ -23,7 +23,7 @@ export default function RootLayout({
         {!authorizationRoutes.includes(pathname) && <NavBar />}
         <Provider>
           <div>{children}</div>
-          <Footer />
+          {!authorizationRoutes.includes(pathname) && <Footer />}
         </Provider>
       </body>
     </html>
