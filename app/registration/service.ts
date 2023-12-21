@@ -7,7 +7,7 @@ async function registerUser(data: registrationObj) {
   if (response.data && response.data.success) {
     return { success: true, message: "Registration is successfull" };
   }
-  return { success: false, message: "Registration is failed" };
+  return { success: false, message: response.data.message};
 }
 
 export { registerUser };
