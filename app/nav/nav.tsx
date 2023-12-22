@@ -5,10 +5,7 @@ import WFGLogo from "../Common/logo";
 import ProfileAvatar from "./profilrAvatar";
 import useAuth from "../Common/customHooks/useAuth";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
-const logopng =
-  "https://drive.google.com/uc?export=view&id=10ROLMv8jcIpmnLJlKC0vZ0ubQVsGHhTz";
 export default function NavBar() {
   let Links = [
     { name: "HOME", link: "/home" },
@@ -28,10 +25,16 @@ export default function NavBar() {
             onClick={(e) => {
               router.push("/dashboard");
             }}
-            className="cursor-pointer"
+            className="flex cursor-pointer"
           >
             <WFGLogo />
+            <div className="mt-2 ml-2">
+              <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                Beta
+              </span>
+            </div>
           </div>
+
           {/* <div
             onClick={() => setOpen(!open)}
             className="text-3xl absolute right-8 top-6 cursor-pointer md:hidden"

@@ -1,4 +1,5 @@
 import WFGLogo from "../Common/logo";
+import Link from "next/link";
 
 function Footer() {
   return (
@@ -28,7 +29,7 @@ function Footer() {
                     Email
                   </a>
                 </li>
-                <li>
+                <li className="mb-4">
                   <a
                     target="_blank"
                     href="https://chat.whatsapp.com/Du558LDd6Na9f0hWYbtUxk"
@@ -36,6 +37,15 @@ function Footer() {
                   >
                     Whatsapp
                   </a>
+                </li>
+                <li>
+                  <Link href="/about" className=" hover:underline">
+                    {" "}
+                    About Us
+                  </Link>
+                  {/* <a target="_blank" href="#" className="hover:underline">
+                    About Us
+                  </a> */}
                 </li>
               </ul>
             </div>

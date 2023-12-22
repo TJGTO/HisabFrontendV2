@@ -12,7 +12,7 @@ function Slider() {
       URL: "https://drive.google.com/uc?export=view&id=1u1H8Uqej_vo-Ds-q-0uOmwC_Npt2klxc",
     },
     {
-      URL: "https://drive.google.com/uc?export=view&id=1CCH3r5NTjfMNJcBTC0G4CFc8MO1awi7w",
+      URL: "https://drive.google.com/uc?export=view&id=16OIdKLIv1gXe0jizehhCBaxSFLxsEI-w",
     },
     {
       URL: "https://drive.google.com/uc?export=view&id=1pdlSVvOsFvLBMvWXVYP7SkHL7AprIwGO",

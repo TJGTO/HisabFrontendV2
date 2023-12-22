@@ -38,7 +38,6 @@ function ProfileAvatar(props: {
       <Avatar
         onClick={handleClick}
         alt="Remy Sharp"
-        src="/static/images/avatar/1.jpg"
         sx={{
           bgcolor: props.username
             ? stringToColor(props.username.toString())
