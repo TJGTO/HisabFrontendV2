@@ -104,14 +104,14 @@ function ProfileSection() {
           {userProfile?.firstName + " " + userProfile?.lastName}
           {userProfile?.academic == "Working Professional" && (
             <Tooltip title="Working Professional">
-              <div>
+              <div onClick={(e) => fireALertWithValue("Working Professional")}>
                 <WorkOutlineIcon />
               </div>
             </Tooltip>
           )}
           {userProfile?.academic == "Student" && (
             <Tooltip title="Student">
-              <div>
+              <div onClick={(e) => fireALertWithValue("Student")}>
                 <SchoolIcon />
               </div>
             </Tooltip>

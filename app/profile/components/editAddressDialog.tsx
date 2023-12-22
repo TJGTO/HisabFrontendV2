@@ -1,8 +1,8 @@
 import { settingDialogProps } from "../domain";
 import { updateTheUser } from "../../../lib/slices/profileSection";
 import { useState, useEffect } from "react";
+import CloseIcon from "@mui/icons-material/Close";
 import { updateProfileObj } from "../domain";
-import WFGLogo from "../../Common/logo";
 import Swal from "sweetalert2";
 import Dialog from "@mui/material/Dialog";
 import { RootState, AppDispatch } from "../../../lib/store";
@@ -108,7 +108,10 @@ function EditAddressDialog({ open, onClose }: settingDialogProps) {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Edit Profile
               </h1>
-              <WFGLogo />
+              <CloseIcon
+                onClick={handleClose}
+                style={{ color: "red", cursor: "pointer" }}
+              />
             </div>
             <div className="space-y-4 md:space-y-6">
               <div className="flex gap-3">
