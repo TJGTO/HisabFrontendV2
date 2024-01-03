@@ -15,6 +15,14 @@ const AxiosWithAuth = axios.create({
   },
 });
 
+const AxiosWithAuthFromData = axios.create({
+  baseURL: URL,
+  timeout: 10000,
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
+
 AxiosWithAuth.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -27,5 +35,16 @@ AxiosWithAuth.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-export { Axios, AxiosWithAuth };
+AxiosWithAuthFromData.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+export { Axios, AxiosWithAuth, AxiosWithAuthFromData };
