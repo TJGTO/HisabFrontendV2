@@ -15,6 +15,9 @@ function ProfileAvatar(props: {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const profilePictureURL = localStorage
+    ? localStorage.getItem("profileURL")
+    : "";
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -37,8 +40,8 @@ function ProfileAvatar(props: {
       {" "}
       <Avatar
         onClick={handleClick}
-        alt="Remy Sharp"
-        src="/static/images/avatar/1.jpg"
+        alt="Profile Picture"
+        src={profilePictureURL ? profilePictureURL : ""}
         sx={{
           bgcolor: props.username
             ? stringToColor(props.username.toString())

@@ -1,12 +1,19 @@
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useSelector, useDispatch } from "react-redux";
+import Swal from "sweetalert2";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { openDialog } from "../../../lib/slices/dashboard";
 
 function CreatematchCard() {
   const dispatch = useDispatch<AppDispatch>();
   const openMatchCreateDialog = () => {
-    dispatch(openDialog());
+    //dispatch(openDialog());
+    Swal.fire({
+      icon: "success",
+      title: "This Functionality will available soon",
+      showConfirmButton: false,
+      timer: 1500,
+    });
   };
   return (
     <div className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const URL = "https://wfg-kol-backend.onrender.com/";
-// const URL = "http://localhost:8000/";
+//const URL = "http://localhost:8000/";
 const Axios = axios.create({
   baseURL: URL,
   timeout: 10000,
@@ -9,9 +9,17 @@ const Axios = axios.create({
 
 const AxiosWithAuth = axios.create({
   baseURL: URL,
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     "Content-Type": "application/json",
+  },
+});
+
+const AxiosWithAuthFromData = axios.create({
+  baseURL: URL,
+  timeout: 30000,
+  headers: {
+    "Content-Type": "multipart/form-data",
   },
 });
 
@@ -27,5 +35,16 @@ AxiosWithAuth.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-export { Axios, AxiosWithAuth };
+AxiosWithAuthFromData.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+export { Axios, AxiosWithAuth, AxiosWithAuthFromData };

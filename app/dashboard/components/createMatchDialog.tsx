@@ -134,9 +134,7 @@ function CreateMatchDialog(props: SimpleDialogProps) {
                     )} */}
                 </div>
               </div>
-              <div>
-                <FileUploadSection />
-              </div>
+              <div>{/* <FileUploadSection /> */}</div>
               <button
                 type="submit"
                 //disabled={!checked}
