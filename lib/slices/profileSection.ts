@@ -139,6 +139,10 @@ const profileSectionSlice = createSlice({
         state.updateMessage = action.payload?.message;
       }
     });
+    builder.addCase(updateProfilePic.rejected, (state) => {
+      state.errorOnUpdate = true;
+      state.updateLoader = false;
+    });
   },
 });
 
