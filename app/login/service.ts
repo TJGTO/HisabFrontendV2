@@ -8,7 +8,6 @@ async function loginUser(data: loginObj) {
     localStorage.setItem("token", response.data.data.token);
     localStorage.setItem("fullname", response.data.data.fullname);
     localStorage.setItem("email", response.data.data.email);
-    localStorage.setItem("profileURL", response.data.data.profilePictureUrl);
 
     return {
       success: true,

@@ -20,7 +20,6 @@ export interface updateProfileObj {
   phone_no?: String;
   email?: String;
   academic?: String;
-  profilePictureURL?: String;
   facebook?: String;
   instagram?: String;
   youtube?: String;

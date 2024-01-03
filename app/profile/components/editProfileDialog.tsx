@@ -12,7 +12,6 @@ function EditProfileDialog({ open, onClose }: settingDialogProps) {
   const userProfile = useSelector(
     (state: RootState) => state.profileSection.userProfile
   );
-
   const dispatch = useDispatch<AppDispatch>();
   const [academic, setacademic] = useState<string>("");
   const [facebook, setfacebook] = useState<string>("");

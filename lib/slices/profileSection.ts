@@ -7,7 +7,6 @@ import {
   updateUser,
   getStates,
   getUserDetails,
-  updateProfilePicture,
 } from "../../app/profile/service";
 
 const initialState: ProfileSectionState = {
@@ -25,7 +24,6 @@ const initialState: ProfileSectionState = {
     academic: "",
     facebook: "",
     instagram: "",
-    profilePictureURL: "",
     youtube: "",
     about: "",
     address: {
@@ -57,18 +55,6 @@ export const updateTheUser = createAsyncThunk(
   async (data: updateProfileObj, { getState, dispatch }) => {
     try {
       const response = await updateUser(data);
-      dispatch(fetchUserDetails());
-      return response;
-    } catch (err) {
-      console.log(err);
-    }
-  }
-);
-export const updateProfilePic = createAsyncThunk(
-  "profileSection/updateProfilePic",
-  async (data: FormData, { getState, dispatch }) => {
-    try {
-      const response = await updateProfilePicture(data);
       dispatch(fetchUserDetails());
       return response;
     } catch (err) {
@@ -123,25 +109,6 @@ const profileSectionSlice = createSlice({
       if (action.payload && action.payload.user) {
         state.userProfile = action.payload.user as updateProfileObj;
       }
-    });
-    builder.addCase(updateProfilePic.pending, (state) => {
-      state.updateLoader = true;
-    });
-    builder.addCase(updateProfilePic.fulfilled, (state, action) => {
-      if (action.payload) {
-        if (action.payload.success) {
-          state.updateLoader = false;
-          state.updateMessage = action.payload?.message;
-        } else {
-          state.errorOnUpdate = true;
-          state.updateLoader = false;
-        }
-        state.updateMessage = action.payload?.message;
-      }
-    });
-    builder.addCase(updateProfilePic.rejected, (state) => {
-      state.errorOnUpdate = true;
-      state.updateLoader = false;
     });
   },
 });
