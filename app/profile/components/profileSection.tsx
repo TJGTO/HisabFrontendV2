@@ -19,6 +19,9 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { createAddressStringFromObj, fromatDate } from "../../Common/functions";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import Swal from "sweetalert2";
+import Badge from "@mui/material/Badge";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import EditProfilePictureDialog from "./profilePictureEditDialog";
 import {
   fetchAllStates,
   fetchUserDetails,
@@ -40,6 +43,7 @@ function ProfileSection() {
   const dispatch = useDispatch<AppDispatch>();
   const [isLoggedIn, token, fullname] = useAuth();
   const [openAddressDialog, setopenAddressDialog] = useState<boolean>(false);
+  const [openpictureDialog, setopenpictureDialog] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(fetchAllStates());
@@ -70,6 +74,9 @@ function ProfileSection() {
   const closeEditAddressDialog = () => {
     setopenAddressDialog(false);
   };
+  const closeEditPictureDialog = () => {
+    setopenpictureDialog(false);
+  };
   const fireALertWithValue = (value: string | undefined) => {
     Swal.fire(value ? value : "");
   };
@@ -90,7 +97,24 @@ function ProfileSection() {
             alt="..."
             className="shadow-lg rounded-full max-w-full h-auto align-middle border-none"
           /> */}
-          <Avatar
+          <Badge
+            overlap="circular"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            badgeContent={
+              <CameraAltIcon onClick={(e) => setopenpictureDialog(true)} />
+            }
+          >
+            <Avatar
+              sx={{
+                width: 150,
+                height: 150,
+                bgcolor: fullname ? stringToColor(fullname.toString()) : "",
+              }}
+            >
+              {fullname && createSortFromForAvator(fullname.toString())}
+            </Avatar>
+          </Badge>
+          {/* <Avatar
             sx={{
               width: 150,
               height: 150,
@@ -98,7 +122,7 @@ function ProfileSection() {
             }}
           >
             {fullname && createSortFromForAvator(fullname.toString())}
-          </Avatar>
+          </Avatar> */}
         </div>
         <div className="flex justify-center gap-2 mt-4 w-60">
           {userProfile?.firstName + " " + userProfile?.lastName}
@@ -204,6 +228,10 @@ function ProfileSection() {
       <EditAddressDialog
         open={openAddressDialog}
         onClose={closeEditAddressDialog}
+      />
+      <EditProfilePictureDialog
+        open={openpictureDialog}
+        onClose={closeEditPictureDialog}
       />
     </div>
   );
