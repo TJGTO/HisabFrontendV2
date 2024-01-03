@@ -83,14 +83,6 @@ function ProfileSection() {
   return (
     <div className="h-screen flex justify-center mt-6 ">
       <div className="flex-col gap-6">
-        <div
-          className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-          role="alert"
-        >
-          <span className="font-medium">
-            Photo Upload will be available Soon
-          </span>
-        </div>
         <div className="flex justify-center h-40 w-60">
           {/* <img
             src="https://www.creative-tim.com/learning-lab/tailwind-starter-kit/img/team-4-470x470.png"
@@ -110,6 +102,7 @@ function ProfileSection() {
                 height: 150,
                 bgcolor: fullname ? stringToColor(fullname.toString()) : "",
               }}
+              src={userProfile?.profilePictureURL?.toString()}
             >
               {fullname && createSortFromForAvator(fullname.toString())}
             </Avatar>

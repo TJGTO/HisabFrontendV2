@@ -24,6 +24,7 @@ const initialState: ProfileSectionState = {
     academic: "",
     facebook: "",
     instagram: "",
+    profilePictureURL: "",
     youtube: "",
     about: "",
     address: {
