@@ -20,7 +20,7 @@ export default function NavBar() {
   return (
     <>
       <div className="shadow-md w-full staic top-0 left-0 ">
-        <div className="flex items-center justify-between bg-[#c8d6e1] py-4 md:px-10 px-7">
+        <div className="flex items-center justify-between bg-[#c8d6e1] py-4 md:px-10 px-7 ">
           <div
             onClick={(e) => {
               router.push("/dashboard");
