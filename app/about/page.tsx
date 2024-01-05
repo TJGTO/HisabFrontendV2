@@ -1,3 +1,5 @@
+"use client";
+
 import AboutUs from "./components/aboutUs";
 
 function About() {
