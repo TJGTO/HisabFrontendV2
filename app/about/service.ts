@@ -1,13 +1,13 @@
 import { Axios } from "../../lib/axios";
 
 async function getAboutUsData() {
-  let response: any = await Axios.get("user/login");
+  let response: any = await Axios.get("aboutus");
 
   if (response.data && response.data.success) {
     return {
       success: true,
       message: "Fetching Successfull",
-      data: response.data,
+      data: response.data.data,
     };
   }
   return {
