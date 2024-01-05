@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { registerUser } from "../../app/registration/service";
 import { loginUser } from "../../app/login/service";
 import { registrationObj } from "../../app/registration/domain";
+import { getAboutUsData } from "../../app/about/service";
 import { loginObj } from "../../app/login/domain";
 
 const initialState = {
@@ -12,7 +13,24 @@ const initialState = {
   loginLoader: false,
   userDetail: null,
   loginMessage: "",
+  aboutUs: {
+    titleText: "",
+    DescriptionText: "",
+    ImageUrl: "",
+  },
 };
+
+export const getaboutUs = createAsyncThunk(
+  "authorization/getaboutUs",
+  async () => {
+    try {
+      const response = await getAboutUsData();
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 
 export const registerTheUser = createAsyncThunk(
   "authorization/registration",
@@ -73,6 +91,16 @@ const authorizationSlice = createSlice({
         state.loginMessage = action.payload.message;
       }
       state.loginLoader = false;
+    });
+    builder.addCase(getaboutUs.fulfilled, (state, action) => {
+      if (action.payload && action.payload.success) {
+        if (action.payload.data.titleText)
+          state.aboutUs.titleText = action.payload.data.titleText;
+        if (action.payload.data.DescriptionText)
+          state.aboutUs.DescriptionText = action.payload.data.DescriptionText;
+        if (action.payload.data.ImageUrl)
+          state.aboutUs.ImageUrl = action.payload.data.ImageUrl;
+      }
     });
   },
 });
