@@ -1,3 +1,5 @@
+import * as yup from "yup";
+
 export interface SlidingImageObject {
   URL: string;
 }

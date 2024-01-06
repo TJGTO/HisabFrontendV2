@@ -50,3 +50,11 @@ export const fromatDate = (
   const momentDate = moment(date);
   return momentDate.format(formatOfDate);
 };
+
+export const getCurrentDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};

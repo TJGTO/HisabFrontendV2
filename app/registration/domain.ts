@@ -2,8 +2,8 @@ import * as yup from "yup";
 
 export const registrationSchema = yup
   .object({
-    firstName: yup.string().required("Firstname is required"),
-    lastName: yup.string().required("Lastname is required"),
+    firstName: yup.string().trim().required("Firstname is required"),
+    lastName: yup.string().trim().required("Lastname is required"),
     phone_no: yup
       .string()
       .matches(/^[6-9]\d{9}$/, {
