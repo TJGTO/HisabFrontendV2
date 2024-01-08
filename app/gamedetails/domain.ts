@@ -11,10 +11,21 @@ export interface settingDialogProps {
   onClose: () => void;
 }
 
+export interface activeGamesObj {
+  gameId: string;
+  venue: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  number_of_players: number;
+  price: number;
+}
+
 export interface gameModelStateObj {
   gameLoader: boolean;
   errorOnCreation: boolean;
   gameCreationMessage: string;
+  activeGames: Array<activeGamesObj>;
 }
 
 export interface createGameReqBody {

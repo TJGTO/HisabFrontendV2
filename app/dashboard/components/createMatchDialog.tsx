@@ -4,12 +4,13 @@ import Avatar from "@mui/material/Avatar";
 import { useForm } from "react-hook-form";
 import CircularProgress from "@mui/material/CircularProgress";
 import Errormessage from "../../Common/FormComponents/errormessage";
-import { getCurrentDate } from "../../Common/functions";
+import { getCurrentDate, fromatDate } from "../../Common/functions";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createMatchSchema } from "../../gamedetails/domain";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
+import { createTheGame } from "../../../lib/slices/gamemodule";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -21,12 +22,14 @@ export interface SimpleDialogProps {
 function CreateMatchDialog(props: SimpleDialogProps) {
   const { onClose, open } = props;
   const dispatch = useDispatch<AppDispatch>();
+  const openFlag = useSelector((state: RootState) => state.dashboard.open);
   const gameLoader = useSelector(
     (state: RootState) => state.gameModel.gameLoader
   );
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(createMatchSchema) });
 
@@ -34,12 +37,28 @@ function CreateMatchDialog(props: SimpleDialogProps) {
     onClose();
   };
 
-  const handleListItemClick = (value: string) => {
-    onClose();
+  React.useEffect(() => {
+    if (!openFlag) {
+      handleFormReset();
+    }
+  }, [openFlag]);
+
+  const handleFormReset = () => {
+    reset({
+      venue: "",
+      start_time: "",
+      end_time: "",
+      price: 0,
+      number_of_players: 0,
+      date: new Date(),
+    });
   };
 
   const onSubmit = (data: any) => {
     console.log(data);
+    let formattedDate = fromatDate(data.date);
+    data.date = formattedDate;
+    dispatch(createTheGame(data));
   };
 
   return (
@@ -175,16 +194,6 @@ function CreateMatchDialog(props: SimpleDialogProps) {
                   Create
                 </button>
               )}
-              <button
-                type="submit"
-                //disabled={!checked}
-                onClick={(e) => {
-                  //e.preventDefault(), dispatch(increment());
-                }}
-                className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Create
-              </button>
             </form>
           </div>
         </div>

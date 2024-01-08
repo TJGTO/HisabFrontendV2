@@ -9,6 +9,9 @@ export interface CardObject {
   URL: string;
   venue: string;
   date: string;
+  startTime: string;
+  endTime: string;
+  price: number;
   creator: Creator;
 }
 
