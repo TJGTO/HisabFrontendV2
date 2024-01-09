@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import Card from "./card";
 import Swal from "sweetalert2";
+import Tooltip from "@mui/material/Tooltip";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../lib/store";
 import CreateMatchDialog from "./createMatchDialog";
@@ -33,10 +35,6 @@ function CardSection() {
   }, []);
 
   useEffect(() => {
-    console.log("activeGames", activeGames);
-  }, [activeGames]);
-
-  useEffect(() => {
     if (!gameLoader && gameCreationMessage) {
       if (!errorOnCreation) handleClose();
       Swal.fire({
@@ -51,30 +49,47 @@ function CardSection() {
   const handleClose = () => {
     dispatch(closeDialog());
   };
+  const openMatchCreateDialog = () => {
+    dispatch(openDialog());
+  };
   const creator: Creator = {
     firstName: "Tathagata Mondal",
     profileImageURL: "https://picsum.photos/32/32/?random",
     id: "tiuer8444444444444444569",
   };
   return (
-    <div className="container my-12 mx-auto px-4 md:px-12">
-      <div className="flex flex-wrap -mx-1 lg:-mx-4">
-        <CreatematchCard />
-        {activeGames.map((x, index) => (
-          <Card
-            key={index}
-            cardId={"1"}
-            URL={"https://picsum.photos/600/400/?random"}
-            venue={x.venue}
-            date={x.date}
-            startTime={x.start_time}
-            endTime={x.end_time}
-            creator={creator}
-            price={x.price}
-          />
-        ))}
+    <div>
+      <div className="container flex gap-3 mx-auto px-4 md:px-12">
+        <p className="text-lg font-bold">Active Matches</p>
+        <div
+          className="my-0.5 cursor-pointer"
+          onClick={(e) => {
+            openMatchCreateDialog();
+          }}
+        >
+          <Tooltip title="Create a Match">
+            <AddCircleIcon style={{ color: "#0051d3" }} />
+          </Tooltip>
+        </div>
       </div>
-      <CreateMatchDialog open={openFlag} onClose={handleClose} />
+      <div className="container my-4 mx-auto px-4 md:px-12">
+        <div className="flex flex-wrap -mx-1 lg:-mx-4">
+          {activeGames.map((x, index) => (
+            <Card
+              key={index}
+              cardId={"1"}
+              URL={"https://picsum.photos/600/400/?random"}
+              venue={x.venue}
+              date={x.date}
+              startTime={x.start_time}
+              endTime={x.end_time}
+              creator={creator}
+              price={x.price}
+            />
+          ))}
+        </div>
+        <CreateMatchDialog open={openFlag} onClose={handleClose} />
+      </div>
     </div>
   );
 }

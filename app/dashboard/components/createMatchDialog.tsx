@@ -60,7 +60,7 @@ function CreateMatchDialog(props: SimpleDialogProps) {
     data.date = formattedDate;
     dispatch(createTheGame(data));
   };
-
+  const [value, onChange] = React.useState<string>("10:00");
   return (
     <Dialog
       onClose={handleClose}

@@ -19,7 +19,7 @@ function Card({
           <img alt="Placeholder" className="block h-40 w-full" src={URL} />
         </a>
 
-        <header className="flex items-center justify-between dark:bg-slate-800 bg-white leading-tight p-2 md:p-4">
+        <header className="flex items-center justify-between dark:bg-slate-800 bg-white leading-tight p-2 md:pt-2">
           <h1 className="text-lg">
             <a
               className="no-underline hover:underline text-black dark:text-white"
@@ -30,13 +30,13 @@ function Card({
           </h1>
           <p className="text-black dark:text-white text-sm">{date}</p>
         </header>
-        <div className="flex justify-between w-full dark:bg-slate-800 bg-white leading-tight p-2 md:p-4">
-          <p className="ml-2 text-sm text-black dark:text-white">
+        <div className="flex justify-between w-full dark:bg-slate-800 bg-white leading-tight p-2 md:t-2">
+          <p className="ml-1 text-sm text-black dark:text-white">
             {startTime} - {endTime}
           </p>
-          <p className="ml-2 text-sm text-black dark:text-white">₹ {price}</p>
+          <p className="ml-1 text-sm text-black dark:text-white">₹ {price}</p>
         </div>
-        <footer className="flex items-center justify-between dark:bg-slate-800 bg-white leading-none p-2 md:p-4">
+        <footer className="flex items-center justify-between dark:bg-slate-800 bg-white leading-none p-2 md:pt-2">
           {/* <a
             className="flex items-center no-underline hover:underline text-black dark:text-white"
             href="#"
