@@ -9,13 +9,18 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../lib/store";
 import CreateMatchDialog from "./createMatchDialog";
 import { Creator } from "../domain";
+import { useRouter } from "next/navigation";
 import { openDialog, closeDialog } from "../../../lib/slices/dashboard";
-import { fetchActiveGames } from "../../../lib/slices/gamemodule";
+import useAuth from "@/app/Common/customHooks/useAuth";
+import { fetchActiveGames, resetFlags } from "../../../lib/slices/gamemodule";
 import CreatematchCard from "./creatematchCard";
 
 function CardSection() {
   const openFlag = useSelector((state: RootState) => state.dashboard.open);
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+
+  const [isLoggedIn] = useAuth();
 
   const gameLoader = useSelector(
     (state: RootState) => state.gameModel.gameLoader
@@ -48,6 +53,7 @@ function CardSection() {
 
   const handleClose = () => {
     dispatch(closeDialog());
+    dispatch(resetFlags());
   };
   const openMatchCreateDialog = () => {
     dispatch(openDialog());
@@ -56,6 +62,9 @@ function CardSection() {
     firstName: "Tathagata Mondal",
     profileImageURL: "https://picsum.photos/32/32/?random",
     id: "tiuer8444444444444444569",
+  };
+  const gotoPage = (link: string) => {
+    router.push(link);
   };
   return (
     <div>
@@ -67,9 +76,11 @@ function CardSection() {
             openMatchCreateDialog();
           }}
         >
-          <Tooltip title="Create a Match">
-            <AddCircleIcon style={{ color: "#0051d3" }} />
-          </Tooltip>
+          {isLoggedIn && (
+            <Tooltip title="Create a Match">
+              <AddCircleIcon style={{ color: "#0051d3" }} />
+            </Tooltip>
+          )}
         </div>
       </div>
       <div className="container my-4 mx-auto px-4 md:px-12">
@@ -77,7 +88,7 @@ function CardSection() {
           {activeGames.map((x, index) => (
             <Card
               key={index}
-              cardId={"1"}
+              cardId={x.gameId}
               URL={"https://picsum.photos/600/400/?random"}
               venue={x.venue}
               date={x.date}
@@ -85,6 +96,7 @@ function CardSection() {
               endTime={x.end_time}
               creator={creator}
               price={x.price}
+              gotoPage={gotoPage}
             />
           ))}
         </div>

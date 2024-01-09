@@ -36,7 +36,13 @@ export const fetchActiveGames = createAsyncThunk(
 const gameModelSlice = createSlice({
   name: "gamemodel",
   initialState,
-  reducers: {},
+  reducers: {
+    resetFlags: (state) => {
+      state.errorOnCreation = false;
+      state.gameCreationMessage = "";
+      state.gameLoader = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(createTheGame.pending, (state) => {
       state.gameLoader = true;
@@ -60,5 +66,6 @@ const gameModelSlice = createSlice({
     });
   },
 });
+export const { resetFlags } = gameModelSlice.actions;
 
 export default gameModelSlice.reducer;

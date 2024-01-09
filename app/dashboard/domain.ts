@@ -13,6 +13,7 @@ export interface CardObject {
   endTime: string;
   price: number;
   creator: Creator;
+  gotoPage: (link: string) => void;
 }
 
 export type Creator = {
