@@ -1,8 +1,7 @@
 import React from "react";
-import Image from "next/image";
 
 const logopng =
-  "https://drive.google.com/uc?export=view&id=10ROLMv8jcIpmnLJlKC0vZ0ubQVsGHhTz";
+  "https://drive.google.com/uc?export=view&id=1irw-9jgO0PlDIEPoKddBQAv9jN4kutPM";
 
 type logoProps = {
   width?: number;
