@@ -79,7 +79,8 @@ const TABLE_ROWS = [
   },
 ];
 
-function Playerist() {
+function Playerist({ gameid }: { gameid: string }) {
+  console.log("gameid", gameid);
   const [tablerows, settablerows] = useState<Array<JSX.Element>>([]);
   const [openDialog, setopenDialog] = useState<boolean>(false);
 
