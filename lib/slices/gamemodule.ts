@@ -1,13 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { gameModelStateObj } from "../../app/gamedetails/domain";
-import { createGameReqBody } from "../../app/gamedetails/domain";
-import { createaGame, getActiveMatches } from "../../app/gamedetails/service";
+import {
+  gameModelStateObj,
+  createGameReqBody,
+} from "../../app/gamedetails/domain";
+
+import {
+  createaGame,
+  getActiveMatches,
+  getMatchDetails,
+} from "../../app/gamedetails/service";
 
 const initialState: gameModelStateObj = {
   gameLoader: false,
   errorOnCreation: false,
   gameCreationMessage: "",
   activeGames: [],
+  gameDetails: null,
 };
 
 export const createTheGame = createAsyncThunk(
@@ -27,6 +35,17 @@ export const fetchActiveGames = createAsyncThunk(
   async () => {
     try {
       const response = await getActiveMatches();
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+export const fetchGameDetails = createAsyncThunk(
+  "gameModel/fetchGameDetails",
+  async (gameId: string) => {
+    try {
+      const response = await getMatchDetails(gameId);
       return response;
     } catch (err) {
       console.log(err);
@@ -62,6 +81,11 @@ const gameModelSlice = createSlice({
     builder.addCase(fetchActiveGames.fulfilled, (state, action) => {
       if (action.payload && action.payload.success) {
         state.activeGames = action.payload.matches;
+      }
+    });
+    builder.addCase(fetchGameDetails.fulfilled, (state, action) => {
+      if (action.payload && action.payload.success) {
+        state.gameDetails = action.payload.details;
       }
     });
   },

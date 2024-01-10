@@ -39,4 +39,23 @@ async function getActiveMatches() {
     }`,
   };
 }
-export { createaGame, getActiveMatches };
+
+async function getMatchDetails(gameId: string) {
+  let response: any = await Axios.get(`game/details/${gameId}`);
+
+  if (response.data && response.data.success) {
+    return {
+      success: true,
+      details: response.data.data,
+    };
+  }
+  return {
+    success: false,
+    message: `${
+      response.data.message
+        ? response.data.message
+        : "Failed to fetch match details"
+    }`,
+  };
+}
+export { createaGame, getActiveMatches, getMatchDetails };

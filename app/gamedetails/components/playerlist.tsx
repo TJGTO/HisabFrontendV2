@@ -9,6 +9,9 @@ import CreateIcon from "@mui/icons-material/Create";
 import AddIcon from "@mui/icons-material/Add";
 import Tabs from "./tabs";
 import SettingDialog from "./settingDialog";
+import { RootState, AppDispatch } from "../../../lib/store";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchGameDetails } from "../../../lib/slices/gamemodule";
 
 import {
   Card,
@@ -24,11 +27,12 @@ import {
 } from "@mui/material";
 
 const TableheaderArr = [
-  { id: 1, label: "Member" },
-  { id: 2, label: "Function" },
-  { id: 3, label: "Status" },
-  { id: 4, label: "Employed" },
-  { id: 5, label: "Member" },
+  { id: 1, label: "Player" },
+  { id: 2, label: "Position" },
+  { id: 3, label: "Age" },
+  { id: 4, label: "Status" },
+  { id: 5, label: "Rating" },
+  { id: 6, label: "Actions" },
 ];
 
 const TABLE_ROWS = [
@@ -80,29 +84,47 @@ const TABLE_ROWS = [
 ];
 
 function Playerist({ gameid }: { gameid: string }) {
-  console.log("gameid", gameid);
+  const dispatch = useDispatch<AppDispatch>();
   const [tablerows, settablerows] = useState<Array<JSX.Element>>([]);
   const [openDialog, setopenDialog] = useState<boolean>(false);
+  const gameDetails = useSelector(
+    (state: RootState) => state.gameModel.gameDetails
+  );
 
   const closeSettingDialog = () => {
     setopenDialog(false);
   };
 
   useEffect(() => {
-    createTableRows();
+    if (gameid) {
+      dispatch(fetchGameDetails(gameid));
+    }
   }, []);
 
+  useEffect(() => {
+    if (gameDetails) {
+      createTableRows();
+    }
+  }, [gameDetails]);
+
+  const getNumbersofSlotLeft = () => {
+    if (gameDetails) {
+      return gameDetails.number_of_players - gameDetails.players.length;
+    } else {
+      return 0;
+    }
+  };
   const createTableRows = (): void => {
     let arr: JSX.Element[] = [];
-    TABLE_ROWS.forEach(
-      ({ img, name, email, job, org, online, date }, index) => {
+    gameDetails?.players.forEach(
+      ({ profilepictureurl, name, age, phoneNumber, position }, index) => {
         const isLast = index === TABLE_ROWS.length - 1;
         const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
         const row: JSX.Element = (
           <tr key={name}>
             <td className={classes}>
               <div className="flex items-center gap-3">
-                <Avatar src={img} alt={name} />
+                <Avatar src={profilepictureurl} alt={name} />
                 <div className="flex flex-col">
                   <Typography
                     color="blue-gray"
@@ -114,7 +136,7 @@ function Playerist({ gameid }: { gameid: string }) {
                     color="blue-gray"
                     className="font-normal opacity-70 dark:text-white"
                   >
-                    {email}
+                    {phoneNumber}
                   </Typography>
                 </div>
               </div>
@@ -125,25 +147,37 @@ function Playerist({ gameid }: { gameid: string }) {
                   color="blue-gray"
                   className="font-normal dark:text-white"
                 >
-                  {job}
-                </Typography>
-                <Typography
-                  color="blue-gray"
-                  className="font-normal opacity-70 dark:text-white"
-                >
-                  {org}
+                  {position}
                 </Typography>
               </div>
             </td>
             <td className={classes}>
-              <div className="w-max">{/*chip section*/}</div>
+              <div className="flex flex-col">
+                <Typography
+                  color="blue-gray"
+                  className="font-normal dark:text-white"
+                >
+                  {age}
+                </Typography>
+              </div>
+            </td>
+            <td className={classes}>
+              <div className="w-max">
+                {" "}
+                <Typography
+                  color="blue-gray"
+                  className="font-normal opacity-70 dark:text-white"
+                >
+                  {"Paid"}
+                </Typography>
+              </div>
             </td>
             <td className={classes}>
               <Typography
                 color="blue-gray"
                 className="font-normal dark:text-white"
               >
-                {date}
+                {"5"}
               </Typography>
             </td>
             <td className={classes}>
@@ -168,13 +202,15 @@ function Playerist({ gameid }: { gameid: string }) {
               color="blue-gray"
               className="dark:text-white"
             >
-              Jawpur , Dumdum Turf
+              {gameDetails?.venue}
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-              Date - 11/11/23 , 7:00PM - 9:00PM
+              Date - {gameDetails?.date} , {gameDetails?.start_time} -{" "}
+              {gameDetails?.end_time}
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-              Total Member - 18
+              Total Capacity - {gameDetails?.number_of_players} Left -{" "}
+              {getNumbersofSlotLeft()}
             </Typography>
           </div>
           <div className="flex shrink-0 flex-col gap-2 sm:flex-row">

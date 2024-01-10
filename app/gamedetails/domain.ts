@@ -6,6 +6,13 @@ export type tabsObject = {
   clicked: boolean;
 };
 
+export enum Position {
+  Defence,
+  Midfield,
+  Attack,
+  Keeper,
+}
+
 export interface settingDialogProps {
   open: boolean;
   onClose: () => void;
@@ -21,11 +28,26 @@ export interface activeGamesObj {
   price: number;
 }
 
+export interface Iplayers {
+  name: string;
+  player_id: string;
+  age: string;
+  profilepictureurl: string;
+  rating?: string;
+  phoneNumber: string;
+  position: Position;
+}
+
+export interface IgameDetailsObj extends activeGamesObj {
+  players: Iplayers[];
+}
+
 export interface gameModelStateObj {
   gameLoader: boolean;
   errorOnCreation: boolean;
   gameCreationMessage: string;
   activeGames: Array<activeGamesObj>;
+  gameDetails: IgameDetailsObj | null;
 }
 
 export interface createGameReqBody {
