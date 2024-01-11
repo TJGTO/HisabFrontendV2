@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import CustomTable from "../../Common/Table/CustomTable";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SearchIcon from "@mui/icons-material/Search";
+import RegisterInGameDialog from "./registerDialog";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import CreateIcon from "@mui/icons-material/Create";
 import AddIcon from "@mui/icons-material/Add";
@@ -35,64 +36,22 @@ const TableheaderArr = [
   { id: 6, label: "Actions" },
 ];
 
-const TABLE_ROWS = [
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-    name: "John Michael",
-    email: "john@creative-tim.com",
-    job: "Manager",
-    org: "Organization",
-    online: true,
-    date: "23/04/18",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-    name: "Alexa Liras",
-    email: "alexa@creative-tim.com",
-    job: "Programator",
-    org: "Developer",
-    online: false,
-    date: "23/04/18",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-    name: "Laurent Perrier",
-    email: "laurent@creative-tim.com",
-    job: "Executive",
-    org: "Projects",
-    online: false,
-    date: "19/09/17",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-    name: "Michael Levi",
-    email: "michael@creative-tim.com",
-    job: "Programator",
-    org: "Developer",
-    online: true,
-    date: "24/12/08",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-    name: "Richard Gran",
-    email: "richard@creative-tim.com",
-    job: "Manager",
-    org: "Executive",
-    online: false,
-    date: "04/10/21",
-  },
-];
-
 function Playerist({ gameid }: { gameid: string }) {
   const dispatch = useDispatch<AppDispatch>();
   const [tablerows, settablerows] = useState<Array<JSX.Element>>([]);
   const [openDialog, setopenDialog] = useState<boolean>(false);
+  const [openRegisterDialog, stopenRegisterDialog] = useState<boolean>(false);
+
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
   );
 
   const closeSettingDialog = () => {
     setopenDialog(false);
+  };
+
+  const closeRsgisterDialog = () => {
+    stopenRegisterDialog(false);
   };
 
   useEffect(() => {
@@ -118,7 +77,7 @@ function Playerist({ gameid }: { gameid: string }) {
     let arr: JSX.Element[] = [];
     gameDetails?.players.forEach(
       ({ profilepictureurl, name, age, phoneNumber, position }, index) => {
-        const isLast = index === TABLE_ROWS.length - 1;
+        const isLast = index === gameDetails?.players.length - 1;
         const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
         const row: JSX.Element = (
           <tr key={name}>
@@ -214,7 +173,15 @@ function Playerist({ gameid }: { gameid: string }) {
             </Typography>
           </div>
           <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-            <Button variant="outlined">Register</Button>
+            <Button
+              variant="outlined"
+              onClick={(e) => {
+                e.preventDefault();
+                stopenRegisterDialog(true);
+              }}
+            >
+              Register
+            </Button>
             <Button className="flex items-center gap-3">
               <AddIcon className="h-4 w-4" /> Add member
             </Button>
@@ -243,6 +210,10 @@ function Playerist({ gameid }: { gameid: string }) {
         )}
       </div>
       <SettingDialog open={openDialog} onClose={closeSettingDialog} />
+      <RegisterInGameDialog
+        open={openRegisterDialog}
+        onClose={closeRsgisterDialog}
+      />
     </Card>
   );
 }
