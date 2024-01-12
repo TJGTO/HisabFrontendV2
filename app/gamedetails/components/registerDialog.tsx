@@ -1,6 +1,7 @@
-import { settingDialogProps } from "../domain";
+import { registerDialogProps } from "../domain";
 import { updateProfilePic } from "../../../lib/slices/profileSection";
 import { useState, useEffect } from "react";
+import Errormessage from "../../Common/FormComponents/errormessage";
 import FileUploadSection from "../../Common/FormComponents/fileUploadSection";
 import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
@@ -8,28 +9,35 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
+import { registerSlot } from "../../../lib/slices/gamemodule";
 
-function RegisterInGameDialog({ open, onClose }: settingDialogProps) {
+function RegisterInGameDialog({ open, onClose, gameid }: registerDialogProps) {
   //   const userProfile = useSelector(
   //     (state: RootState) => state.profileSection.userProfile
   //   );
 
   const dispatch = useDispatch<AppDispatch>();
   const [file, setfile] = useState<File>();
+  const [position, setposition] = useState<string>("");
+  const [positionError, setpositionError] = useState<boolean>(false);
 
   const handleClose = () => {
     onClose();
   };
 
   const updateProfilePicture = () => {
+    if (!position) {
+      setpositionError(true);
+      return;
+    }
     const formData = new FormData();
     let blobdata = file as Blob;
-    console.log("blob", blobdata);
     formData.append(`file`, blobdata);
-    dispatch(updateProfilePic(formData));
+    formData.append("position", position);
+    formData.append("gameid", gameid);
+    dispatch(registerSlot(formData));
   };
   const getFileFromInput = (fileObj: File) => {
-    console.log("Get the file", fileObj);
     setfile(fileObj);
   };
   return (
@@ -61,9 +69,11 @@ function RegisterInGameDialog({ open, onClose }: settingDialogProps) {
                     id="position"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     onChange={(e) => {
-                      //setacademic(e.target.value);
+                      setposition(e.target.value);
+                      if (!e.target.value) {
+                        setpositionError(true);
+                      }
                     }}
-                    //   value={academic}
                   >
                     <option value="">{"Please Select"}</option>
                     <option value="Defence">{"Defence"}</option>
@@ -72,6 +82,9 @@ function RegisterInGameDialog({ open, onClose }: settingDialogProps) {
                     <option value="Keeper">{"Keeper"}</option>
                   </select>
                 </div>
+                {positionError && (
+                  <Errormessage message={"Please select a position"} />
+                )}
               </div>
               <FileUploadSection
                 fileObject={file}

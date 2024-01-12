@@ -13,7 +13,7 @@ import SettingDialog from "./settingDialog";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchGameDetails } from "../../../lib/slices/gamemodule";
-
+import MessageBox from "./messageBox";
 import {
   Card,
   CardHeader,
@@ -213,7 +213,9 @@ function Playerist({ gameid }: { gameid: string }) {
       <RegisterInGameDialog
         open={openRegisterDialog}
         onClose={closeRsgisterDialog}
+        gameid={gameid}
       />
+      <MessageBox action={closeRsgisterDialog} />
     </Card>
   );
 }

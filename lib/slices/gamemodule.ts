@@ -8,6 +8,7 @@ import {
   createaGame,
   getActiveMatches,
   getMatchDetails,
+  registerIngame,
 } from "../../app/gamedetails/service";
 
 const initialState: gameModelStateObj = {
@@ -16,6 +17,9 @@ const initialState: gameModelStateObj = {
   gameCreationMessage: "",
   activeGames: [],
   gameDetails: null,
+  messageBoxFlag: false,
+  messageBoxMessage: "",
+  messageboxType: "",
 };
 
 export const createTheGame = createAsyncThunk(
@@ -52,6 +56,17 @@ export const fetchGameDetails = createAsyncThunk(
     }
   }
 );
+export const registerSlot = createAsyncThunk(
+  "gameModel/registerSlot",
+  async (data: FormData) => {
+    try {
+      const response = await registerIngame(data);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 const gameModelSlice = createSlice({
   name: "gamemodel",
   initialState,
@@ -60,6 +75,11 @@ const gameModelSlice = createSlice({
       state.errorOnCreation = false;
       state.gameCreationMessage = "";
       state.gameLoader = false;
+    },
+    resetMessageBox: (state) => {
+      state.messageBoxFlag = false;
+      state.messageBoxMessage = "";
+      state.messageboxType = "";
     },
   },
   extraReducers: (builder) => {
@@ -88,8 +108,19 @@ const gameModelSlice = createSlice({
         state.gameDetails = action.payload.details;
       }
     });
+    builder.addCase(registerSlot.fulfilled, (state, action) => {
+      if (action.payload && action.payload.success) {
+        state.messageBoxFlag = true;
+        state.messageBoxMessage = action.payload.message;
+        state.messageboxType = "success";
+      } else {
+        state.messageBoxFlag = true;
+        state.messageBoxMessage = "guueegguqfgvywueg";
+        state.messageboxType = "error";
+      }
+    });
   },
 });
-export const { resetFlags } = gameModelSlice.actions;
+export const { resetFlags, resetMessageBox } = gameModelSlice.actions;
 
 export default gameModelSlice.reducer;

@@ -17,6 +17,9 @@ export interface settingDialogProps {
   open: boolean;
   onClose: () => void;
 }
+export interface registerDialogProps extends settingDialogProps {
+  gameid: string;
+}
 
 export interface activeGamesObj {
   gameId: string;
@@ -48,6 +51,9 @@ export interface gameModelStateObj {
   gameCreationMessage: string;
   activeGames: Array<activeGamesObj>;
   gameDetails: IgameDetailsObj | null;
+  messageBoxFlag: boolean;
+  messageBoxMessage: string;
+  messageboxType: string;
 }
 
 export interface createGameReqBody {
