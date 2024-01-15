@@ -14,6 +14,8 @@ import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchGameDetails } from "../../../lib/slices/gamemodule";
 import MessageBox from "./messageBox";
+import PageLoader from "../../Common/Loader/pageLoader";
+import ListRow from "./listRow";
 import {
   Card,
   CardHeader,
@@ -45,7 +47,9 @@ function Playerist({ gameid }: { gameid: string }) {
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
   );
-
+  const gameDetailsLoader = useSelector(
+    (state: RootState) => state.gameModel.gameDetailsLoader
+  );
   const closeSettingDialog = () => {
     setopenDialog(false);
   };
@@ -80,71 +84,14 @@ function Playerist({ gameid }: { gameid: string }) {
         const isLast = index === gameDetails?.players.length - 1;
         const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
         const row: JSX.Element = (
-          <tr key={name}>
-            <td className={classes}>
-              <div className="flex items-center gap-3">
-                <Avatar src={profilepictureurl} alt={name} />
-                <div className="flex flex-col">
-                  <Typography
-                    color="blue-gray"
-                    className="font-normal dark:text-white"
-                  >
-                    {name}
-                  </Typography>
-                  <Typography
-                    color="blue-gray"
-                    className="font-normal opacity-70 dark:text-white"
-                  >
-                    {phoneNumber}
-                  </Typography>
-                </div>
-              </div>
-            </td>
-            <td className={classes}>
-              <div className="flex flex-col">
-                <Typography
-                  color="blue-gray"
-                  className="font-normal dark:text-white"
-                >
-                  {position}
-                </Typography>
-              </div>
-            </td>
-            <td className={classes}>
-              <div className="flex flex-col">
-                <Typography
-                  color="blue-gray"
-                  className="font-normal dark:text-white"
-                >
-                  {age}
-                </Typography>
-              </div>
-            </td>
-            <td className={classes}>
-              <div className="w-max">
-                {" "}
-                <Typography
-                  color="blue-gray"
-                  className="font-normal opacity-70 dark:text-white"
-                >
-                  {"Paid"}
-                </Typography>
-              </div>
-            </td>
-            <td className={classes}>
-              <Typography
-                color="blue-gray"
-                className="font-normal dark:text-white"
-              >
-                {"5"}
-              </Typography>
-            </td>
-            <td className={classes}>
-              <Tooltip title="Edit User">
-                <CreateIcon className="h-4 w-4 dark:text-white" />
-              </Tooltip>
-            </td>
-          </tr>
+          <ListRow
+            profilepictureurl={profilepictureurl}
+            name={name}
+            age={age}
+            phoneNumber={phoneNumber}
+            position={position.toString()}
+            classes={classes}
+          />
         );
         arr.push(row);
       }
@@ -216,6 +163,7 @@ function Playerist({ gameid }: { gameid: string }) {
         gameid={gameid}
       />
       <MessageBox action={closeRsgisterDialog} />
+      {gameDetailsLoader && <PageLoader />}
     </Card>
   );
 }

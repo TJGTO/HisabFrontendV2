@@ -14,6 +14,7 @@ import {
 const initialState: gameModelStateObj = {
   gameLoader: false,
   errorOnCreation: false,
+  gameDetailsLoader: false,
   gameCreationMessage: "",
   activeGames: [],
   gameDetails: null,
@@ -103,10 +104,14 @@ const gameModelSlice = createSlice({
         state.activeGames = action.payload.matches;
       }
     });
+    builder.addCase(fetchGameDetails.pending, (state) => {
+      state.gameDetailsLoader = true;
+    });
     builder.addCase(fetchGameDetails.fulfilled, (state, action) => {
       if (action.payload && action.payload.success) {
         state.gameDetails = action.payload.details;
       }
+      state.gameDetailsLoader = false;
     });
     builder.addCase(registerSlot.fulfilled, (state, action) => {
       if (action.payload && action.payload.success) {

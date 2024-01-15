@@ -48,6 +48,7 @@ export interface IgameDetailsObj extends activeGamesObj {
 export interface gameModelStateObj {
   gameLoader: boolean;
   errorOnCreation: boolean;
+  gameDetailsLoader: boolean;
   gameCreationMessage: string;
   activeGames: Array<activeGamesObj>;
   gameDetails: IgameDetailsObj | null;
@@ -79,3 +80,12 @@ export const createMatchSchema = yup.object({
     .required("Pricing is required")
     .typeError("Pricing is required"),
 });
+
+export type PlayerObjinGameList = {
+  profilepictureurl: string;
+  name: string;
+  age: string;
+  phoneNumber: string;
+  position: string;
+  classes: string;
+};
