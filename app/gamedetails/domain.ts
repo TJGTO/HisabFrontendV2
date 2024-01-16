@@ -16,10 +16,9 @@ export enum Position {
 export interface settingDialogProps {
   open: boolean;
   onClose: () => void;
-}
-export interface registerDialogProps extends settingDialogProps {
   gameid: string;
 }
+export interface registerDialogProps extends settingDialogProps {}
 
 export interface activeGamesObj {
   gameId: string;
@@ -29,6 +28,8 @@ export interface activeGamesObj {
   end_time: string;
   number_of_players: number;
   price: number;
+  paymentNo?: string;
+  upiId?: string;
 }
 
 export interface Iplayers {
@@ -65,7 +66,9 @@ export interface createGameReqBody {
   number_of_players: number;
   price: number;
 }
+
 export interface updateGameReqBody {
+  gameid: string;
   upiId?: string;
   paymentNo?: string;
   start_time: string;
@@ -73,6 +76,7 @@ export interface updateGameReqBody {
   number_of_players: number;
   price: number;
 }
+
 export const createMatchSchema = yup.object({
   venue: yup.string().trim().required("Venue is required"),
   date: yup.date().required("Date is required").typeError("Date is required"),

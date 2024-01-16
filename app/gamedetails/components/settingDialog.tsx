@@ -2,14 +2,16 @@ import { useState, useEffect } from "react";
 import { settingDialogProps, settingsDialogSchema } from "../domain";
 import MultiSelect from "../../Common/FormComponents/multiSelect";
 import DialogTitle from "@mui/material/DialogTitle";
+import CloseIcon from "@mui/icons-material/Close";
 import Errormessage from "../../Common/FormComponents/errormessage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
+import { updateTheGame } from "../../../lib/slices/gamemodule";
 import { useForm } from "react-hook-form";
 import Dialog from "@mui/material/Dialog";
 
-function SettingDialog({ open, onClose }: settingDialogProps) {
+function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
   const handleClose = () => {
     onClose();
   };
@@ -28,7 +30,6 @@ function SettingDialog({ open, onClose }: settingDialogProps) {
     (state: RootState) => state.gameModel.gameDetails
   );
 
-  //setValue('name', 'value', { shouldValidate: true })
   useEffect(() => {
     if (gameDetails) {
       if (gameDetails.price) setValue("price", gameDetails.price);
@@ -37,10 +38,15 @@ function SettingDialog({ open, onClose }: settingDialogProps) {
       if (gameDetails.end_time) setValue("end_time", gameDetails.end_time);
       if (gameDetails.number_of_players)
         setValue("number_of_players", gameDetails.number_of_players);
+      if (gameDetails.paymentNo) setValue("paymentNo", gameDetails.paymentNo);
+      if (gameDetails.upiId) setValue("upiId", gameDetails.upiId);
     }
   }, [gameDetails]);
+
   const onSubmit = (data: any) => {
     console.log(data);
+    data.gameid = gameid;
+    dispatch(updateTheGame(data));
   };
   return (
     <Dialog
@@ -56,10 +62,9 @@ function SettingDialog({ open, onClose }: settingDialogProps) {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Settings
               </h1>
-              <img
-                className="w-8 h-8 mr-2"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-                alt="logo"
+              <CloseIcon
+                onClick={handleClose}
+                style={{ color: "red", cursor: "pointer" }}
               />
             </div>
             <form

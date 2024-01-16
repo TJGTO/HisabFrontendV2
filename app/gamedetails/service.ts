@@ -78,7 +78,7 @@ async function registerIngame(data: FormData) {
 }
 
 async function updateGame(data: updateGameReqBody) {
-  let response: any = await AxiosWithAuth.post("game/register", data);
+  let response: any = await AxiosWithAuth.post("game/updateGame", data);
 
   if (response.data && response.data.success) {
     return {

@@ -58,6 +58,10 @@ function Playerist({ gameid }: { gameid: string }) {
     stopenRegisterDialog(false);
   };
 
+  const dialogsafterSuccess = () => {
+    closeRsgisterDialog();
+    closeSettingDialog();
+  };
   useEffect(() => {
     if (gameid) {
       dispatch(fetchGameDetails(gameid));
@@ -156,13 +160,17 @@ function Playerist({ gameid }: { gameid: string }) {
           <CustomTable tablehead={TableheaderArr} tablerows={tablerows} />
         )}
       </div>
-      <SettingDialog open={openDialog} onClose={closeSettingDialog} />
+      <SettingDialog
+        open={openDialog}
+        onClose={closeSettingDialog}
+        gameid={gameid}
+      />
       <RegisterInGameDialog
         open={openRegisterDialog}
         onClose={closeRsgisterDialog}
         gameid={gameid}
       />
-      <MessageBox action={closeRsgisterDialog} />
+      <MessageBox action={dialogsafterSuccess} />
       {gameDetailsLoader && <PageLoader />}
     </Card>
   );
