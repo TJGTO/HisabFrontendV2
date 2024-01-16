@@ -65,7 +65,14 @@ export interface createGameReqBody {
   number_of_players: number;
   price: number;
 }
-
+export interface updateGameReqBody {
+  upiId?: string;
+  paymentNo?: string;
+  start_time: string;
+  end_time: string;
+  number_of_players: number;
+  price: number;
+}
 export const createMatchSchema = yup.object({
   venue: yup.string().trim().required("Venue is required"),
   date: yup.date().required("Date is required").typeError("Date is required"),
@@ -78,6 +85,21 @@ export const createMatchSchema = yup.object({
   price: yup
     .number()
     .required("Pricing is required")
+    .typeError("Pricing is required"),
+});
+
+export const settingsDialogSchema = yup.object({
+  upiId: yup.string(),
+  paymentNo: yup.string(),
+  start_time: yup.string().required("Start time is required"),
+  end_time: yup.string().required("End time is required"),
+  number_of_players: yup
+    .number()
+    .required("Please enter a valid number")
+    .typeError("No of slots are required"),
+  price: yup
+    .number()
+    .required("Please enter a valid price")
     .typeError("Pricing is required"),
 });
 

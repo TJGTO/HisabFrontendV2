@@ -25,6 +25,9 @@ function MessageBox({ action }: { action: () => void }) {
         timer: 1500,
       });
       action();
+      setTimeout(() => {
+        dispatch(resetMessageBox());
+      }, 2000);
       return () => {
         dispatch(resetMessageBox());
       };

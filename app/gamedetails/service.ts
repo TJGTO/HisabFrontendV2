@@ -1,5 +1,5 @@
 import { AxiosWithAuth, Axios, AxiosWithAuthFromData } from "../../lib/axios";
-import { createGameReqBody } from "./domain";
+import { createGameReqBody, updateGameReqBody } from "./domain";
 
 async function createaGame(data: createGameReqBody) {
   let response: any = await AxiosWithAuth.post("game/create", data);
@@ -76,4 +76,28 @@ async function registerIngame(data: FormData) {
     }`,
   };
 }
-export { createaGame, getActiveMatches, getMatchDetails, registerIngame };
+
+async function updateGame(data: updateGameReqBody) {
+  let response: any = await AxiosWithAuth.post("game/register", data);
+
+  if (response.data && response.data.success) {
+    return {
+      success: true,
+      message: "Update is successfull",
+      userdata: response.data.data,
+    };
+  }
+  return {
+    success: false,
+    message: `${
+      response.data.message ? response.data.message : "Failed to Update"
+    }`,
+  };
+}
+export {
+  createaGame,
+  getActiveMatches,
+  getMatchDetails,
+  registerIngame,
+  updateGame,
+};

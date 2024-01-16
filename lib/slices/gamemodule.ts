@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   gameModelStateObj,
   createGameReqBody,
+  updateGameReqBody,
 } from "../../app/gamedetails/domain";
 
 import {
@@ -9,6 +10,7 @@ import {
   getActiveMatches,
   getMatchDetails,
   registerIngame,
+  updateGame,
 } from "../../app/gamedetails/service";
 
 const initialState: gameModelStateObj = {
@@ -68,6 +70,17 @@ export const registerSlot = createAsyncThunk(
     }
   }
 );
+export const updateTheGame = createAsyncThunk(
+  "gameModel/updateTheGame",
+  async (data: updateGameReqBody) => {
+    try {
+      const response = await updateGame(data);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 const gameModelSlice = createSlice({
   name: "gamemodel",
   initialState,
@@ -121,6 +134,19 @@ const gameModelSlice = createSlice({
       } else {
         state.messageBoxFlag = true;
         state.messageBoxMessage = "guueegguqfgvywueg";
+        state.messageboxType = "error";
+      }
+    });
+    builder.addCase(updateTheGame.fulfilled, (state, action) => {
+      if (action.payload && action.payload.success) {
+        state.messageBoxFlag = true;
+        state.messageBoxMessage = action.payload.message;
+        state.messageboxType = "success";
+      } else {
+        state.messageBoxFlag = true;
+        state.messageBoxMessage = action.payload?.message
+          ? action.payload.message
+          : "Failed to update";
         state.messageboxType = "error";
       }
     });
