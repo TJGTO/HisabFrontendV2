@@ -15,6 +15,7 @@ import {
 
 const initialState: gameModelStateObj = {
   gameLoader: false,
+  registerSlotLoader: false,
   errorOnCreation: false,
   gameDetailsLoader: false,
   gameCreationMessage: "",
@@ -61,9 +62,11 @@ export const fetchGameDetails = createAsyncThunk(
 );
 export const registerSlot = createAsyncThunk(
   "gameModel/registerSlot",
-  async (data: FormData) => {
+  async (data: FormData, { getState, dispatch }) => {
     try {
       const response = await registerIngame(data);
+      const gameId: string = data.get("gameid")?.toString() || "";
+      if (gameId) dispatch(fetchGameDetails(gameId));
       return response;
     } catch (err) {
       console.log(err);
@@ -127,16 +130,26 @@ const gameModelSlice = createSlice({
       }
       state.gameDetailsLoader = false;
     });
+    builder.addCase(registerSlot.pending, (state) => {
+      state.registerSlotLoader = true;
+    });
     builder.addCase(registerSlot.fulfilled, (state, action) => {
+      state.registerSlotLoader = false;
       if (action.payload && action.payload.success) {
         state.messageBoxFlag = true;
         state.messageBoxMessage = action.payload.message;
         state.messageboxType = "success";
       } else {
         state.messageBoxFlag = true;
-        state.messageBoxMessage = "guueegguqfgvywueg";
+        state.messageBoxMessage = "Failed to register";
         state.messageboxType = "error";
       }
+    });
+    builder.addCase(registerSlot.rejected, (state) => {
+      state.registerSlotLoader = false;
+      state.messageBoxFlag = true;
+      state.messageBoxMessage = "Failed to register";
+      state.messageboxType = "error";
     });
     builder.addCase(updateTheGame.fulfilled, (state, action) => {
       if (action.payload && action.payload.success) {

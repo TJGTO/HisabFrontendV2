@@ -12,9 +12,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { registerSlot } from "../../../lib/slices/gamemodule";
 
 function RegisterInGameDialog({ open, onClose, gameid }: registerDialogProps) {
-  //   const userProfile = useSelector(
-  //     (state: RootState) => state.profileSection.userProfile
-  //   );
+  const registerSlotLoader = useSelector(
+    (state: RootState) => state.gameModel.registerSlotLoader
+  );
 
   const dispatch = useDispatch<AppDispatch>();
   const [file, setfile] = useState<File>();
@@ -90,7 +90,7 @@ function RegisterInGameDialog({ open, onClose, gameid }: registerDialogProps) {
                 fileObject={file}
                 setFunction={getFileFromInput}
               />
-              {false ? (
+              {registerSlotLoader ? (
                 <button
                   type="submit"
                   disabled={true}

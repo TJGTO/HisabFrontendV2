@@ -62,6 +62,7 @@ export interface gameModelStateObj {
   messageBoxFlag: boolean;
   messageBoxMessage: string;
   messageboxType: string;
+  registerSlotLoader: boolean;
 }
 
 export interface createGameReqBody {

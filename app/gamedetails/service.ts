@@ -65,7 +65,7 @@ async function registerIngame(data: FormData) {
   if (response.data && response.data.success) {
     return {
       success: true,
-      message: "Update is successfull",
+      message: "Registration is Successful",
       userdata: response.data.data,
     };
   }
