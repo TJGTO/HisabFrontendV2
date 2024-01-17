@@ -72,9 +72,10 @@ export const registerSlot = createAsyncThunk(
 );
 export const updateTheGame = createAsyncThunk(
   "gameModel/updateTheGame",
-  async (data: updateGameReqBody) => {
+  async (data: updateGameReqBody, { getState, dispatch }) => {
     try {
       const response = await updateGame(data);
+      dispatch(fetchGameDetails(data.gameid));
       return response;
     } catch (err) {
       console.log(err);

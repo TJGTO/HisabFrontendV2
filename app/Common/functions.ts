@@ -58,3 +58,12 @@ export const getCurrentDate = () => {
   const day = String(today.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
+
+export function copyToClipboard(text: string): boolean {
+  try {
+    navigator.clipboard.writeText(text);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}

@@ -12,13 +12,19 @@ export enum Position {
   Attack,
   Keeper,
 }
-
-export interface settingDialogProps {
+export interface BasicDialogProps {
   open: boolean;
   onClose: () => void;
+}
+export interface settingDialogProps extends BasicDialogProps {
   gameid: string;
 }
 export interface registerDialogProps extends settingDialogProps {}
+
+export interface paymentDetailsDialogProps extends BasicDialogProps {
+  paymentNo?: string;
+  upiId?: string;
+}
 
 export interface activeGamesObj {
   gameId: string;

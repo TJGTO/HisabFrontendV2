@@ -5,8 +5,7 @@ import CustomTable from "../../Common/Table/CustomTable";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SearchIcon from "@mui/icons-material/Search";
 import RegisterInGameDialog from "./registerDialog";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import CreateIcon from "@mui/icons-material/Create";
+import UpiDetailsDialog from "./upiDetailsDialog";
 import AddIcon from "@mui/icons-material/Add";
 import Tabs from "./tabs";
 import SettingDialog from "./settingDialog";
@@ -16,18 +15,7 @@ import { fetchGameDetails } from "../../../lib/slices/gamemodule";
 import MessageBox from "./messageBox";
 import PageLoader from "../../Common/Loader/pageLoader";
 import ListRow from "./listRow";
-import {
-  Card,
-  CardHeader,
-  Input,
-  Typography,
-  Button,
-  Chip,
-  Tab,
-  Avatar,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
+import { Card, CardHeader, Input, Typography, Button } from "@mui/material";
 
 const TableheaderArr = [
   { id: 1, label: "Player" },
@@ -43,6 +31,7 @@ function Playerist({ gameid }: { gameid: string }) {
   const [tablerows, settablerows] = useState<Array<JSX.Element>>([]);
   const [openDialog, setopenDialog] = useState<boolean>(false);
   const [openRegisterDialog, stopenRegisterDialog] = useState<boolean>(false);
+  const [openPaymentDetails, setopenPaymentDetails] = useState<boolean>(false);
 
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
@@ -53,11 +42,12 @@ function Playerist({ gameid }: { gameid: string }) {
   const closeSettingDialog = () => {
     setopenDialog(false);
   };
-
   const closeRsgisterDialog = () => {
     stopenRegisterDialog(false);
   };
-
+  const closePaymentDetailsDialog = () => {
+    setopenPaymentDetails(false);
+  };
   const dialogsafterSuccess = () => {
     closeRsgisterDialog();
     closeSettingDialog();
@@ -138,8 +128,7 @@ function Playerist({ gameid }: { gameid: string }) {
             </Button>
           </div>
         </div>
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          {/* <Tabs /> */}
+        <div className="flex items-center gap-4">
           <Button
             className="flex items-center gap-2"
             variant="outlined"
@@ -149,6 +138,16 @@ function Playerist({ gameid }: { gameid: string }) {
             }}
           >
             Settings <SettingsIcon className="h-4 w-4" />
+          </Button>
+          <Button
+            className="flex items-center gap-2"
+            variant="outlined"
+            onClick={(e) => {
+              e.preventDefault();
+              setopenPaymentDetails(true);
+            }}
+          >
+            Payment Details
           </Button>
           {/* <div className="w-full md:w-72">
             <Input placeholder="Search" />
@@ -172,6 +171,12 @@ function Playerist({ gameid }: { gameid: string }) {
       />
       <MessageBox action={dialogsafterSuccess} />
       {gameDetailsLoader && <PageLoader />}
+      <UpiDetailsDialog
+        open={openPaymentDetails}
+        onClose={closePaymentDetailsDialog}
+        paymentNo={gameDetails?.paymentNo}
+        upiId={gameDetails?.upiId}
+      />
     </Card>
   );
 }
