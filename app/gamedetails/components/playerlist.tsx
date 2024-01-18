@@ -85,6 +85,7 @@ function Playerist({ gameid }: { gameid: string }) {
             phoneNumber={phoneNumber}
             position={position.toString()}
             classes={classes}
+            gameId={gameid}
           />
         );
         arr.push(row);

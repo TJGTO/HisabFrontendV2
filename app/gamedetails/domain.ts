@@ -121,4 +121,5 @@ export type PlayerObjinGameList = {
   phoneNumber: string;
   position: string;
   classes: string;
+  gameId: string;
 };

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Typography, Avatar, Tooltip } from "@mui/material";
 import CreateIcon from "@mui/icons-material/Create";
 import Menu from "@mui/material/Menu";
@@ -7,6 +8,7 @@ import React from "react";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
+import ViewDialog from "./viewDialog";
 import { PlayerObjinGameList } from "../domain";
 
 function ListRow({
@@ -16,9 +18,14 @@ function ListRow({
   phoneNumber,
   position,
   classes,
+  gameId,
 }: PlayerObjinGameList) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [openViewDialog, setopenViewDialog] = useState<boolean>(false);
   const open = Boolean(anchorEl);
+  const closeViewDialog = () => {
+    setopenViewDialog(false);
+  };
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -91,7 +98,12 @@ function ListRow({
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <MenuItem onClick={() => {}}>
+          <MenuItem
+            onClick={(e) => {
+              e.preventDefault();
+              setopenViewDialog(true);
+            }}
+          >
             <ListItemIcon>
               <VisibilityIcon fontSize="small" />
             </ListItemIcon>
@@ -106,6 +118,11 @@ function ListRow({
           </MenuItem>
         </Menu>
       </td>
+      <ViewDialog
+        open={openViewDialog}
+        onClose={closeViewDialog}
+        gameid={gameId}
+      />
     </tr>
   );
 }
