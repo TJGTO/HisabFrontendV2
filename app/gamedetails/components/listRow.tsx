@@ -5,6 +5,7 @@ import Menu from "@mui/material/Menu";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import React from "react";
+import ConfirmDialog from "../../Common/ConfirmDialog/confirmDialog";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
@@ -22,12 +23,23 @@ function ListRow({
 }: PlayerObjinGameList) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openViewDialog, setopenViewDialog] = useState<boolean>(false);
+  const [openConfirmDialog, setopenConfirmDialog] = useState<boolean>(false);
+  const [confirmHeaderText, setconfirmHeaderText] = useState<string>("");
+  const [confirmTitleText, setconfirmTitleText] = useState<string>("");
+  const [actionType, setactionType] = useState<string>("");
+
   const open = Boolean(anchorEl);
   const closeViewDialog = () => {
     setopenViewDialog(false);
   };
+  const closeConfirmDialog = () => {
+    setopenConfirmDialog(false);
+  };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const onApproveorReject = () => {
+    console.log(actionType);
   };
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -122,6 +134,17 @@ function ListRow({
         open={openViewDialog}
         onClose={closeViewDialog}
         gameid={gameId}
+        setactionType={setactionType}
+        setConfirmDialogState={setopenConfirmDialog}
+        setConfirmDialogHeader={setconfirmHeaderText}
+        setConfirmDialogTitle={setconfirmTitleText}
+      />
+      <ConfirmDialog
+        open={openConfirmDialog}
+        headerText={confirmHeaderText}
+        titleText={confirmTitleText}
+        onClose={closeConfirmDialog}
+        onConfirm={onApproveorReject}
       />
     </tr>
   );

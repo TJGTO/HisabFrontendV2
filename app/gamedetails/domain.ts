@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import React from "react";
 
 export type tabsObject = {
   label: string;
@@ -19,7 +20,15 @@ export interface BasicDialogProps {
 export interface settingDialogProps extends BasicDialogProps {
   gameid: string;
 }
+
 export interface registerDialogProps extends settingDialogProps {}
+
+export interface viewDialogProps extends settingDialogProps {
+  setConfirmDialogState: React.Dispatch<React.SetStateAction<boolean>>;
+  setConfirmDialogHeader: React.Dispatch<React.SetStateAction<string>>;
+  setConfirmDialogTitle: React.Dispatch<React.SetStateAction<string>>;
+  setactionType: React.Dispatch<React.SetStateAction<string>>;
+}
 
 export interface paymentDetailsDialogProps extends BasicDialogProps {
   paymentNo?: string;
