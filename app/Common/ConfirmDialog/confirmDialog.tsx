@@ -29,7 +29,7 @@ function ConfirmDialog({
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <div className="flex gap-3 justify-between">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-xl dark:text-white">
                 {headerText}
               </h1>
               <CloseIcon
@@ -38,7 +38,9 @@ function ConfirmDialog({
               />
             </div>
             <div className="space-y-4 md:space-y-6">
-              <DialogTitle>{titleText}</DialogTitle>
+              <DialogTitle className="text-gray-900 text-sm dark:text-white">
+                {titleText}
+              </DialogTitle>
               <div className="flex gap-3">
                 <button
                   onClick={(e) => {
