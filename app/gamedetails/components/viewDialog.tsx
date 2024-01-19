@@ -60,7 +60,6 @@ function ViewDialog({
                       e.preventDefault();
                       setactionType("Rejected");
                       setConfirmDialogState(true);
-                      setConfirmDialogState(true);
                       setConfirmDialogHeader("Do You really want to Reject?");
                       setConfirmDialogTitle("");
                     }}

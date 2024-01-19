@@ -48,6 +48,8 @@ export interface activeGamesObj {
   upiId?: string;
 }
 
+type Status = "Approved" | "Rejected" | "Withdrawn" | "Removed" | "Paid";
+
 export interface Iplayers {
   name: string;
   player_id: string;
@@ -56,7 +58,7 @@ export interface Iplayers {
   rating?: string;
   phoneNumber: string;
   position: Position;
-  status: string;
+  status: Status;
 }
 
 export interface IgameDetailsObj extends activeGamesObj {
@@ -139,5 +141,21 @@ export type PlayerObjinGameList = {
   classes: string;
   gameId: string;
   player_id: string;
-  status: string;
+  status: Status;
+};
+
+export const colorListforStatus = {
+  Approved: "text-green-700",
+  Rejected: "text-red-700",
+  Withdrawn: "text-orange-700",
+  Removed: "text-gray-700",
+  Paid: "text-blue-700",
+};
+
+export const colorListforStatusBG = {
+  Approved: "bg-green-300",
+  Rejected: "bg-red-300",
+  Withdrawn: "bg-orange-300",
+  Removed: "bg-gray-300",
+  Paid: "bg-blue-300",
 };

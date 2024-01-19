@@ -12,7 +12,12 @@ import MenuItem from "@mui/material/MenuItem";
 import ViewDialog from "./viewDialog";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
-import { PlayerObjinGameList, updatePlayerStatusReqBody } from "../domain";
+import {
+  PlayerObjinGameList,
+  updatePlayerStatusReqBody,
+  colorListforStatus,
+  colorListforStatusBG,
+} from "../domain";
 import { updatePlayerStatusInMatch } from "../../../lib/slices/gamemodule";
 
 function ListRow({
@@ -44,7 +49,7 @@ function ListRow({
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const onApproveorReject = () => {
+  const onStatusChangeofPlayer = () => {
     const requestObj: updatePlayerStatusReqBody = {
       gameId: gameId,
       playerId: player_id,
@@ -91,11 +96,11 @@ function ListRow({
         </div>
       </td>
       <td className={classes}>
-        <div className="w-max">
+        <div className={`w-max ${colorListforStatusBG[status]} p-2 rounded-lg`}>
           {" "}
           <Typography
             color="blue-gray"
-            className="font-normal opacity-70 dark:text-white"
+            className={`font-normal opacity-70 ${colorListforStatus[status]}`}
           >
             {status}
           </Typography>
@@ -132,13 +137,26 @@ function ListRow({
             </ListItemIcon>
             View
           </MenuItem>
-          <Divider />
-          <MenuItem onClick={() => {}}>
-            <ListItemIcon>
-              <PersonRemoveIcon fontSize="small" />
-            </ListItemIcon>
-            Remove
-          </MenuItem>
+
+          {status != "Removed" && (
+            <>
+              <Divider />
+              <MenuItem
+                onClick={(e) => {
+                  e.preventDefault();
+                  setactionType("Removed");
+                  setopenConfirmDialog(true);
+                  setconfirmHeaderText("Do You really want to Remove?");
+                  setconfirmTitleText("");
+                }}
+              >
+                <ListItemIcon>
+                  <PersonRemoveIcon fontSize="small" />
+                </ListItemIcon>
+                Remove
+              </MenuItem>
+            </>
+          )}
         </Menu>
       </td>
       <ViewDialog
@@ -156,7 +174,7 @@ function ListRow({
         headerText={confirmHeaderText}
         titleText={confirmTitleText}
         onClose={closeConfirmDialog}
-        onConfirm={onApproveorReject}
+        onConfirm={onStatusChangeofPlayer}
       />
     </tr>
   );
