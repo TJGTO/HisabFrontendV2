@@ -66,7 +66,10 @@ function Playerist({ gameid }: { gameid: string }) {
 
   const getNumbersofSlotLeft = () => {
     if (gameDetails) {
-      return gameDetails.number_of_players - gameDetails.players.length;
+      return (
+        gameDetails.number_of_players -
+        gameDetails.players.filter((x) => x.status == "Approved").length
+      );
     } else {
       return 0;
     }
@@ -74,7 +77,18 @@ function Playerist({ gameid }: { gameid: string }) {
   const createTableRows = (): void => {
     let arr: JSX.Element[] = [];
     gameDetails?.players.forEach(
-      ({ profilepictureurl, name, age, phoneNumber, position }, index) => {
+      (
+        {
+          profilepictureurl,
+          name,
+          age,
+          phoneNumber,
+          position,
+          player_id,
+          status,
+        },
+        index
+      ) => {
         const isLast = index === gameDetails?.players.length - 1;
         const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
         const row: JSX.Element = (
@@ -86,6 +100,8 @@ function Playerist({ gameid }: { gameid: string }) {
             position={position.toString()}
             classes={classes}
             gameId={gameid}
+            player_id={player_id}
+            status={status}
           />
         );
         arr.push(row);

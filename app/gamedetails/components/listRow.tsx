@@ -10,7 +10,10 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
 import ViewDialog from "./viewDialog";
-import { PlayerObjinGameList } from "../domain";
+import { RootState, AppDispatch } from "../../../lib/store";
+import { useSelector, useDispatch } from "react-redux";
+import { PlayerObjinGameList, updatePlayerStatusReqBody } from "../domain";
+import { updatePlayerStatusInMatch } from "../../../lib/slices/gamemodule";
 
 function ListRow({
   profilepictureurl,
@@ -20,7 +23,10 @@ function ListRow({
   position,
   classes,
   gameId,
+  player_id,
+  status,
 }: PlayerObjinGameList) {
+  const dispatch = useDispatch<AppDispatch>();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openViewDialog, setopenViewDialog] = useState<boolean>(false);
   const [openConfirmDialog, setopenConfirmDialog] = useState<boolean>(false);
@@ -39,7 +45,12 @@ function ListRow({
     setAnchorEl(null);
   };
   const onApproveorReject = () => {
-    console.log(actionType);
+    const requestObj: updatePlayerStatusReqBody = {
+      gameId: gameId,
+      playerId: player_id,
+      status: actionType,
+    };
+    dispatch(updatePlayerStatusInMatch(requestObj));
   };
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -86,7 +97,7 @@ function ListRow({
             color="blue-gray"
             className="font-normal opacity-70 dark:text-white"
           >
-            {"Paid"}
+            {status}
           </Typography>
         </div>
       </td>
@@ -134,6 +145,7 @@ function ListRow({
         open={openViewDialog}
         onClose={closeViewDialog}
         gameid={gameId}
+        status={status}
         setactionType={setactionType}
         setConfirmDialogState={setopenConfirmDialog}
         setConfirmDialogHeader={setconfirmHeaderText}

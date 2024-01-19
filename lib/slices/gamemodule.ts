@@ -3,6 +3,7 @@ import {
   gameModelStateObj,
   createGameReqBody,
   updateGameReqBody,
+  updatePlayerStatusReqBody,
 } from "../../app/gamedetails/domain";
 
 import {
@@ -11,6 +12,7 @@ import {
   getMatchDetails,
   registerIngame,
   updateGame,
+  updatePlayerStatus,
 } from "../../app/gamedetails/service";
 
 const initialState: gameModelStateObj = {
@@ -79,6 +81,18 @@ export const updateTheGame = createAsyncThunk(
     try {
       const response = await updateGame(data);
       dispatch(fetchGameDetails(data.gameid));
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+export const updatePlayerStatusInMatch = createAsyncThunk(
+  "gameModel/updatePlayerStatus",
+  async (data: updatePlayerStatusReqBody, { getState, dispatch }) => {
+    try {
+      const response = await updatePlayerStatus(data);
+      dispatch(fetchGameDetails(data.gameId));
       return response;
     } catch (err) {
       console.log(err);
@@ -163,6 +177,24 @@ const gameModelSlice = createSlice({
           : "Failed to update";
         state.messageboxType = "error";
       }
+    });
+    builder.addCase(updatePlayerStatusInMatch.fulfilled, (state, action) => {
+      if (action.payload && action.payload.success) {
+        state.messageBoxFlag = true;
+        state.messageBoxMessage = action.payload.message;
+        state.messageboxType = "success";
+      } else {
+        state.messageBoxFlag = true;
+        state.messageBoxMessage = action.payload?.message
+          ? action.payload.message
+          : "Failed to update";
+        state.messageboxType = "error";
+      }
+    });
+    builder.addCase(updatePlayerStatusInMatch.rejected, (state) => {
+      state.messageBoxFlag = true;
+      state.messageBoxMessage = "Failed to update the status";
+      state.messageboxType = "success";
     });
   },
 });

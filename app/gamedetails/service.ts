@@ -1,5 +1,9 @@
 import { AxiosWithAuth, Axios, AxiosWithAuthFromData } from "../../lib/axios";
-import { createGameReqBody, updateGameReqBody } from "./domain";
+import {
+  createGameReqBody,
+  updateGameReqBody,
+  updatePlayerStatusReqBody,
+} from "./domain";
 
 async function createaGame(data: createGameReqBody) {
   let response: any = await AxiosWithAuth.post("game/create", data);
@@ -94,10 +98,48 @@ async function updateGame(data: updateGameReqBody) {
     }`,
   };
 }
+
+async function updatePlayerStatus(data: updatePlayerStatusReqBody) {
+  let response: any = await AxiosWithAuth.post(
+    "game/updatePlayerInGameStatus",
+    data
+  );
+  let message = "";
+  switch (data.status) {
+    case "Approved":
+      message = "Successfully Approved";
+      break;
+    case "Rejected":
+      message = "Rejected Successfully";
+      break;
+    case "Withdrawn":
+      message = "Withdrawn Successfully";
+      break;
+    case "Removed":
+      message = "Removed Successfully";
+      break;
+    default:
+      message = "Updated Successfully";
+  }
+  if (response.data && response.data.success) {
+    return {
+      success: true,
+      message: message,
+      userdata: response.data.data,
+    };
+  }
+  return {
+    success: false,
+    message: `${
+      response.data.message ? response.data.message : "Failed to Update"
+    }`,
+  };
+}
 export {
   createaGame,
   getActiveMatches,
   getMatchDetails,
   registerIngame,
   updateGame,
+  updatePlayerStatus,
 };

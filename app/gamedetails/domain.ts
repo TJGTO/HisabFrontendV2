@@ -28,6 +28,7 @@ export interface viewDialogProps extends settingDialogProps {
   setConfirmDialogHeader: React.Dispatch<React.SetStateAction<string>>;
   setConfirmDialogTitle: React.Dispatch<React.SetStateAction<string>>;
   setactionType: React.Dispatch<React.SetStateAction<string>>;
+  status: string;
 }
 
 export interface paymentDetailsDialogProps extends BasicDialogProps {
@@ -55,6 +56,7 @@ export interface Iplayers {
   rating?: string;
   phoneNumber: string;
   position: Position;
+  status: string;
 }
 
 export interface IgameDetailsObj extends activeGamesObj {
@@ -93,6 +95,11 @@ export interface updateGameReqBody {
   price: number;
 }
 
+export interface updatePlayerStatusReqBody {
+  gameId: string;
+  playerId: string;
+  status: string;
+}
 export const createMatchSchema = yup.object({
   venue: yup.string().trim().required("Venue is required"),
   date: yup.date().required("Date is required").typeError("Date is required"),
@@ -131,4 +138,6 @@ export type PlayerObjinGameList = {
   position: string;
   classes: string;
   gameId: string;
+  player_id: string;
+  status: string;
 };
