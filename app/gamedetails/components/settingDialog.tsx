@@ -3,6 +3,7 @@ import { settingDialogProps, settingsDialogSchema } from "../domain";
 import MultiSelect from "../../Common/FormComponents/multiSelect";
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
+import { timingsArray } from "../../gamedetails/domain";
 import Errormessage from "../../Common/FormComponents/errormessage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RootState, AppDispatch } from "../../../lib/store";
@@ -38,8 +39,16 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
       if (gameDetails.end_time) setValue("end_time", gameDetails.end_time);
       if (gameDetails.number_of_players)
         setValue("number_of_players", gameDetails.number_of_players);
-      if (gameDetails.paymentNo) setValue("paymentNo", gameDetails.paymentNo);
-      if (gameDetails.upiId) setValue("upiId", gameDetails.upiId);
+      if (gameDetails.paymentNo) {
+        setValue("paymentNo", gameDetails.paymentNo);
+      } else {
+        setValue("paymentNo", "");
+      }
+      if (gameDetails.upiId) {
+        setValue("upiId", gameDetails.upiId);
+      } else {
+        setValue("upiId", "");
+      }
     }
   }, [gameDetails]);
 
@@ -99,11 +108,16 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Start Time
                   </label>
-                  <input
+                  <select
                     id="start_time"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-48 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     {...register("start_time")}
-                  />
+                  >
+                    <option value="">{"Please Select"}</option>
+                    {timingsArray.map((x) => (
+                      <option value={x}>{x}</option>
+                    ))}
+                  </select>
                   {errors && errors.start_time && (
                     <Errormessage message={errors.start_time.message} />
                   )}
@@ -112,11 +126,16 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     End Time
                   </label>
-                  <input
+                  <select
                     id="end_time"
-                    className="bg-gray-50 border w-48 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-48 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     {...register("end_time")}
-                  />
+                  >
+                    <option value="">{"Please Select"}</option>
+                    {timingsArray.map((x) => (
+                      <option value={x}>{x}</option>
+                    ))}
+                  </select>
                   {errors && errors.end_time && (
                     <Errormessage message={errors.end_time.message} />
                   )}

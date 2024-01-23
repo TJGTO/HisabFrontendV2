@@ -1,7 +1,9 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
+import Swal from "sweetalert2";
 import Avatar from "@mui/material/Avatar";
 import { useForm } from "react-hook-form";
+import { timingsArray } from "../../gamedetails/domain";
 import CircularProgress from "@mui/material/CircularProgress";
 import Errormessage from "../../Common/FormComponents/errormessage";
 import { getCurrentDate, fromatDate } from "../../Common/functions";
@@ -55,9 +57,20 @@ function CreateMatchDialog(props: SimpleDialogProps) {
   };
 
   const onSubmit = (data: any) => {
-    console.log(data);
     let formattedDate = fromatDate(data.date);
     data.date = formattedDate;
+    if (
+      timingsArray.indexOf(data.start_time) >=
+      timingsArray.indexOf(data.end_time)
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "End time can'tbe same or earlier than Start time",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
     dispatch(createTheGame(data));
   };
   const [value, onChange] = React.useState<string>("10:00");
@@ -120,12 +133,16 @@ function CreateMatchDialog(props: SimpleDialogProps) {
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Start Time
                   </label>
-                  <input
+                  <select
                     id="start_time"
-                    type="time"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-48 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     {...register("start_time")}
-                  />
+                  >
+                    <option value="">{"Please Select"}</option>
+                    {timingsArray.map((x) => (
+                      <option value={x}>{x}</option>
+                    ))}
+                  </select>
                   {errors && errors.start_time && (
                     <Errormessage message={errors.start_time.message} />
                   )}
@@ -134,12 +151,16 @@ function CreateMatchDialog(props: SimpleDialogProps) {
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     End Time
                   </label>
-                  <input
+                  <select
                     id="end_time"
-                    type="time"
-                    className="bg-gray-50 border  border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-48 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-48 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     {...register("end_time")}
-                  />
+                  >
+                    <option value="">{"Please Select"}</option>
+                    {timingsArray.map((x) => (
+                      <option value={x}>{x}</option>
+                    ))}
+                  </select>
                   {errors && errors.end_time && (
                     <Errormessage message={errors.end_time.message} />
                   )}
