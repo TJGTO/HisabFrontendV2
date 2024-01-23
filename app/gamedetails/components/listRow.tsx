@@ -5,6 +5,7 @@ import Menu from "@mui/material/Menu";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import React from "react";
+import LogoutIcon from "@mui/icons-material/Logout";
 import ConfirmDialog from "../../Common/ConfirmDialog/confirmDialog";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
@@ -154,6 +155,25 @@ function ListRow({
                   <PersonRemoveIcon fontSize="small" />
                 </ListItemIcon>
                 Remove
+              </MenuItem>
+            </>
+          )}
+          {status != "Withdrawn" && (
+            <>
+              <Divider />
+              <MenuItem
+                onClick={(e) => {
+                  e.preventDefault();
+                  setactionType("Withdrawn");
+                  setopenConfirmDialog(true);
+                  setconfirmHeaderText("Do You really want to Withdraw?");
+                  setconfirmTitleText("");
+                }}
+              >
+                <ListItemIcon>
+                  <LogoutIcon fontSize="small" />
+                </ListItemIcon>
+                Withdraw
               </MenuItem>
             </>
           )}

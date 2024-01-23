@@ -1,11 +1,27 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import CustomTableFooter from "./CustomTableFooter";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { TableProps } from "./domain";
 import { Typography } from "@mui/material";
 
 function CustomTable({ tablehead, tablerows }: TableProps) {
+  const [visibleRows, setVisibleRows] = useState<Array<JSX.Element>>([]);
+  const [page, setpage] = useState<number>(1);
+  const [pageSize, setpageSize] = useState<number>(5);
+  const totalPages = Math.ceil(tablerows.length / pageSize);
+
+  useEffect(() => {
+    let cutoffRows = tablerows.slice((page - 1) * pageSize, page * pageSize);
+    setVisibleRows(cutoffRows);
+  }, [page]);
+
+  useEffect(() => {
+    let cutoffRows = tablerows.slice(0, 1 * pageSize);
+    setVisibleRows(cutoffRows);
+  }, []);
+
   return (
     <div>
       <table className="mt-4 w-full min-w-max table-auto text-left">
@@ -29,9 +45,14 @@ function CustomTable({ tablehead, tablerows }: TableProps) {
             ))}
           </tr>
         </thead>
-        <tbody>{tablerows}</tbody>
+        <tbody>{visibleRows}</tbody>
       </table>
-      <CustomTableFooter />
+      <CustomTableFooter
+        page={page}
+        pageSize={pageSize}
+        totalPages={totalPages}
+        setpage={setpage}
+      />
     </div>
   );
 }
