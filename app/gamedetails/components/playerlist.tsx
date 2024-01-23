@@ -15,6 +15,7 @@ import { fetchGameDetails } from "../../../lib/slices/gamemodule";
 import MessageBox from "./messageBox";
 import PageLoader from "../../Common/Loader/pageLoader";
 import ListRow from "./listRow";
+import CreateTeamDialog from "./createTeamDialog";
 import { Card, CardHeader, Input, Typography, Button } from "@mui/material";
 
 const TableheaderArr = [
@@ -32,6 +33,7 @@ function Playerist({ gameid }: { gameid: string }) {
   const [openDialog, setopenDialog] = useState<boolean>(false);
   const [openRegisterDialog, stopenRegisterDialog] = useState<boolean>(false);
   const [openPaymentDetails, setopenPaymentDetails] = useState<boolean>(false);
+  const [openTeamDialog, setopenTeamDialog] = useState<boolean>(false);
 
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
@@ -39,6 +41,9 @@ function Playerist({ gameid }: { gameid: string }) {
   const gameDetailsLoader = useSelector(
     (state: RootState) => state.gameModel.gameDetailsLoader
   );
+  const closeTeamDialog = () => {
+    setopenTeamDialog(false);
+  };
   const closeSettingDialog = () => {
     setopenDialog(false);
   };
@@ -140,8 +145,14 @@ function Playerist({ gameid }: { gameid: string }) {
             >
               Register
             </Button>
-            <Button className="flex items-center gap-3">
-              <AddIcon className="h-4 w-4" /> Add member
+            <Button
+              className="flex items-center gap-3"
+              onClick={(e) => {
+                e.preventDefault();
+                setopenTeamDialog(true);
+              }}
+            >
+              <AddIcon className="h-4 w-4" /> Create Team
             </Button>
           </div>
         </div>
@@ -193,6 +204,11 @@ function Playerist({ gameid }: { gameid: string }) {
         onClose={closePaymentDetailsDialog}
         paymentNo={gameDetails?.paymentNo}
         upiId={gameDetails?.upiId}
+      />
+      <CreateTeamDialog
+        gameid={gameid}
+        open={openTeamDialog}
+        onClose={closeTeamDialog}
       />
     </Card>
   );
