@@ -14,6 +14,7 @@ function CreateTeamDialog({ open, onClose, gameid }: createTeamDialogProps) {
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
   );
+  const [numberofTeams, setnumberofTeams] = useState<number>(2);
   useEffect(() => {
     if (open && gameDetails && gameDetails.players) {
       let copyGameDetails: IgameDetailsObj = JSON.parse(
@@ -44,12 +45,38 @@ function CreateTeamDialog({ open, onClose, gameid }: createTeamDialogProps) {
   return (
     <Dialog onClose={handleClose} open={open} maxWidth={"md"}>
       <div className="bg-gray-50 dark:bg-gray-900">
-        <div className="flex flex-col items-center justify-center mx-auto">
-          <div className="p-2 space-y-2 md:space-y-2 sm:p-2">
+        <div className="flex flex-col mx-auto">
+          <div className="pl-3 pt-2 space-y-2 md:space-y-2 sm:pl-3 sm:pt-2 pr-3 sm:pr-3">
             <div className="flex gap-3 justify-between">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Create Teams
-              </h1>
+              <div className="flex gap-3">
+                <div className="inline-flex rounded-md shadow-sm" role="group">
+                  <button
+                    type="button"
+                    className={`px-4 py-2 text-sm font-medium bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white disabled:opacity-50 disabled:cursor-not-allowed`}
+                    disabled={numberofTeams == 2}
+                  >
+                    2 Teams
+                  </button>
+                  <button
+                    type="button"
+                    className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+                  >
+                    3 Teams
+                  </button>
+                  <button
+                    type="button"
+                    className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
+                  >
+                    4 Teams
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Save
+                </button>
+              </div>
               <CloseIcon
                 onClick={handleClose}
                 style={{ color: "red", cursor: "pointer" }}
