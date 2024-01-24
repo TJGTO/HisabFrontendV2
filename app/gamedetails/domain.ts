@@ -21,6 +21,10 @@ export interface settingDialogProps extends BasicDialogProps {
   gameid: string;
 }
 
+export interface teamConfigObj {
+  teamKey: string;
+  name: string;
+}
 export interface registerDialogProps extends settingDialogProps {}
 
 export interface viewDialogProps extends settingDialogProps {
