@@ -61,6 +61,7 @@ export interface Iplayers {
   phoneNumber: string;
   position: Position;
   status: Status;
+  team?: string;
 }
 
 export interface IgameDetailsObj extends activeGamesObj {
