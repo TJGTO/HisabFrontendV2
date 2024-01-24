@@ -26,7 +26,7 @@ function CreateTeamDialog({ open, onClose, gameid }: createTeamDialogProps) {
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
   );
-  const [numberofTeams, setnumberofTeams] = useState<number>(3);
+  const [numberofTeams, setnumberofTeams] = useState<number>(2);
   useEffect(() => {
     if (open && gameDetails && gameDetails.players) {
       let copyGameDetails: IgameDetailsObj = JSON.parse(
