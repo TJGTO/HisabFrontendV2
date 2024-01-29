@@ -135,6 +135,26 @@ async function updatePlayerStatus(data: updatePlayerStatusReqBody) {
     }`,
   };
 }
+
+async function getVenueList() {
+  let response: any = await Axios.get("venue/venueList");
+
+  if (response.data && response.data.success) {
+    return {
+      success: true,
+      message: response.data.message,
+      venueList: response.data.data,
+    };
+  }
+  return {
+    success: false,
+    message: `${
+      response.data.message
+        ? response.data.message
+        : "Failed to fetch venue List"
+    }`,
+  };
+}
 export {
   createaGame,
   getActiveMatches,
@@ -142,4 +162,5 @@ export {
   registerIngame,
   updateGame,
   updatePlayerStatus,
+  getVenueList,
 };

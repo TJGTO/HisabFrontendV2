@@ -12,6 +12,7 @@ import {
   getMatchDetails,
   registerIngame,
   updateGame,
+  getVenueList,
   updatePlayerStatus,
 } from "../../app/gamedetails/service";
 
@@ -26,6 +27,7 @@ const initialState: gameModelStateObj = {
   messageBoxFlag: false,
   messageBoxMessage: "",
   messageboxType: "",
+  venueList: [],
 };
 
 export const createTheGame = createAsyncThunk(
@@ -56,6 +58,17 @@ export const fetchGameDetails = createAsyncThunk(
   async (gameId: string) => {
     try {
       const response = await getMatchDetails(gameId);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+export const fetchVenueList = createAsyncThunk(
+  "gameModel/fetchVenueList",
+  async () => {
+    try {
+      const response = await getVenueList();
       return response;
     } catch (err) {
       console.log(err);
@@ -195,6 +208,11 @@ const gameModelSlice = createSlice({
       state.messageBoxFlag = true;
       state.messageBoxMessage = "Failed to update the status";
       state.messageboxType = "success";
+    });
+    builder.addCase(fetchVenueList.fulfilled, (state, action) => {
+      if (action.payload && action.payload.success) {
+        state.venueList = action.payload.venueList;
+      }
     });
   },
 });

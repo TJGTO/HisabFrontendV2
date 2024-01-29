@@ -21,6 +21,11 @@ export interface settingDialogProps extends BasicDialogProps {
   gameid: string;
 }
 
+export interface venueObj {
+  venueId: String;
+  fieldName: String;
+}
+
 export interface teamConfigObj {
   teamKey: string;
   name: string;
@@ -83,6 +88,7 @@ export interface gameModelStateObj {
   messageBoxMessage: string;
   messageboxType: string;
   registerSlotLoader: boolean;
+  venueList: Array<venueObj>;
 }
 
 export interface createGameReqBody {

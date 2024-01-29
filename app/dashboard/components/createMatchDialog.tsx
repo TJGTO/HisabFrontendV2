@@ -12,7 +12,7 @@ import { createMatchSchema } from "../../gamedetails/domain";
 import CloseIcon from "@mui/icons-material/Close";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
-import { createTheGame } from "../../../lib/slices/gamemodule";
+import { createTheGame, fetchVenueList } from "../../../lib/slices/gamemodule";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -28,6 +28,9 @@ function CreateMatchDialog(props: SimpleDialogProps) {
   const gameLoader = useSelector(
     (state: RootState) => state.gameModel.gameLoader
   );
+  const venueList = useSelector(
+    (state: RootState) => state.gameModel.venueList
+  );
   const {
     register,
     handleSubmit,
@@ -38,6 +41,15 @@ function CreateMatchDialog(props: SimpleDialogProps) {
   const handleClose = () => {
     onClose();
   };
+  React.useEffect(() => {
+    if (props.open && venueList.length <= 0) {
+      dispatch(fetchVenueList());
+    }
+  }, [props.open]);
+
+  React.useEffect(() => {
+    console.log("venueList", venueList);
+  }, [venueList]);
 
   React.useEffect(() => {
     if (!openFlag) {
