@@ -8,6 +8,8 @@ import RegisterInGameDialog from "./registerDialog";
 import UpiDetailsDialog from "./upiDetailsDialog";
 import AddIcon from "@mui/icons-material/Add";
 import Tabs from "./tabs";
+import Swal from "sweetalert2";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SettingDialog from "./settingDialog";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
@@ -114,6 +116,20 @@ function Playerist({ gameid }: { gameid: string }) {
     );
     settablerows([...arr]);
   };
+  const openLocationGoDialog = (link: string) => {
+    Swal.fire({
+      title: "Location Link",
+      text: link,
+      showCancelButton: true,
+      confirmButtonText: "Go",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.open(link, "_blank");
+        Swal.close();
+      }
+    });
+  };
   return (
     <Card className="h-full w-full dark:bg-slate-800">
       <div className="ml-2 mr-2 mt-2">
@@ -124,7 +140,18 @@ function Playerist({ gameid }: { gameid: string }) {
               color="blue-gray"
               className="dark:text-white"
             >
-              {gameDetails?.venue}
+              {gameDetails?.venueDetails.fieldName}{" "}
+              {gameDetails?.venueDetails.location && (
+                <LocationOnIcon
+                  className="mb-2 cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openLocationGoDialog(
+                      gameDetails?.venueDetails.location || ""
+                    );
+                  }}
+                />
+              )}
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
               Date - {gameDetails?.date} , {gameDetails?.start_time} -{" "}

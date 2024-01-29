@@ -1,5 +1,6 @@
 import * as yup from "yup";
 import React from "react";
+import { SeparatorConfig } from "tailwindcss/types/config";
 
 export type tabsObject = {
   label: string;
@@ -27,6 +28,7 @@ export interface venueObj {
 }
 export interface VenueDetailsforCard extends venueObj {
   images: string[];
+  location?: string;
 }
 export interface teamConfigObj {
   teamKey: string;
