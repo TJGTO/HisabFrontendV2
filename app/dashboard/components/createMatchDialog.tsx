@@ -115,11 +115,16 @@ function CreateMatchDialog(props: SimpleDialogProps) {
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Venue
                   </label>
-                  <input
+                  <select
                     id="venue"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-48 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     {...register("venue")}
-                  />
+                  >
+                    <option value="">{"Please Select"}</option>
+                    {venueList.map((x) => (
+                      <option value={x.venueId}>{x.fieldName}</option>
+                    ))}
+                  </select>
                   {errors && errors.venue && (
                     <Errormessage message={errors.venue.message} />
                   )}

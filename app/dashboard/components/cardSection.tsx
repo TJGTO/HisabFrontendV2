@@ -10,6 +10,7 @@ import { RootState, AppDispatch } from "../../../lib/store";
 import CreateMatchDialog from "./createMatchDialog";
 import { Creator } from "../domain";
 import { useRouter } from "next/navigation";
+import { VenueDetailsforCard } from "../../gamedetails/domain";
 import { openDialog, closeDialog } from "../../../lib/slices/dashboard";
 import useAuth from "@/app/Common/customHooks/useAuth";
 import { fetchActiveGames, resetFlags } from "../../../lib/slices/gamemodule";
@@ -34,7 +35,7 @@ function CardSection() {
   const activeGames = useSelector(
     (state: RootState) => state.gameModel.activeGames
   );
-
+  console.log("activeGames", activeGames);
   useEffect(() => {
     dispatch(fetchActiveGames());
   }, []);
@@ -66,6 +67,12 @@ function CardSection() {
   const gotoPage = (link: string) => {
     router.push(link);
   };
+  const getImageOfGame = (venuedetails: VenueDetailsforCard) => {
+    if (venuedetails.images && venuedetails.images.length > 0) {
+      return venuedetails.images[0];
+    }
+    return "";
+  };
   return (
     <div>
       <div className="container flex gap-3 mx-auto px-4 md:px-12">
@@ -89,8 +96,8 @@ function CardSection() {
             <Card
               key={index}
               cardId={x.gameId}
-              URL={"https://picsum.photos/600/400/?random"}
-              venue={x.venue}
+              URL={getImageOfGame(x.venueDetails)}
+              venue={x.venueDetails.fieldName}
               date={x.date}
               startTime={x.start_time}
               endTime={x.end_time}

@@ -22,10 +22,12 @@ export interface settingDialogProps extends BasicDialogProps {
 }
 
 export interface venueObj {
-  venueId: String;
-  fieldName: String;
+  venueId: string;
+  fieldName: string;
 }
-
+export interface VenueDetailsforCard extends venueObj {
+  images: string[];
+}
 export interface teamConfigObj {
   teamKey: string;
   name: string;
@@ -57,6 +59,7 @@ export interface activeGamesObj {
   price: number;
   paymentNo?: string;
   upiId?: string;
+  venueDetails: VenueDetailsforCard;
 }
 
 type Status = "Approved" | "Rejected" | "Withdrawn" | "Removed" | "Paid";
