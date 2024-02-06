@@ -161,7 +161,11 @@ export type PlayerObjinGameList = {
   player_id: string;
   status: Status;
 };
-
+export type IUpdateTeamReqObj = {
+  gameId: string;
+  players: Iplayers[];
+  number_of_teams: number;
+};
 export const colorListforStatus = {
   Approved: "text-green-700",
   Rejected: "text-red-700",

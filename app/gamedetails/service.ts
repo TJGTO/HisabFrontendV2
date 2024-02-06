@@ -2,6 +2,7 @@ import { AxiosWithAuth, Axios, AxiosWithAuthFromData } from "../../lib/axios";
 import {
   createGameReqBody,
   updateGameReqBody,
+  IUpdateTeamReqObj,
   updatePlayerStatusReqBody,
 } from "./domain";
 
@@ -155,8 +156,27 @@ async function getVenueList() {
     }`,
   };
 }
+async function updateTeamsofPlayers(data: IUpdateTeamReqObj) {
+  let response: any = await AxiosWithAuth.post("game/updateTeamDetails", data);
+
+  if (response.data && response.data.success) {
+    return {
+      success: true,
+      message: "Update is successfull",
+      userdata: response.data.data,
+    };
+  }
+  return {
+    success: false,
+    message: `${
+      response.data.message ? response.data.message : "Failed to Update"
+    }`,
+  };
+}
+
 export {
   createaGame,
+  updateTeamsofPlayers,
   getActiveMatches,
   getMatchDetails,
   registerIngame,

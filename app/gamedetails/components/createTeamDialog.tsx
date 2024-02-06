@@ -3,12 +3,14 @@ import {
   Iplayers,
   IgameDetailsObj,
   teamConfigObj,
+  IUpdateTeamReqObj,
 } from "../domain";
 import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Avatar, Tooltip } from "@mui/material";
+import { updateTeamDetails } from "../../../lib/slices/gamemodule";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 import Swal from "sweetalert2";
@@ -22,6 +24,7 @@ const teamsConfigArr: teamConfigObj[] = [
 ];
 
 function CreateTeamDialog({ open, onClose, gameid }: createTeamDialogProps) {
+  const dispatch = useDispatch<AppDispatch>();
   const [teamArr, setteamArr] = useState<Iplayers[]>([]);
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
@@ -81,6 +84,15 @@ function CreateTeamDialog({ open, onClose, gameid }: createTeamDialogProps) {
 
     return flag;
   };
+  const saveTeamsDetail = () => {
+    console.log("teamArr", teamArr);
+    let requestObj: IUpdateTeamReqObj = {
+      gameId: "",
+      players: teamArr,
+      number_of_teams: numberofTeams,
+    };
+    dispatch(updateTeamDetails(requestObj));
+  };
   return (
     <Dialog
       onClose={handleClose}
@@ -136,6 +148,10 @@ function CreateTeamDialog({ open, onClose, gameid }: createTeamDialogProps) {
                 <button
                   type="button"
                   className="px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    saveTeamsDetail();
+                  }}
                 >
                   Save
                 </button>
