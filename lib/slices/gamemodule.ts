@@ -231,13 +231,17 @@ const gameModelSlice = createSlice({
     builder.addCase(updateTeamDetails.rejected, (state) => {
       state.messageBoxFlag = true;
       state.messageBoxMessage = "Failed to update the teams";
-      state.messageboxType = "success";
+      state.messageboxType = "error";
     });
     builder.addCase(updateTeamDetails.fulfilled, (state, action) => {
       if (action.payload && action.payload.success) {
         state.messageBoxFlag = true;
         state.messageBoxMessage = action.payload.message;
         state.messageboxType = "success";
+      } else {
+        state.messageBoxFlag = true;
+        state.messageBoxMessage = "Failed to update the teams";
+        state.messageboxType = "error";
       }
     });
   },

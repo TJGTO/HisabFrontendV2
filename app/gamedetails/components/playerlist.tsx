@@ -25,7 +25,7 @@ const TableheaderArr = [
   { id: 2, label: "Position" },
   { id: 3, label: "Age" },
   { id: 4, label: "Status" },
-  { id: 5, label: "Rating" },
+  { id: 5, label: "Team" },
   { id: 6, label: "Actions" },
 ];
 
@@ -58,6 +58,7 @@ function Playerist({ gameid }: { gameid: string }) {
   const dialogsafterSuccess = () => {
     closeRsgisterDialog();
     closeSettingDialog();
+    closeTeamDialog();
   };
   useEffect(() => {
     if (gameid) {
@@ -93,6 +94,7 @@ function Playerist({ gameid }: { gameid: string }) {
           position,
           player_id,
           status,
+          team,
         },
         index
       ) => {
@@ -109,6 +111,7 @@ function Playerist({ gameid }: { gameid: string }) {
             gameId={gameid}
             player_id={player_id}
             status={status}
+            team={team}
           />
         );
         arr.push(row);

@@ -31,6 +31,7 @@ function ListRow({
   gameId,
   player_id,
   status,
+  team,
 }: PlayerObjinGameList) {
   const dispatch = useDispatch<AppDispatch>();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -109,7 +110,7 @@ function ListRow({
       </td>
       <td className={classes}>
         <Typography color="blue-gray" className="font-normal dark:text-white">
-          {"5"}
+          {team || ""}
         </Typography>
       </td>
       <td className={classes}>

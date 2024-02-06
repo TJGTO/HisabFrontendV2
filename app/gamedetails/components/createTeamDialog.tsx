@@ -38,10 +38,14 @@ function CreateTeamDialog({ open, onClose, gameid }: createTeamDialogProps) {
       let dumpArray: Array<Iplayers> = [];
 
       copyGameDetails.players.forEach((x, index) => {
-        x.team = teamsConfigArr[0].teamKey;
+        if (!x.team) {
+          x.team = teamsConfigArr[0].teamKey;
+        }
         dumpArray.push(x);
       });
       setteamArr([...dumpArray]);
+      if (gameDetails.number_of_teams)
+        setnumberofTeams(gameDetails.number_of_teams);
     }
   }, [open]);
   const handleClose = () => {
@@ -85,10 +89,9 @@ function CreateTeamDialog({ open, onClose, gameid }: createTeamDialogProps) {
     return flag;
   };
   const saveTeamsDetail = () => {
-    console.log("teamArr", teamArr);
     let requestObj: IUpdateTeamReqObj = {
-      gameId: "",
-      players: teamArr,
+      gameId: gameid,
+      teams: teamArr,
       number_of_teams: numberofTeams,
     };
     dispatch(updateTeamDetails(requestObj));

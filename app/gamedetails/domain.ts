@@ -62,6 +62,7 @@ export interface activeGamesObj {
   paymentNo?: string;
   upiId?: string;
   venueDetails: VenueDetailsforCard;
+  number_of_teams?: number;
 }
 
 type Status = "Approved" | "Rejected" | "Withdrawn" | "Removed" | "Paid";
@@ -160,10 +161,11 @@ export type PlayerObjinGameList = {
   gameId: string;
   player_id: string;
   status: Status;
+  team?: string;
 };
 export type IUpdateTeamReqObj = {
   gameId: string;
-  players: Iplayers[];
+  teams: Iplayers[];
   number_of_teams: number;
 };
 export const colorListforStatus = {
