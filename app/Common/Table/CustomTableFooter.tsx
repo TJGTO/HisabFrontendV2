@@ -19,6 +19,7 @@ function CustomTableFooter({
             pageLengthConfig.map((x, index) => (
               <button
                 type="button"
+                key={index}
                 disabled={pageSize == x}
                 onClick={(e) => {
                   e.preventDefault();

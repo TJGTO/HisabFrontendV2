@@ -114,8 +114,10 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
                     {...register("start_time")}
                   >
                     <option value="">{"Please Select"}</option>
-                    {timingsArray.map((x) => (
-                      <option value={x}>{x}</option>
+                    {timingsArray.map((x, index) => (
+                      <option value={x} key={index}>
+                        {x}
+                      </option>
                     ))}
                   </select>
                   {errors && errors.start_time && (
@@ -132,8 +134,10 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
                     {...register("end_time")}
                   >
                     <option value="">{"Please Select"}</option>
-                    {timingsArray.map((x) => (
-                      <option value={x}>{x}</option>
+                    {timingsArray.map((x, index) => (
+                      <option value={x} key={index}>
+                        {x}
+                      </option>
                     ))}
                   </select>
                   {errors && errors.end_time && (

@@ -168,7 +168,10 @@ function CreateTeamDialog({ open, onClose, gameid }: createTeamDialogProps) {
         </div>
         <div className="flex gap-3 p-3">
           {teamsConfigArr.slice(0, numberofTeams).map((y, tidx) => (
-            <div className="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+            <div
+              key={tidx}
+              className="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+            >
               <div className="flex items-center justify-between mb-4">
                 <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
                   {y.name}
@@ -182,7 +185,7 @@ function CreateTeamDialog({ open, onClose, gameid }: createTeamDialogProps) {
                   {teamArr.map((x, index) => {
                     if (x.team && x.team == y.teamKey)
                       return (
-                        <li className="py-3 sm:py-4">
+                        <li className="py-3 sm:py-4" key={index}>
                           <div className="flex items-center">
                             <div className="flex-shrink-0">
                               <Avatar src={x.profilepictureurl} alt={x.name} />

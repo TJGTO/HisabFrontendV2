@@ -121,8 +121,10 @@ function CreateMatchDialog(props: SimpleDialogProps) {
                     {...register("venue")}
                   >
                     <option value="">{"Please Select"}</option>
-                    {venueList.map((x) => (
-                      <option value={x.venueId}>{x.fieldName}</option>
+                    {venueList.map((x, index) => (
+                      <option value={x.venueId} key={index}>
+                        {x.fieldName}
+                      </option>
                     ))}
                   </select>
                   {errors && errors.venue && (
@@ -156,8 +158,10 @@ function CreateMatchDialog(props: SimpleDialogProps) {
                     {...register("start_time")}
                   >
                     <option value="">{"Please Select"}</option>
-                    {timingsArray.map((x) => (
-                      <option value={x}>{x}</option>
+                    {timingsArray.map((x, index) => (
+                      <option value={x} key={index}>
+                        {x}
+                      </option>
                     ))}
                   </select>
                   {errors && errors.start_time && (
@@ -174,8 +178,10 @@ function CreateMatchDialog(props: SimpleDialogProps) {
                     {...register("end_time")}
                   >
                     <option value="">{"Please Select"}</option>
-                    {timingsArray.map((x) => (
-                      <option value={x}>{x}</option>
+                    {timingsArray.map((x, index) => (
+                      <option value={x} key={index}>
+                        {x}
+                      </option>
                     ))}
                   </select>
                   {errors && errors.end_time && (
