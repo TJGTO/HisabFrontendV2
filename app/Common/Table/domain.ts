@@ -13,4 +13,7 @@ export interface IFooterProps {
   pageSize: number;
   totalPages: number;
   setpage: React.Dispatch<React.SetStateAction<number>>;
+  setpageSize: React.Dispatch<React.SetStateAction<number>>;
 }
+
+export const pageLengthConfig: Array<number> = [5, 10, 20];

@@ -15,7 +15,7 @@ function CustomTable({ tablehead, tablerows }: TableProps) {
   useEffect(() => {
     let cutoffRows = tablerows.slice((page - 1) * pageSize, page * pageSize);
     setVisibleRows(cutoffRows);
-  }, [page, tablerows]);
+  }, [page, tablerows, pageSize]);
 
   useEffect(() => {
     let cutoffRows = tablerows.slice(0, 1 * pageSize);
@@ -52,6 +52,7 @@ function CustomTable({ tablehead, tablerows }: TableProps) {
         pageSize={pageSize}
         totalPages={totalPages}
         setpage={setpage}
+        setpageSize={setpageSize}
       />
     </div>
   );
