@@ -9,13 +9,13 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 function Slider() {
   const slides: Array<SlidingImageObject> = [
     {
-      URL: "https://drive.google.com/uc?export=view&id=1u1H8Uqej_vo-Ds-q-0uOmwC_Npt2klxc",
+      URL: "https://firebasestorage.googleapis.com/v0/b/wfgkol2023.appspot.com/o/sliderPictures%2FWhatsApp123.jpeg?alt=media&token=cc9de9e1-4c48-4b5f-8814-94fe46ba2691",
     },
     {
-      URL: "https://drive.google.com/uc?export=view&id=16OIdKLIv1gXe0jizehhCBaxSFLxsEI-w",
+      URL: "https://firebasestorage.googleapis.com/v0/b/wfgkol2023.appspot.com/o/sliderPictures%2FIMG-20231210-WA0013.jpg?alt=media&token=6d632b6e-c68d-45c5-bc29-7fd4286d5ccc",
     },
     {
-      URL: "https://drive.google.com/uc?export=view&id=1pdlSVvOsFvLBMvWXVYP7SkHL7AprIwGO",
+      URL: "https://firebasestorage.googleapis.com/v0/b/wfgkol2023.appspot.com/o/sliderPictures%2FWhatsApp1234.jpeg?alt=media&token=a241f350-357f-46b3-9d3b-a2a4962d690b",
     },
   ];
 

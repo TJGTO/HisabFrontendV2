@@ -1,8 +1,7 @@
 import React from "react";
-import Image from "next/image";
 
 const logopng =
-  "https://drive.google.com/uc?export=view&id=10ROLMv8jcIpmnLJlKC0vZ0ubQVsGHhTz";
+  "https://firebasestorage.googleapis.com/v0/b/wfgkol2023.appspot.com/o/WFG%20(1).png?alt=media&token=4d23ecc0-81dc-4f03-9b13-dcb6e88a5d11";
 
 type logoProps = {
   width?: number;
