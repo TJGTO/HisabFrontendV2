@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authorizationReducer from "./slices/authorization";
 import dashboardReducer from "./slices/dashboard";
 import profileSectionReducer from "./slices/profileSection";
+import gameModelReducer from "./slices/gamemodule";
 
 export const makeStore = () => {
   return configureStore({
@@ -9,6 +10,7 @@ export const makeStore = () => {
       authorization: authorizationReducer,
       dashboard: dashboardReducer,
       profileSection: profileSectionReducer,
+      gameModel: gameModelReducer,
     },
   });
 };

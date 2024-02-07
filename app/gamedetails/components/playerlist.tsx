@@ -4,158 +4,134 @@ import { useState, useEffect } from "react";
 import CustomTable from "../../Common/Table/CustomTable";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SearchIcon from "@mui/icons-material/Search";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import CreateIcon from "@mui/icons-material/Create";
+import RegisterInGameDialog from "./registerDialog";
+import UpiDetailsDialog from "./upiDetailsDialog";
 import AddIcon from "@mui/icons-material/Add";
 import Tabs from "./tabs";
+import Swal from "sweetalert2";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SettingDialog from "./settingDialog";
-
-import {
-  Card,
-  CardHeader,
-  Input,
-  Typography,
-  Button,
-  Chip,
-  Tab,
-  Avatar,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
+import { RootState, AppDispatch } from "../../../lib/store";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchGameDetails } from "../../../lib/slices/gamemodule";
+import MessageBox from "./messageBox";
+import PageLoader from "../../Common/Loader/pageLoader";
+import ListRow from "./listRow";
+import CreateTeamDialog from "./createTeamDialog";
+import { Card, CardHeader, Input, Typography, Button } from "@mui/material";
 
 const TableheaderArr = [
-  { id: 1, label: "Member" },
-  { id: 2, label: "Function" },
-  { id: 3, label: "Status" },
-  { id: 4, label: "Employed" },
-  { id: 5, label: "Member" },
+  { id: 1, label: "Player" },
+  { id: 2, label: "Position" },
+  { id: 3, label: "Age" },
+  { id: 4, label: "Status" },
+  { id: 5, label: "Team" },
+  { id: 6, label: "Actions" },
 ];
 
-const TABLE_ROWS = [
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-    name: "John Michael",
-    email: "john@creative-tim.com",
-    job: "Manager",
-    org: "Organization",
-    online: true,
-    date: "23/04/18",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-    name: "Alexa Liras",
-    email: "alexa@creative-tim.com",
-    job: "Programator",
-    org: "Developer",
-    online: false,
-    date: "23/04/18",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-    name: "Laurent Perrier",
-    email: "laurent@creative-tim.com",
-    job: "Executive",
-    org: "Projects",
-    online: false,
-    date: "19/09/17",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-    name: "Michael Levi",
-    email: "michael@creative-tim.com",
-    job: "Programator",
-    org: "Developer",
-    online: true,
-    date: "24/12/08",
-  },
-  {
-    img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-    name: "Richard Gran",
-    email: "richard@creative-tim.com",
-    job: "Manager",
-    org: "Executive",
-    online: false,
-    date: "04/10/21",
-  },
-];
-
-function Playerist() {
+function Playerist({ gameid }: { gameid: string }) {
+  const dispatch = useDispatch<AppDispatch>();
   const [tablerows, settablerows] = useState<Array<JSX.Element>>([]);
   const [openDialog, setopenDialog] = useState<boolean>(false);
+  const [openRegisterDialog, stopenRegisterDialog] = useState<boolean>(false);
+  const [openPaymentDetails, setopenPaymentDetails] = useState<boolean>(false);
+  const [openTeamDialog, setopenTeamDialog] = useState<boolean>(false);
 
+  const gameDetails = useSelector(
+    (state: RootState) => state.gameModel.gameDetails
+  );
+  const gameDetailsLoader = useSelector(
+    (state: RootState) => state.gameModel.gameDetailsLoader
+  );
+  const closeTeamDialog = () => {
+    setopenTeamDialog(false);
+  };
   const closeSettingDialog = () => {
     setopenDialog(false);
   };
-
+  const closeRsgisterDialog = () => {
+    stopenRegisterDialog(false);
+  };
+  const closePaymentDetailsDialog = () => {
+    setopenPaymentDetails(false);
+  };
+  const dialogsafterSuccess = () => {
+    closeRsgisterDialog();
+    closeSettingDialog();
+    closeTeamDialog();
+  };
   useEffect(() => {
-    createTableRows();
+    if (gameid) {
+      dispatch(fetchGameDetails(gameid));
+    }
   }, []);
 
+  useEffect(() => {
+    if (gameDetails) {
+      createTableRows();
+    }
+  }, [gameDetails]);
+
+  const getNumbersofSlotLeft = () => {
+    if (gameDetails) {
+      return (
+        gameDetails.number_of_players -
+        gameDetails.players.filter((x) => x.status == "Approved").length
+      );
+    } else {
+      return 0;
+    }
+  };
   const createTableRows = (): void => {
     let arr: JSX.Element[] = [];
-    TABLE_ROWS.forEach(
-      ({ img, name, email, job, org, online, date }, index) => {
-        const isLast = index === TABLE_ROWS.length - 1;
-        const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
+    gameDetails?.players.forEach(
+      (
+        {
+          profilepictureurl,
+          name,
+          age,
+          phoneNumber,
+          position,
+          player_id,
+          status,
+          team,
+        },
+        index
+      ) => {
+        const isLast = index === gameDetails?.players.length - 1;
+        let classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
         const row: JSX.Element = (
-          <tr key={name}>
-            <td className={classes}>
-              <div className="flex items-center gap-3">
-                <Avatar src={img} alt={name} />
-                <div className="flex flex-col">
-                  <Typography
-                    color="blue-gray"
-                    className="font-normal dark:text-white"
-                  >
-                    {name}
-                  </Typography>
-                  <Typography
-                    color="blue-gray"
-                    className="font-normal opacity-70 dark:text-white"
-                  >
-                    {email}
-                  </Typography>
-                </div>
-              </div>
-            </td>
-            <td className={classes}>
-              <div className="flex flex-col">
-                <Typography
-                  color="blue-gray"
-                  className="font-normal dark:text-white"
-                >
-                  {job}
-                </Typography>
-                <Typography
-                  color="blue-gray"
-                  className="font-normal opacity-70 dark:text-white"
-                >
-                  {org}
-                </Typography>
-              </div>
-            </td>
-            <td className={classes}>
-              <div className="w-max">{/*chip section*/}</div>
-            </td>
-            <td className={classes}>
-              <Typography
-                color="blue-gray"
-                className="font-normal dark:text-white"
-              >
-                {date}
-              </Typography>
-            </td>
-            <td className={classes}>
-              <Tooltip title="Edit User">
-                <CreateIcon className="h-4 w-4 dark:text-white" />
-              </Tooltip>
-            </td>
-          </tr>
+          <ListRow
+            profilepictureurl={profilepictureurl}
+            name={name}
+            age={age}
+            phoneNumber={phoneNumber}
+            position={position.toString()}
+            classes={classes}
+            gameId={gameid}
+            player_id={player_id}
+            status={status}
+            team={team}
+          />
         );
         arr.push(row);
       }
     );
     settablerows([...arr]);
+  };
+  const openLocationGoDialog = (link: string) => {
+    Swal.fire({
+      title: "Location Link",
+      text: link,
+      showCancelButton: true,
+      confirmButtonText: "Go",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.open(link, "_blank");
+        Swal.close();
+      }
+    });
   };
   return (
     <Card className="h-full w-full dark:bg-slate-800">
@@ -167,24 +143,50 @@ function Playerist() {
               color="blue-gray"
               className="dark:text-white"
             >
-              Jawpur , Dumdum Turf
+              {gameDetails?.venueDetails.fieldName}{" "}
+              {gameDetails?.venueDetails.location && (
+                <LocationOnIcon
+                  className="mb-2 cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openLocationGoDialog(
+                      gameDetails?.venueDetails.location || ""
+                    );
+                  }}
+                />
+              )}
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-              Date - 11/11/23 , 7:00PM - 9:00PM
+              Date - {gameDetails?.date} , {gameDetails?.start_time} -{" "}
+              {gameDetails?.end_time}
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-              Total Member - 18
+              Total Capacity - {gameDetails?.number_of_players} Left -{" "}
+              {getNumbersofSlotLeft()}
             </Typography>
           </div>
           <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-            <Button variant="outlined">Register</Button>
-            <Button className="flex items-center gap-3">
-              <AddIcon className="h-4 w-4" /> Add member
+            <Button
+              variant="outlined"
+              onClick={(e) => {
+                e.preventDefault();
+                stopenRegisterDialog(true);
+              }}
+            >
+              Register
+            </Button>
+            <Button
+              className="flex items-center gap-3"
+              onClick={(e) => {
+                e.preventDefault();
+                setopenTeamDialog(true);
+              }}
+            >
+              <AddIcon className="h-4 w-4" /> Create Team
             </Button>
           </div>
         </div>
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          {/* <Tabs /> */}
+        <div className="flex items-center gap-4">
           <Button
             className="flex items-center gap-2"
             variant="outlined"
@@ -194,6 +196,16 @@ function Playerist() {
             }}
           >
             Settings <SettingsIcon className="h-4 w-4" />
+          </Button>
+          <Button
+            className="flex items-center gap-2"
+            variant="outlined"
+            onClick={(e) => {
+              e.preventDefault();
+              setopenPaymentDetails(true);
+            }}
+          >
+            Payment Details
           </Button>
           {/* <div className="w-full md:w-72">
             <Input placeholder="Search" />
@@ -205,7 +217,29 @@ function Playerist() {
           <CustomTable tablehead={TableheaderArr} tablerows={tablerows} />
         )}
       </div>
-      <SettingDialog open={openDialog} onClose={closeSettingDialog} />
+      <SettingDialog
+        open={openDialog}
+        onClose={closeSettingDialog}
+        gameid={gameid}
+      />
+      <RegisterInGameDialog
+        open={openRegisterDialog}
+        onClose={closeRsgisterDialog}
+        gameid={gameid}
+      />
+      <MessageBox action={dialogsafterSuccess} />
+      {gameDetailsLoader && <PageLoader />}
+      <UpiDetailsDialog
+        open={openPaymentDetails}
+        onClose={closePaymentDetailsDialog}
+        paymentNo={gameDetails?.paymentNo}
+        upiId={gameDetails?.upiId}
+      />
+      <CreateTeamDialog
+        gameid={gameid}
+        open={openTeamDialog}
+        onClose={closeTeamDialog}
+      />
     </Card>
   );
 }
