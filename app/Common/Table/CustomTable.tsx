@@ -15,7 +15,7 @@ function CustomTable({ tablehead, tablerows }: TableProps) {
   useEffect(() => {
     let cutoffRows = tablerows.slice((page - 1) * pageSize, page * pageSize);
     setVisibleRows(cutoffRows);
-  }, [page]);
+  }, [page, tablerows]);
 
   useEffect(() => {
     let cutoffRows = tablerows.slice(0, 1 * pageSize);
@@ -30,16 +30,16 @@ function CustomTable({ tablehead, tablerows }: TableProps) {
             {tablehead.map((head, index) => (
               <th
                 key={head.id}
-                className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
+                className={`cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 hover:bg-blue-gray-50`}
               >
                 <Typography
                   color="blue-gray"
                   className="flex items-center justify-between gap-2 font-normal leading-none opacity-70 dark:text-white"
                 >
                   {head.label}{" "}
-                  {index !== tablehead.length - 1 && (
+                  {/* {index !== tablehead.length - 1 && (
                     <KeyboardArrowUpIcon className="h-4 w-4" />
-                  )}
+                  )} */}
                 </Typography>
               </th>
             ))}

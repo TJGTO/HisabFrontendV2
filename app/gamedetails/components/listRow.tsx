@@ -64,7 +64,7 @@ function ListRow({
   };
   return (
     <tr>
-      <td className={classes}>
+      <td className={`${classes}`}>
         <div className="flex items-center gap-3">
           <Avatar src={profilepictureurl} alt={name} />
           <div className="flex flex-col">
@@ -97,7 +97,7 @@ function ListRow({
           </Typography>
         </div>
       </td>
-      <td className={classes}>
+      {/* <td className={classes}>
         <div className={`w-max ${colorListforStatusBG[status]} p-2 rounded-lg`}>
           {" "}
           <Typography
@@ -106,6 +106,22 @@ function ListRow({
           >
             {status}
           </Typography>
+        </div>
+      </td> */}
+      <td className={classes}>
+        <div className={`w-max p-2 rounded-lg flex gap-3`}>
+          <div className="flex items-center">
+            <div
+              className={`h-3.5 w-3.5 rounded-full ${colorListforStatusBG[status]} mr-2`}
+            ></div>
+            <Typography
+              color="blue-gray"
+              className="font-normal dark:text-white"
+            >
+              {" "}
+              {status}
+            </Typography>
+          </div>
         </div>
       </td>
       <td className={classes}>
