@@ -40,7 +40,7 @@ export const createTheGame = createAsyncThunk(
       dispatch(fetchActiveGames());
       return response;
     } catch (err) {
-      console.log(err);
+      throw err;
     }
   }
 );
@@ -156,6 +156,8 @@ const gameModelSlice = createSlice({
     });
     builder.addCase(createTheGame.rejected, (state, action) => {
       state.gameLoader = false;
+      state.errorOnCreation = true;
+      state.gameCreationMessage = action.error?.message || "";
     });
     builder.addCase(fetchActiveGames.fulfilled, (state, action) => {
       if (action.payload && action.payload.success) {

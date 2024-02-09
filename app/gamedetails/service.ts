@@ -7,23 +7,32 @@ import {
 } from "./domain";
 
 async function createaGame(data: createGameReqBody) {
-  let response: any = await AxiosWithAuth.post("game/create", data);
+  try {
+    let response: any = await AxiosWithAuth.post("game/create", data);
 
-  if (response.data && response.data.success) {
-    return {
-      success: true,
-      message: "Game creation is successfull",
-      userdata: response.data.data,
-    };
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: "Game creation is successfull",
+        userdata: response.data.data,
+      };
+    } else {
+      return {
+        success: false,
+        message: `${
+          response.data.data.message
+            ? response.data.data.message
+            : "Failed to create the game"
+        }`,
+      };
+    }
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to create the game");
+    }
   }
-  return {
-    success: false,
-    message: `${
-      response.data.message
-        ? response.data.message
-        : "Failed to create the game"
-    }`,
-  };
 }
 
 async function getActiveMatches() {

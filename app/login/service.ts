@@ -9,6 +9,7 @@ async function loginUser(data: loginObj) {
     localStorage.setItem("fullname", response.data.data.fullname);
     localStorage.setItem("email", response.data.data.email);
     localStorage.setItem("profileURL", response.data.data.profilePictureUrl);
+    localStorage.setItem("roles", JSON.stringify(response.data.data.roles));
 
     return {
       success: true,
