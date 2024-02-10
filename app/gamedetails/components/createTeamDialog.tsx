@@ -23,7 +23,12 @@ const teamsConfigArr: teamConfigObj[] = [
   { teamKey: "D", name: "Team D" },
 ];
 
-function CreateTeamDialog({ open, onClose, gameid }: createTeamDialogProps) {
+function CreateTeamDialog({
+  open,
+  onClose,
+  gameid,
+  editPermission = false,
+}: createTeamDialogProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [teamArr, setteamArr] = useState<Iplayers[]>([]);
   const gameDetails = useSelector(
@@ -106,59 +111,65 @@ function CreateTeamDialog({ open, onClose, gameid }: createTeamDialogProps) {
         <div className="flex flex-col mx-auto">
           <div className="pl-3 pt-2 space-y-2 md:space-y-2 sm:pl-3 sm:pt-2 pr-3 sm:pr-3">
             <div className="flex gap-3 justify-between">
-              <div className="flex gap-3">
-                <div className="inline-flex rounded-md shadow-sm" role="group">
+              {editPermission && (
+                <div className="flex gap-3">
+                  <div
+                    className="inline-flex rounded-md shadow-sm"
+                    role="group"
+                  >
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (checkIfPossibletoSwitchTeamNumbers(2)) {
+                          setnumberofTeams(2);
+                        }
+                      }}
+                      className={`px-4 py-2 text-sm font-medium bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white disabled:opacity-50 disabled:cursor-not-allowed`}
+                      disabled={numberofTeams == 2}
+                    >
+                      2 Teams
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (checkIfPossibletoSwitchTeamNumbers(3)) {
+                          setnumberofTeams(3);
+                        }
+                      }}
+                      disabled={numberofTeams == 3}
+                      className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      3 Teams
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (checkIfPossibletoSwitchTeamNumbers(4)) {
+                          setnumberofTeams(4);
+                        }
+                      }}
+                      disabled={numberofTeams == 4}
+                      className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      4 Teams
+                    </button>
+                  </div>
+
                   <button
                     type="button"
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={(e) => {
                       e.preventDefault();
-                      if (checkIfPossibletoSwitchTeamNumbers(2)) {
-                        setnumberofTeams(2);
-                      }
+                      saveTeamsDetail();
                     }}
-                    className={`px-4 py-2 text-sm font-medium bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white disabled:opacity-50 disabled:cursor-not-allowed`}
-                    disabled={numberofTeams == 2}
                   >
-                    2 Teams
-                  </button>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (checkIfPossibletoSwitchTeamNumbers(3)) {
-                        setnumberofTeams(3);
-                      }
-                    }}
-                    disabled={numberofTeams == 3}
-                    className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    3 Teams
-                  </button>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (checkIfPossibletoSwitchTeamNumbers(4)) {
-                        setnumberofTeams(4);
-                      }
-                    }}
-                    disabled={numberofTeams == 4}
-                    className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    4 Teams
+                    Save
                   </button>
                 </div>
-                <button
-                  type="button"
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    saveTeamsDetail();
-                  }}
-                >
-                  Save
-                </button>
-              </div>
+              )}
               <CloseIcon
                 onClick={handleClose}
                 style={{ color: "red", cursor: "pointer" }}
@@ -198,30 +209,32 @@ function CreateTeamDialog({ open, onClose, gameid }: createTeamDialogProps) {
                                 {x.position}
                               </p>
                             </div>
-                            <div className="inline-flex cursor-pointer items-center text-base font-semibold text-gray-900 dark:text-white pl-2">
-                              {tidx != 0 && (
-                                <ArrowBackIcon
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    updateTeams(
-                                      index,
-                                      teamsConfigArr[tidx - 1].teamKey
-                                    );
-                                  }}
-                                />
-                              )}
-                              {tidx != numberofTeams - 1 && (
-                                <ArrowForwardIcon
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    updateTeams(
-                                      index,
-                                      teamsConfigArr[tidx + 1].teamKey
-                                    );
-                                  }}
-                                />
-                              )}
-                            </div>
+                            {editPermission && (
+                              <div className="inline-flex cursor-pointer items-center text-base font-semibold text-gray-900 dark:text-white pl-2">
+                                {tidx != 0 && (
+                                  <ArrowBackIcon
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      updateTeams(
+                                        index,
+                                        teamsConfigArr[tidx - 1].teamKey
+                                      );
+                                    }}
+                                  />
+                                )}
+                                {tidx != numberofTeams - 1 && (
+                                  <ArrowForwardIcon
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      updateTeams(
+                                        index,
+                                        teamsConfigArr[tidx + 1].teamKey
+                                      );
+                                    }}
+                                  />
+                                )}
+                              </div>
+                            )}
                           </div>
                         </li>
                       );

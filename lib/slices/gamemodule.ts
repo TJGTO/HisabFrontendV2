@@ -16,6 +16,7 @@ import {
   getVenueList,
   updatePlayerStatus,
   updateTeamsofPlayers,
+  getMatchPermissions,
 } from "../../app/gamedetails/service";
 
 const initialState: gameModelStateObj = {
@@ -30,6 +31,11 @@ const initialState: gameModelStateObj = {
   messageBoxMessage: "",
   messageboxType: "",
   venueList: [],
+  permissionMatrix: {
+    editSetting: false,
+    approveOrReject: false,
+    editTeam: false,
+  },
 };
 
 export const createTheGame = createAsyncThunk(
@@ -40,7 +46,7 @@ export const createTheGame = createAsyncThunk(
       dispatch(fetchActiveGames());
       return response;
     } catch (err) {
-      console.log(err);
+      throw err;
     }
   }
 );
@@ -63,6 +69,17 @@ export const fetchGameDetails = createAsyncThunk(
       return response;
     } catch (err) {
       console.log(err);
+    }
+  }
+);
+export const fetchGamePermission = createAsyncThunk(
+  "gameModel/fetchGamePermission",
+  async (gameId: string) => {
+    try {
+      const response = await getMatchPermissions(gameId);
+      return response;
+    } catch (err) {
+      throw err;
     }
   }
 );
@@ -156,6 +173,8 @@ const gameModelSlice = createSlice({
     });
     builder.addCase(createTheGame.rejected, (state, action) => {
       state.gameLoader = false;
+      state.errorOnCreation = true;
+      state.gameCreationMessage = action.error?.message || "";
     });
     builder.addCase(fetchActiveGames.fulfilled, (state, action) => {
       if (action.payload && action.payload.success) {
@@ -242,6 +261,11 @@ const gameModelSlice = createSlice({
         state.messageBoxFlag = true;
         state.messageBoxMessage = "Failed to update the teams";
         state.messageboxType = "error";
+      }
+    });
+    builder.addCase(fetchGamePermission.fulfilled, (state, action) => {
+      if (action.payload && action.payload.success) {
+        state.permissionMatrix = action.payload.permissionMatrix;
       }
     });
   },
