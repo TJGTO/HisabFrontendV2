@@ -12,6 +12,7 @@ function ViewDialog({
   setConfirmDialogTitle,
   setactionType,
   status,
+  actionsPflag,
 }: viewDialogProps) {
   const handleClose = () => {
     onClose();
@@ -38,7 +39,7 @@ function ViewDialog({
                   }
                 />
               </div>
-              {status == "Paid" && (
+              {status == "Paid" && actionsPflag && (
                 <div className="flex gap-3">
                   <button
                     type="submit"

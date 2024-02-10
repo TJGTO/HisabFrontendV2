@@ -9,15 +9,21 @@ import UpiDetailsDialog from "./upiDetailsDialog";
 import AddIcon from "@mui/icons-material/Add";
 import Tabs from "./tabs";
 import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
+import useAuth from "../../Common/customHooks/useAuth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SettingDialog from "./settingDialog";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchGameDetails } from "../../../lib/slices/gamemodule";
+import {
+  fetchGameDetails,
+  fetchGamePermission,
+} from "../../../lib/slices/gamemodule";
 import MessageBox from "./messageBox";
 import PageLoader from "../../Common/Loader/pageLoader";
 import ListRow from "./listRow";
 import CreateTeamDialog from "./createTeamDialog";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { Card, CardHeader, Input, Typography, Button } from "@mui/material";
 
 const TableheaderArr = [
@@ -30,18 +36,23 @@ const TableheaderArr = [
 ];
 
 function Playerist({ gameid }: { gameid: string }) {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const [tablerows, settablerows] = useState<Array<JSX.Element>>([]);
   const [openDialog, setopenDialog] = useState<boolean>(false);
   const [openRegisterDialog, stopenRegisterDialog] = useState<boolean>(false);
   const [openPaymentDetails, setopenPaymentDetails] = useState<boolean>(false);
   const [openTeamDialog, setopenTeamDialog] = useState<boolean>(false);
+  const [isLoggedIn, token] = useAuth();
 
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
   );
   const gameDetailsLoader = useSelector(
     (state: RootState) => state.gameModel.gameDetailsLoader
+  );
+  const permissionMatrix = useSelector(
+    (state: RootState) => state.gameModel.permissionMatrix
   );
   const closeTeamDialog = () => {
     setopenTeamDialog(false);
@@ -67,6 +78,12 @@ function Playerist({ gameid }: { gameid: string }) {
   }, []);
 
   useEffect(() => {
+    if (gameid && isLoggedIn) {
+      dispatch(fetchGamePermission(gameid));
+    }
+  }, [token]);
+
+  useEffect(() => {
     if (gameDetails) {
       createTableRows();
     }
@@ -80,6 +97,23 @@ function Playerist({ gameid }: { gameid: string }) {
       );
     } else {
       return 0;
+    }
+  };
+  const openRegisterDialogAfterCheck = () => {
+    if (isLoggedIn) {
+      stopenRegisterDialog(true);
+    } else {
+      Swal.fire({
+        title: "Please login to register in game",
+        showCancelButton: true,
+        confirmButtonText: "Go",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.close();
+          router.push("/login");
+        }
+      });
     }
   };
   const createTableRows = (): void => {
@@ -170,11 +204,12 @@ function Playerist({ gameid }: { gameid: string }) {
               variant="outlined"
               onClick={(e) => {
                 e.preventDefault();
-                stopenRegisterDialog(true);
+                openRegisterDialogAfterCheck();
               }}
             >
               Register
             </Button>
+
             <Button
               className="flex items-center gap-3"
               onClick={(e) => {
@@ -182,21 +217,32 @@ function Playerist({ gameid }: { gameid: string }) {
                 setopenTeamDialog(true);
               }}
             >
-              <AddIcon className="h-4 w-4" /> Create Team
+              {permissionMatrix.editTeam ? (
+                <>
+                  <AddIcon className="h-4 w-4" /> Create Team
+                </>
+              ) : (
+                <>
+                  <RemoveRedEyeIcon className="h-4 w-4" /> View Team
+                </>
+              )}
             </Button>
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <Button
-            className="flex items-center gap-2"
-            variant="outlined"
-            onClick={(e) => {
-              e.preventDefault();
-              setopenDialog(true);
-            }}
-          >
-            Settings <SettingsIcon className="h-4 w-4" />
-          </Button>
+          {permissionMatrix.editSetting && (
+            <Button
+              className="flex items-center gap-2"
+              variant="outlined"
+              onClick={(e) => {
+                e.preventDefault();
+                setopenDialog(true);
+              }}
+            >
+              Settings <SettingsIcon className="h-4 w-4" />
+            </Button>
+          )}
+
           <Button
             className="flex items-center gap-2"
             variant="outlined"
@@ -239,6 +285,7 @@ function Playerist({ gameid }: { gameid: string }) {
         gameid={gameid}
         open={openTeamDialog}
         onClose={closeTeamDialog}
+        editPermission={permissionMatrix.editTeam}
       />
     </Card>
   );

@@ -10,7 +10,10 @@ import { RootState, AppDispatch } from "../../../lib/store";
 import CreateMatchDialog from "./createMatchDialog";
 import { Creator } from "../domain";
 import { useRouter } from "next/navigation";
-import { VenueDetailsforCard } from "../../gamedetails/domain";
+import {
+  VenueDetailsforCard,
+  AlertmessageList,
+} from "../../gamedetails/domain";
 import { openDialog, closeDialog } from "../../../lib/slices/dashboard";
 import useAuth from "@/app/Common/customHooks/useAuth";
 import { fetchActiveGames, resetFlags } from "../../../lib/slices/gamemodule";
@@ -57,6 +60,23 @@ function CardSection() {
     dispatch(resetFlags());
   };
   const openMatchCreateDialog = () => {
+    const storedRoleString = localStorage.getItem("roles");
+    let roles: Array<string> | null = null;
+    if (storedRoleString) {
+      roles = JSON.parse(storedRoleString);
+      if (!roles?.includes("Match Moderator") && !roles?.includes("Admin")) {
+        Swal.fire({
+          icon: "error",
+          title: AlertmessageList["NOT_AN_MODERATOR"],
+          showConfirmButton: false,
+          showCancelButton: true,
+          cancelButtonText: "Cancel",
+          timer: 8000,
+        });
+        return;
+      }
+    }
+
     dispatch(openDialog());
   };
   const creator: Creator = {

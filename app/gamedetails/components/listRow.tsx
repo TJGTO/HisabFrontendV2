@@ -40,6 +40,9 @@ function ListRow({
   const [confirmHeaderText, setconfirmHeaderText] = useState<string>("");
   const [confirmTitleText, setconfirmTitleText] = useState<string>("");
   const [actionType, setactionType] = useState<string>("");
+  const permissionMatrix = useSelector(
+    (state: RootState) => state.gameModel.permissionMatrix
+  );
 
   const open = Boolean(anchorEl);
   const closeViewDialog = () => {
@@ -156,7 +159,7 @@ function ListRow({
             View
           </MenuItem>
 
-          {status != "Removed" && (
+          {status != "Removed" && permissionMatrix.approveOrReject && (
             <>
               <Divider />
               <MenuItem
@@ -175,7 +178,7 @@ function ListRow({
               </MenuItem>
             </>
           )}
-          {status != "Withdrawn" && (
+          {status != "Withdrawn" && permissionMatrix.approveOrReject && (
             <>
               <Divider />
               <MenuItem
@@ -202,6 +205,7 @@ function ListRow({
         gameid={gameId}
         status={status}
         setactionType={setactionType}
+        actionsPflag={permissionMatrix.approveOrReject}
         setConfirmDialogState={setopenConfirmDialog}
         setConfirmDialogHeader={setconfirmHeaderText}
         setConfirmDialogTitle={setconfirmTitleText}
