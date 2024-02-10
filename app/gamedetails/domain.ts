@@ -42,9 +42,12 @@ export interface viewDialogProps extends settingDialogProps {
   setConfirmDialogTitle: React.Dispatch<React.SetStateAction<string>>;
   setactionType: React.Dispatch<React.SetStateAction<string>>;
   status: string;
+  actionsPflag?: boolean;
 }
 
-export interface createTeamDialogProps extends settingDialogProps {}
+export interface createTeamDialogProps extends settingDialogProps {
+  editPermission: boolean;
+}
 
 export interface paymentDetailsDialogProps extends BasicDialogProps {
   paymentNo?: string;
@@ -82,7 +85,11 @@ export interface Iplayers {
 export interface IgameDetailsObj extends activeGamesObj {
   players: Iplayers[];
 }
-
+export type GamePermissionMatrix = {
+  editSetting: boolean;
+  approveOrReject: boolean;
+  editTeam: boolean;
+};
 export interface gameModelStateObj {
   gameLoader: boolean;
   errorOnCreation: boolean;
@@ -95,6 +102,7 @@ export interface gameModelStateObj {
   messageboxType: string;
   registerSlotLoader: boolean;
   venueList: Array<venueObj>;
+  permissionMatrix: GamePermissionMatrix;
 }
 
 export interface createGameReqBody {

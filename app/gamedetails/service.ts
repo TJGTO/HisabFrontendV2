@@ -72,6 +72,30 @@ async function getMatchDetails(gameId: string) {
     }`,
   };
 }
+async function getMatchPermissions(gameId: string) {
+  try {
+    let response: any = await AxiosWithAuth.get(
+      `game/getPermissionMatrix/${gameId}`
+    );
+
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        permissionMatrix: response.data.data,
+      };
+    }
+    return {
+      success: false,
+      message: `${
+        response.data.message
+          ? response.data.message
+          : "Failed to fetch permission matrix"
+      }`,
+    };
+  } catch (error) {
+    throw new Error("Failed to fetch permission matrix");
+  }
+}
 
 async function registerIngame(data: FormData) {
   let response: any = await AxiosWithAuthFromData.post("game/register", data);
@@ -192,4 +216,5 @@ export {
   updateGame,
   updatePlayerStatus,
   getVenueList,
+  getMatchPermissions,
 };
