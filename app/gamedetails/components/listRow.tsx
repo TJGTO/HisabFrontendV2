@@ -40,6 +40,7 @@ function ListRow({
   const [confirmHeaderText, setconfirmHeaderText] = useState<string>("");
   const [confirmTitleText, setconfirmTitleText] = useState<string>("");
   const [actionType, setactionType] = useState<string>("");
+
   const permissionMatrix = useSelector(
     (state: RootState) => state.gameModel.permissionMatrix
   );

@@ -89,7 +89,7 @@ function Playerist({ gameid }: { gameid: string }) {
     }
   }, [gameDetails]);
 
-  const getNumbersofSlotLeft = () => {
+  const getNumbersofSlotLeft = (): number => {
     if (gameDetails) {
       return (
         gameDetails.number_of_players -

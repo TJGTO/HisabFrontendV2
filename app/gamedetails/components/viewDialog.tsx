@@ -1,7 +1,10 @@
 import React from "react";
 import { viewDialogProps } from "../domain";
 import Dialog from "@mui/material/Dialog";
+import { RootState } from "../../../lib/store";
+import { useSelector } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
+import Swal from "sweetalert2";
 
 function ViewDialog({
   open,
@@ -14,8 +17,21 @@ function ViewDialog({
   status,
   actionsPflag,
 }: viewDialogProps) {
+  const gameDetails = useSelector(
+    (state: RootState) => state.gameModel.gameDetails
+  );
   const handleClose = () => {
     onClose();
+  };
+  const getNumbersofSlotLeft = (): number => {
+    if (gameDetails) {
+      return (
+        gameDetails.number_of_players -
+        gameDetails.players.filter((x) => x.status == "Approved").length
+      );
+    } else {
+      return 0;
+    }
   };
   return (
     <Dialog onClose={handleClose} open={open} maxWidth={"md"}>
@@ -42,9 +58,18 @@ function ViewDialog({
               {status == "Paid" && actionsPflag && (
                 <div className="flex gap-3">
                   <button
-                    type="submit"
                     onClick={(e) => {
                       e.preventDefault();
+                      if (getNumbersofSlotLeft() <= 0) {
+                        Swal.fire({
+                          icon: "error",
+                          title:
+                            "SLot is full if you want to approve more players then please increase the slots",
+                          showConfirmButton: false,
+                          timer: 2500,
+                        });
+                        return;
+                      }
                       setactionType("Approved");
                       setConfirmDialogState(true);
                       setConfirmDialogHeader("Do You really want to Approve?");
@@ -56,7 +81,6 @@ function ViewDialog({
                     Approve
                   </button>
                   <button
-                    type="submit"
                     onClick={(e) => {
                       e.preventDefault();
                       setactionType("Rejected");
