@@ -27,6 +27,6 @@ function StatisticsSection() {
       </div>
     </section>
   );
-} //text-gray-700 bg-stone-100 dark:bg-gray-800 font-poppins
+}
 
 export default StatisticsSection;
