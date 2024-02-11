@@ -168,7 +168,7 @@ function Playerist({ gameid }: { gameid: string }) {
     });
   };
   return (
-    <Card className="h-full w-full dark:bg-slate-800">
+    <section className="h-full w-full dark:bg-slate-800">
       <div className="ml-2 mr-2 mt-2">
         <div className="mb-4 flex items-center justify-between gap-8">
           <div>
@@ -287,7 +287,7 @@ function Playerist({ gameid }: { gameid: string }) {
         onClose={closeTeamDialog}
         editPermission={permissionMatrix.editTeam}
       />
-    </Card>
+    </section>
   );
 }
 
