@@ -10,7 +10,7 @@ export const dataForStatisticsSection: IsatsCard[] = [
   {
     id: "1",
     statsText: "1.5k",
-    secondaryText: "Menbers",
+    secondaryText: "Members",
     icon: "/assets/facebookicon.png",
     subject: "Facebook",
   },
