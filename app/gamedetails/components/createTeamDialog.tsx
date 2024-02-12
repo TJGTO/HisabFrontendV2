@@ -199,7 +199,13 @@ function CreateTeamDialog({
                         <li className="py-3 sm:py-4" key={index}>
                           <div className="flex items-center">
                             <div className="flex-shrink-0">
-                              <Avatar src={x.profilepictureurl} alt={x.name} />
+                              <Avatar
+                                src={
+                                  "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
+                                  x.profilepictureurl
+                                }
+                                alt={x.name}
+                              />
                             </div>
                             <div className="flex-1 min-w-0 ms-4">
                               <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
