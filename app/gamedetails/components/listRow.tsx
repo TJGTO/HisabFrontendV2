@@ -25,6 +25,7 @@ function ListRow({
   profilepictureurl,
   name,
   age,
+  paymentImageurl,
   phoneNumber,
   position,
   classes,
@@ -70,7 +71,13 @@ function ListRow({
     <tr>
       <td className={`${classes}`}>
         <div className="flex items-center gap-3">
-          <Avatar src={profilepictureurl} alt={name} />
+          <Avatar
+            src={
+              "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
+              profilepictureurl
+            }
+            alt={name}
+          />
           <div className="flex flex-col">
             <Typography
               color="blue-gray"
@@ -206,6 +213,7 @@ function ListRow({
         gameid={gameId}
         status={status}
         setactionType={setactionType}
+        paymentImageurl={paymentImageurl}
         actionsPflag={permissionMatrix.approveOrReject}
         setConfirmDialogState={setopenConfirmDialog}
         setConfirmDialogHeader={setconfirmHeaderText}

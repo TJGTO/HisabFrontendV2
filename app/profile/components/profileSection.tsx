@@ -102,7 +102,10 @@ function ProfileSection() {
                 height: 150,
                 bgcolor: fullname ? stringToColor(fullname.toString()) : "",
               }}
-              src={userProfile?.profilePictureURL?.toString()}
+              src={
+                "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
+                userProfile?.profilePictureURL?.toString()
+              }
             >
               {fullname && createSortFromForAvator(fullname.toString())}
             </Avatar>

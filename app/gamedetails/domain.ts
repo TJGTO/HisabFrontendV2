@@ -43,6 +43,7 @@ export interface viewDialogProps extends settingDialogProps {
   setactionType: React.Dispatch<React.SetStateAction<string>>;
   status: string;
   actionsPflag?: boolean;
+  paymentImageurl: string[];
 }
 
 export interface createTeamDialogProps extends settingDialogProps {
@@ -75,6 +76,7 @@ export interface Iplayers {
   player_id: string;
   age: string;
   profilepictureurl: string;
+  paymentImageurl: string[];
   rating?: string;
   phoneNumber: string;
   position: Position;
@@ -163,6 +165,7 @@ export type PlayerObjinGameList = {
   profilepictureurl: string;
   name: string;
   age: string;
+  paymentImageurl: string[];
   phoneNumber: string;
   position: string;
   classes: string;

@@ -124,6 +124,7 @@ function Playerist({ gameid }: { gameid: string }) {
           profilepictureurl,
           name,
           age,
+          paymentImageurl,
           phoneNumber,
           position,
           player_id,
@@ -139,6 +140,7 @@ function Playerist({ gameid }: { gameid: string }) {
             profilepictureurl={profilepictureurl}
             name={name}
             age={age}
+            paymentImageurl={paymentImageurl}
             phoneNumber={phoneNumber}
             position={position.toString()}
             classes={classes}

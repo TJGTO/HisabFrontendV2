@@ -41,7 +41,10 @@ function ProfileAvatar(props: {
       <Avatar
         onClick={handleClick}
         alt="Profile Picture"
-        src={profilePictureURL ? profilePictureURL : ""}
+        src={
+          "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
+          profilePictureURL
+        }
         sx={{
           bgcolor: props.username
             ? stringToColor(props.username.toString())

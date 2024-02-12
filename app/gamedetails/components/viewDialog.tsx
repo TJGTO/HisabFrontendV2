@@ -15,6 +15,7 @@ function ViewDialog({
   setConfirmDialogTitle,
   setactionType,
   status,
+  paymentImageurl,
   actionsPflag,
 }: viewDialogProps) {
   const gameDetails = useSelector(
@@ -48,10 +49,11 @@ function ViewDialog({
               />
             </div>
             <div className="space-y-4 md:space-y-6">
-              <div className="flex w-full">
+              <div className="flex h-60 w-60">
                 <img
                   src={
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSzuCZ5ntitJcOHywP_ECjin8aYem_v-nXnUdZMSivjA&s"
+                    "https://wfgimagebucket.s3.amazonaws.com/paymentpictures/" +
+                    paymentImageurl[0]
                   }
                 />
               </div>
