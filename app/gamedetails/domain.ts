@@ -55,6 +55,12 @@ export interface paymentDetailsDialogProps extends BasicDialogProps {
   upiId?: string;
 }
 
+export interface ICreator {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  profilePictureURL: string;
+}
 export interface activeGamesObj {
   gameId: string;
   venue: string;
@@ -67,6 +73,8 @@ export interface activeGamesObj {
   upiId?: string;
   venueDetails: VenueDetailsforCard;
   number_of_teams?: number;
+  status: string;
+  creator?: ICreator;
 }
 
 type Status = "Approved" | "Rejected" | "Withdrawn" | "Removed" | "Paid";
@@ -124,6 +132,7 @@ export interface updateGameReqBody {
   end_time: string;
   number_of_players: number;
   price: number;
+  status: string;
 }
 
 export interface updatePlayerStatusReqBody {
@@ -151,6 +160,7 @@ export const settingsDialogSchema = yup.object({
   paymentNo: yup.string(),
   start_time: yup.string().required("Start time is required"),
   end_time: yup.string().required("End time is required"),
+  status: yup.string().required("Status is required"),
   number_of_players: yup
     .number()
     .required("Please enter a valid number")
@@ -199,6 +209,13 @@ export const AlertmessageList = {
   NOT_AN_MODERATOR:
     "Currently, you do not have game moderator privileges. If you wish to become one, please send an email using your registered email ID for further assistance",
 };
+export const gameStatusArr: Array<string> = [
+  "Inactive",
+  "Active",
+  "Cancelled",
+  "Removed",
+  "Completed",
+];
 export const timingsArray: string[] = [
   "12:00 AM",
   "12:15 AM",

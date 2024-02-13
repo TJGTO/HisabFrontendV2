@@ -8,9 +8,9 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../lib/store";
 import CreateMatchDialog from "./createMatchDialog";
-import { Creator } from "../domain";
 import { useRouter } from "next/navigation";
 import {
+  ICreator,
   VenueDetailsforCard,
   AlertmessageList,
 } from "../../gamedetails/domain";
@@ -79,10 +79,11 @@ function CardSection() {
 
     dispatch(openDialog());
   };
-  const creator: Creator = {
-    firstName: "Tathagata Mondal",
-    profileImageURL: "https://picsum.photos/32/32/?random",
-    id: "tiuer8444444444444444569",
+  const creator: ICreator = {
+    firstName: "Tathagata",
+    lastName: "Mondal",
+    profilePictureURL: "https://picsum.photos/32/32/?random",
+    _id: "tiuer8444444444444444569",
   };
   const gotoPage = (link: string) => {
     router.push(link);
@@ -121,8 +122,9 @@ function CardSection() {
               date={x.date}
               startTime={x.start_time}
               endTime={x.end_time}
-              creator={creator}
+              creator={x.creator ? x.creator : creator}
               price={x.price}
+              status={x.status}
               gotoPage={gotoPage}
             />
           ))}

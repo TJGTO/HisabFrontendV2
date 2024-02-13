@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { ICreator } from "../gamedetails/domain";
 
 export interface SlidingImageObject {
   URL: string;
@@ -12,12 +13,7 @@ export interface CardObject {
   startTime: string;
   endTime: string;
   price: number;
-  creator: Creator;
+  creator: ICreator;
+  status: string;
   gotoPage: (link: string) => void;
 }
-
-export type Creator = {
-  firstName: string;
-  profileImageURL: string;
-  id: string;
-};

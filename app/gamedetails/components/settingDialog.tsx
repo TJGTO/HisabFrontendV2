@@ -3,7 +3,7 @@ import { settingDialogProps, settingsDialogSchema } from "../domain";
 import MultiSelect from "../../Common/FormComponents/multiSelect";
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
-import { timingsArray } from "../../gamedetails/domain";
+import { timingsArray, gameStatusArr } from "../../gamedetails/domain";
 import Errormessage from "../../Common/FormComponents/errormessage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RootState, AppDispatch } from "../../../lib/store";
@@ -34,6 +34,7 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
   useEffect(() => {
     if (gameDetails) {
       if (gameDetails.price) setValue("price", gameDetails.price);
+      if (gameDetails.status) setValue("status", gameDetails.status);
       if (gameDetails.start_time)
         setValue("start_time", gameDetails.start_time);
       if (gameDetails.end_time) setValue("end_time", gameDetails.end_time);
@@ -170,6 +171,28 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
                   />
                   {errors && errors.price && (
                     <Errormessage message={errors.price.message} />
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col md:flex-row gap-3">
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Status
+                  </label>
+                  <select
+                    id="status"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-48 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    {...register("status")}
+                  >
+                    <option value="">{"Please Select"}</option>
+                    {gameStatusArr.map((x, index) => (
+                      <option value={x} key={index}>
+                        {x}
+                      </option>
+                    ))}
+                  </select>
+                  {errors && errors.status && (
+                    <Errormessage message={errors.status.message} />
                   )}
                 </div>
               </div>
