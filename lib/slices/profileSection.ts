@@ -72,7 +72,7 @@ export const updateProfilePic = createAsyncThunk(
       dispatch(fetchUserDetails());
       return response;
     } catch (err) {
-      console.log(err);
+      throw err;
     }
   }
 );
@@ -139,9 +139,11 @@ const profileSectionSlice = createSlice({
         state.updateMessage = action.payload?.message;
       }
     });
-    builder.addCase(updateProfilePic.rejected, (state) => {
+    builder.addCase(updateProfilePic.rejected, (state, action) => {
       state.errorOnUpdate = true;
       state.updateLoader = false;
+      state.updateMessage =
+        action.error?.message || "Failed to Update profile picture";
     });
   },
 });

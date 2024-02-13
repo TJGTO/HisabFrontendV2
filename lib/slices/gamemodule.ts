@@ -103,7 +103,7 @@ export const registerSlot = createAsyncThunk(
       if (gameId) dispatch(fetchGameDetails(gameId));
       return response;
     } catch (err) {
-      console.log(err);
+      throw err;
     }
   }
 );
@@ -201,14 +201,15 @@ const gameModelSlice = createSlice({
         state.messageboxType = "success";
       } else {
         state.messageBoxFlag = true;
-        state.messageBoxMessage = "Failed to register";
+        state.messageBoxMessage =
+          action.payload?.message || "Failed to Register";
         state.messageboxType = "error";
       }
     });
-    builder.addCase(registerSlot.rejected, (state) => {
+    builder.addCase(registerSlot.rejected, (state, action) => {
       state.registerSlotLoader = false;
       state.messageBoxFlag = true;
-      state.messageBoxMessage = "Failed to register";
+      state.gameCreationMessage = action.error?.message || "Failed to register";
       state.messageboxType = "error";
     });
     builder.addCase(updateTheGame.fulfilled, (state, action) => {

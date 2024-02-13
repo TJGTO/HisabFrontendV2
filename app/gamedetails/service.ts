@@ -98,21 +98,29 @@ async function getMatchPermissions(gameId: string) {
 }
 
 async function registerIngame(data: FormData) {
-  let response: any = await AxiosWithAuthFromData.post("game/register", data);
+  try {
+    let response: any = await AxiosWithAuthFromData.post("game/register", data);
 
-  if (response.data && response.data.success) {
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: "Registration is Successful",
+        userdata: response.data.data,
+      };
+    }
     return {
-      success: true,
-      message: "Registration is Successful",
-      userdata: response.data.data,
+      success: false,
+      message: `${
+        response.data.message ? response.data.message : "Failed to register"
+      }`,
     };
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to register");
+    }
   }
-  return {
-    success: false,
-    message: `${
-      response.data.message ? response.data.message : "Failed to Update"
-    }`,
-  };
 }
 
 async function updateGame(data: updateGameReqBody) {

@@ -20,24 +20,34 @@ async function updateUser(data: updateProfileObj) {
   };
 }
 async function updateProfilePicture(data: FormData) {
-  let response: any = await AxiosWithAuthFromData.patch(
-    "user/userPrfoilePicture",
-    data
-  );
+  try {
+    let response: any = await AxiosWithAuthFromData.patch(
+      "user/userPrfoilePicture",
+      data
+    );
 
-  if (response.data && response.data.success) {
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: "Update is successfull",
+        userdata: response.data.data,
+      };
+    }
     return {
-      success: true,
-      message: "Update is successfull",
-      userdata: response.data.data,
+      success: false,
+      message: `${
+        response.data.message
+          ? response.data.message
+          : "Failed to Update profile picture"
+      }`,
     };
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to Update profile picture");
+    }
   }
-  return {
-    success: false,
-    message: `${
-      response.data.message ? response.data.message : "Failed to Update"
-    }`,
-  };
 }
 async function getStates() {
   let response: any = await AxiosWithAuth.get("states");
