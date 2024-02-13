@@ -55,6 +55,12 @@ export interface paymentDetailsDialogProps extends BasicDialogProps {
   upiId?: string;
 }
 
+export interface ICreator {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  profilePictureURL: string;
+}
 export interface activeGamesObj {
   gameId: string;
   venue: string;
@@ -68,6 +74,7 @@ export interface activeGamesObj {
   venueDetails: VenueDetailsforCard;
   number_of_teams?: number;
   status: string;
+  creator?: ICreator;
 }
 
 type Status = "Approved" | "Rejected" | "Withdrawn" | "Removed" | "Paid";

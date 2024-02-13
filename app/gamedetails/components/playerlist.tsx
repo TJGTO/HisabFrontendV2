@@ -172,34 +172,44 @@ function Playerist({ gameid }: { gameid: string }) {
   return (
     <section className="h-full w-full dark:bg-slate-800">
       <div className="ml-2 mr-2 mt-2">
+        <div>
+          <Typography
+            variant="h5"
+            color="blue-gray"
+            className="dark:text-white"
+          >
+            {gameDetails?.venueDetails.fieldName}{" "}
+            {gameDetails?.venueDetails.location && (
+              <LocationOnIcon
+                className="mb-2 cursor-pointer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openLocationGoDialog(
+                    gameDetails?.venueDetails.location || ""
+                  );
+                }}
+              />
+            )}
+          </Typography>
+        </div>
         <div className="mb-4 flex items-center justify-between gap-8">
           <div>
-            <Typography
-              variant="h5"
-              color="blue-gray"
-              className="dark:text-white"
-            >
-              {gameDetails?.venueDetails.fieldName}{" "}
-              {gameDetails?.venueDetails.location && (
-                <LocationOnIcon
-                  className="mb-2 cursor-pointer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    openLocationGoDialog(
-                      gameDetails?.venueDetails.location || ""
-                    );
-                  }}
-                />
-              )}
-            </Typography>
-            <Typography color="gray" className="mt-1 font-normal">
-              Date - {gameDetails?.date} , {gameDetails?.start_time} -{" "}
-              {gameDetails?.end_time}
-            </Typography>
-            <Typography color="gray" className="mt-1 font-normal">
-              Total Capacity - {gameDetails?.number_of_players} Left -{" "}
-              {getNumbersofSlotLeft()} , {gameDetails?.status}
-            </Typography>
+            <div className="flex flex-col sm:flex-row">
+              <Typography color="gray" className="mt-1 font-normal">
+                Date - {gameDetails?.date} ,
+              </Typography>
+              <Typography color="gray" className="mt-1 font-normal">
+                {gameDetails?.start_time} - {gameDetails?.end_time}
+              </Typography>
+            </div>
+            <div className="flex flex-col sm:flex-row">
+              <Typography color="gray" className="mt-1 font-normal">
+                Total Capacity - {gameDetails?.number_of_players} ,
+              </Typography>
+              <Typography color="gray" className="mt-1 font-normal">
+                Left - {getNumbersofSlotLeft()} , {gameDetails?.status}
+              </Typography>
+            </div>
           </div>
           <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
             <Button

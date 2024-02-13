@@ -177,7 +177,7 @@ function CreateTeamDialog({
             </div>
           </div>
         </div>
-        <div className="flex  flex-col sm:flex-row gap-3 p-3">
+        <div className="flex flex-col sm:flex-row gap-3 p-3">
           {teamsConfigArr.slice(0, numberofTeams).map((y, tidx) => (
             <div
               key={tidx}

@@ -1,6 +1,8 @@
 "use client";
 
-import { CardObject, Creator } from "../domain";
+import { CardObject } from "../domain";
+import Avatar from "@mui/material/Avatar";
+import { stringToColor, createSortFromForAvator } from "../../Common/functions";
 
 function Card({
   cardId,
@@ -11,6 +13,7 @@ function Card({
   startTime,
   endTime,
   price,
+  status,
   gotoPage,
 }: CardObject) {
   return (
@@ -37,26 +40,36 @@ function Card({
           </p>
           <p className="ml-1 text-sm text-black dark:text-white">₹ {price}</p>
         </div>
-        <footer className="flex items-center justify-between dark:bg-slate-800 bg-white leading-none p-2 md:pt-2">
-          {/* <a
+        <div className="flex justify-between w-full dark:bg-slate-800 bg-white leading-tight p-2 md:t-2">
+          <a
             className="flex items-center no-underline hover:underline text-black dark:text-white"
             href="#"
           >
-            <img
-              alt="Placeholder"
-              className="block rounded-full"
-              src={creator.profileImageURL}
-            />
+            <Avatar
+              alt="Profile Picture"
+              src={
+                "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
+                creator.profilePictureURL
+              }
+              sx={{
+                bgcolor: creator.firstName
+                  ? stringToColor(creator.firstName.toString())
+                  : "",
+              }}
+            >
+              {creator.firstName &&
+                createSortFromForAvator(creator.firstName.toString())}
+            </Avatar>
             <p className="ml-2 text-sm text-black dark:text-white">
-              {startTime} - {endTime}
+              {creator.firstName + " " + creator.lastName}
             </p>
-          </a> */}
-          {/* <div className="flex justify-between w-full">
-            <p className="ml-2 text-sm text-black dark:text-white">
-              {startTime} - {endTime}
-            </p>
-            <p className="ml-2 text-sm text-black dark:text-white">₹ {price}</p>
-          </div> */}
+          </a>
+          <p className="ml-1 text-sm text-black dark:text-white mt-2">
+            {" "}
+            {status}
+          </p>
+        </div>
+        <footer className="flex items-center justify-between dark:bg-slate-800 bg-white leading-none p-2 md:pt-2">
           <button
             type="submit"
             //disabled={!checked}

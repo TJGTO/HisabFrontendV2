@@ -19,7 +19,7 @@ export const createAddressStringFromObj = (address: addressObj | undefined) => {
 
 export const createSortFromForAvator = (fullName: String) => {
   const firstName = fullName.split(" ")[0];
-  const lastName = fullName.split(" ")[1];
+  const lastName = fullName.split(" ")[1] ? fullName.split(" ")[1] : " ";
   const result =
     firstName.toString().charAt(0).toUpperCase() +
     lastName.toString().charAt(0).toUpperCase();
