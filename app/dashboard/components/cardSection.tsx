@@ -15,9 +15,10 @@ import {
   AlertmessageList,
 } from "../../gamedetails/domain";
 import { openDialog, closeDialog } from "../../../lib/slices/dashboard";
+import { newsArr } from "../domain";
 import useAuth from "@/app/Common/customHooks/useAuth";
 import { fetchActiveGames, resetFlags } from "../../../lib/slices/gamemodule";
-import CreatematchCard from "./creatematchCard";
+import NewsCard from "./newsCard";
 
 function CardSection() {
   const openFlag = useSelector((state: RootState) => state.dashboard.open);
@@ -125,6 +126,38 @@ function CardSection() {
               creator={x.creator ? x.creator : creator}
               price={x.price}
               status={x.status}
+              gotoPage={gotoPage}
+            />
+          ))}
+        </div>
+        <CreateMatchDialog open={openFlag} onClose={handleClose} />
+      </div>
+      <div className="container flex gap-3 mx-auto px-4 md:px-12">
+        <p className="text-lg font-bold">News & Articles</p>
+        <div
+          className="my-0.5 cursor-pointer"
+          onClick={(e) => {
+            openMatchCreateDialog();
+          }}
+        >
+          {isLoggedIn && (
+            <Tooltip title="Create a Article">
+              <AddCircleIcon style={{ color: "#0051d3" }} />
+            </Tooltip>
+          )}
+        </div>
+      </div>
+      <div className="container my-4 mx-auto px-4 md:px-12">
+        <div className="flex flex-wrap -mx-1 lg:-mx-4">
+          {newsArr.map((x, index) => (
+            <NewsCard
+              key={index}
+              _id={x._id}
+              title={x.title}
+              createdAt={x.createdAt}
+              updatedAt={x.updatedAt}
+              createdBy={x.createdBy}
+              profilePictureURL={x.profilePictureURL}
               gotoPage={gotoPage}
             />
           ))}
