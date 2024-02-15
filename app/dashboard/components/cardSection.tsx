@@ -148,7 +148,7 @@ function CardSection() {
         </div>
       </div>
       <div className="container my-4 mx-auto px-4 md:px-12">
-        <div className="flex flex-wrap -mx-1 lg:-mx-4">
+        <div className="flex flex-wrap -mx-1 lg:-mx-6">
           {newsArr.map((x, index) => (
             <NewsCard
               key={index}
