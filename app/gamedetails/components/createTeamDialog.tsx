@@ -43,6 +43,7 @@ function CreateTeamDialog({
       let dumpArray: Array<Iplayers> = [];
 
       copyGameDetails.players.forEach((x, index) => {
+        if (x.status != "Approved") return;
         if (!x.team) {
           x.team = teamsConfigArr[0].teamKey;
         }

@@ -292,6 +292,7 @@ function Playerist({ gameid }: { gameid: string }) {
         onClose={closePaymentDetailsDialog}
         paymentNo={gameDetails?.paymentNo}
         upiId={gameDetails?.upiId}
+        price={gameDetails?.price}
       />
       <CreateTeamDialog
         gameid={gameid}

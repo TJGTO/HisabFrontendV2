@@ -53,6 +53,7 @@ export interface createTeamDialogProps extends settingDialogProps {
 export interface paymentDetailsDialogProps extends BasicDialogProps {
   paymentNo?: string;
   upiId?: string;
+  price?: number;
 }
 
 export interface ICreator {
