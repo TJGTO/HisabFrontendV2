@@ -1,0 +1,75 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createNewsReqBody, IAirticleState } from "../../app/news/domain";
+
+import { createNews, getActiveNews } from "../../app/news/service";
+
+const initialState: IAirticleState = {
+  AirticleLoader: false,
+  AirticleMessage: "",
+  AirticleFlag: "",
+  activeAirticles: [],
+};
+
+export const createTheNews = createAsyncThunk(
+  "airticleModel/createNews",
+  async (data: createNewsReqBody, { getState, dispatch }) => {
+    try {
+      const response = await createNews(data);
+      dispatch(fetchActiveNews());
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  }
+);
+export const fetchActiveNews = createAsyncThunk(
+  "airticleModel/fetchActiveArticles",
+  async () => {
+    try {
+      const response = await getActiveNews();
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  }
+);
+
+const airticleModelSlice = createSlice({
+  name: "gamemodel",
+  initialState,
+  reducers: {
+    resetFlags: (state) => {
+      state.AirticleLoader = false;
+      state.AirticleMessage = "";
+      state.AirticleFlag = "";
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(createTheNews.pending, (state) => {
+      state.AirticleLoader = true;
+    });
+    builder.addCase(createTheNews.fulfilled, (state, action) => {
+      state.AirticleLoader = false;
+      if (action.payload && action.payload.success) {
+        state.AirticleFlag = "success";
+        state.AirticleMessage = action.payload.message || "";
+      } else if (action.payload) {
+        state.AirticleFlag = "error";
+        state.AirticleMessage = action.payload.message || "";
+      }
+    });
+    builder.addCase(createTheNews.rejected, (state, action) => {
+      state.AirticleLoader = false;
+      state.AirticleFlag = "error";
+      state.AirticleMessage = action.error?.message || "";
+    });
+    builder.addCase(fetchActiveNews.fulfilled, (state, action) => {
+      if (action.payload && action.payload.success) {
+        state.activeAirticles = action.payload.newsData;
+      }
+    });
+  },
+});
+export const { resetFlags } = airticleModelSlice.actions;
+
+export default airticleModelSlice.reducer;
