@@ -61,6 +61,7 @@ function ListRow({
       gameId: gameId,
       playerId: player_id,
       status: actionType,
+      phoneNo: "+91" + phoneNumber,
     };
     dispatch(updatePlayerStatusInMatch(requestObj));
   };

@@ -140,6 +140,7 @@ export interface updatePlayerStatusReqBody {
   gameId: string;
   playerId: string;
   status: string;
+  phoneNo: string;
 }
 export const createMatchSchema = yup.object({
   venue: yup.string().trim().required("Venue is required"),
