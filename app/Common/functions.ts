@@ -67,3 +67,8 @@ export function copyToClipboard(text: string): boolean {
     return false;
   }
 }
+
+export function hasStringContent(htmlContent: string) {
+  const textContent = htmlContent.replace(/<[^>]*>/g, "");
+  return /\S/.test(textContent);
+}

@@ -6,3 +6,15 @@ export interface NewCardObject {
   createdBy: string;
   profilePictureURL: string;
 }
+
+export interface createNewsReqBody {
+  title: string;
+  description: string;
+}
+
+export interface IAirticleState {
+  AirticleLoader: boolean;
+  AirticleMessage: string;
+  AirticleFlag: string;
+  activeAirticles: NewCardObject[];
+}

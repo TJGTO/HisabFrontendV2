@@ -3,6 +3,7 @@ import authorizationReducer from "./slices/authorization";
 import dashboardReducer from "./slices/dashboard";
 import profileSectionReducer from "./slices/profileSection";
 import gameModelReducer from "./slices/gamemodule";
+import airticleModelSlice from "./slices/airticle";
 
 export const makeStore = () => {
   return configureStore({
@@ -11,6 +12,7 @@ export const makeStore = () => {
       dashboard: dashboardReducer,
       profileSection: profileSectionReducer,
       gameModel: gameModelReducer,
+      airticle: airticleModelSlice,
     },
   });
 };
