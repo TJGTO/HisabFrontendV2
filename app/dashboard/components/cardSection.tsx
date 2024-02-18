@@ -18,6 +18,7 @@ import { openDialog, closeDialog } from "../../../lib/slices/dashboard";
 import { newsArr } from "../domain";
 import useAuth from "@/app/Common/customHooks/useAuth";
 import { fetchActiveGames, resetFlags } from "../../../lib/slices/gamemodule";
+import { fetchActiveNews } from "../../../lib/slices/airticle";
 import NewsCard from "./newsCard";
 
 function CardSection() {
@@ -39,9 +40,14 @@ function CardSection() {
   const activeGames = useSelector(
     (state: RootState) => state.gameModel.activeGames
   );
+  const activeAirticles = useSelector(
+    (state: RootState) => state.airticle.activeAirticles
+  );
   console.log("activeGames", activeGames);
+  console.log("fetchActiveNews", activeAirticles);
   useEffect(() => {
     dispatch(fetchActiveGames());
+    dispatch(fetchActiveNews());
   }, []);
 
   useEffect(() => {
@@ -149,7 +155,7 @@ function CardSection() {
       </div>
       <div className="container my-4 mx-auto px-4 md:px-12">
         <div className="flex flex-wrap -mx-1 lg:-mx-6">
-          {newsArr.map((x, index) => (
+          {activeAirticles.map((x, index) => (
             <NewsCard
               key={index}
               _id={x._id}

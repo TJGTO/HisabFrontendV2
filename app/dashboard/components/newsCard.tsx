@@ -18,7 +18,7 @@ function NewsCard({
             alt="Placeholder"
             className="block h-40 w-full"
             src={
-              "https://wfgimagebucket.s3.ap-south-1.amazonaws.com/WFG+(1).png"
+              "https://wfgimagebucket.s3.ap-south-1.amazonaws.com/WhatsApp+Image+2024-02-18+at+14.46.28.jpeg"
             }
           />
         </a>

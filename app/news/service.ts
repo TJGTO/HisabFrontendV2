@@ -58,4 +58,32 @@ async function getActiveNews() {
     }
   }
 }
-export { createNews, getActiveNews };
+async function getNewsDetails(newsId: string) {
+  try {
+    let response: any = await Axios.get(`article/allArticles/${newsId}`);
+
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: "Successfully fetched",
+        airticle: response.data.data,
+      };
+    } else {
+      return {
+        success: false,
+        message: `${
+          response.data.data.message
+            ? response.data.data.message
+            : "Failed to fetch the article details"
+        }`,
+      };
+    }
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to fetch the articledetails");
+    }
+  }
+}
+export { createNews, getActiveNews, getNewsDetails };

@@ -1,13 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { createNewsReqBody, IAirticleState } from "../../app/news/domain";
 
-import { createNews, getActiveNews } from "../../app/news/service";
+import {
+  createNews,
+  getActiveNews,
+  getNewsDetails,
+} from "../../app/news/service";
 
 const initialState: IAirticleState = {
   AirticleLoader: false,
   AirticleMessage: "",
   AirticleFlag: "",
   activeAirticles: [],
+  currentAirticleDetail: null,
 };
 
 export const createTheNews = createAsyncThunk(
@@ -33,7 +38,17 @@ export const fetchActiveNews = createAsyncThunk(
     }
   }
 );
-
+export const fetchcurrentAirticleDetails = createAsyncThunk(
+  "airticleModel/fetchcurrentAirticleDetails",
+  async (newsId: string) => {
+    try {
+      const response = await getNewsDetails(newsId);
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  }
+);
 const airticleModelSlice = createSlice({
   name: "gamemodel",
   initialState,
@@ -67,6 +82,18 @@ const airticleModelSlice = createSlice({
       if (action.payload && action.payload.success) {
         state.activeAirticles = action.payload.newsData;
       }
+    });
+    builder.addCase(fetchcurrentAirticleDetails.pending, (state) => {
+      state.AirticleLoader = true;
+    });
+    builder.addCase(fetchcurrentAirticleDetails.fulfilled, (state, action) => {
+      state.AirticleLoader = false;
+      if (action.payload && action.payload.success) {
+        state.currentAirticleDetail = action.payload.airticle;
+      }
+    });
+    builder.addCase(fetchcurrentAirticleDetails.rejected, (state, action) => {
+      state.AirticleLoader = false;
     });
   },
 });
