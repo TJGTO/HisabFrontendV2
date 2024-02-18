@@ -83,7 +83,6 @@ const airticleModelSlice = createSlice({
         state.activeAirticles = action.payload.newsData;
       }
     });
-<<<<<<< HEAD
     builder.addCase(fetchcurrentAirticleDetails.pending, (state) => {
       state.AirticleLoader = true;
     });
@@ -96,8 +95,6 @@ const airticleModelSlice = createSlice({
     builder.addCase(fetchcurrentAirticleDetails.rejected, (state, action) => {
       state.AirticleLoader = false;
     });
-=======
->>>>>>> 43ee4b9814c1a795ff20a2401508a69b291cce52
   },
 });
 export const { resetFlags } = airticleModelSlice.actions;
