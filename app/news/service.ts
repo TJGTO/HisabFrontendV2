@@ -58,7 +58,6 @@ async function getActiveNews() {
     }
   }
 }
-<<<<<<< HEAD
 async function getNewsDetails(newsId: string) {
   try {
     let response: any = await Axios.get(`article/allArticles/${newsId}`);
@@ -88,6 +87,3 @@ async function getNewsDetails(newsId: string) {
   }
 }
 export { createNews, getActiveNews, getNewsDetails };
-=======
-export { createNews, getActiveNews };
->>>>>>> 43ee4b9814c1a795ff20a2401508a69b291cce52
