@@ -17,7 +17,6 @@ function NewsDescription({ newsId }: { newsId: string }) {
   const AirticleLoader = useSelector(
     (state: RootState) => state.airticle.AirticleLoader
   );
-  console.log("currentAirticleDetail", currentAirticleDetail);
   useEffect(() => {
     if (newsId) {
       dispatch(fetchcurrentAirticleDetails(newsId));

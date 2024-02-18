@@ -27,6 +27,11 @@ const CreateNews: React.FC = () => {
     (state: RootState) => state.airticle.AirticleFlag
   );
   useEffect(() => {
+    return () => {
+      resetFlags();
+    };
+  }, []);
+  useEffect(() => {
     if (!AirticleLoader && AirticleMessage) {
       Swal.fire({
         icon: AirticleFlag == "error" ? "error" : "success",

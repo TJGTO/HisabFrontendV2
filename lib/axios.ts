@@ -1,8 +1,8 @@
 import axios from "axios";
 
 //const URL = "https://wfg-kol-backend.onrender.com/";
-const URL = "http://localhost:8000/";
-//const URL = "https://wfg-kol-backend.vercel.app";
+//const URL = "http://localhost:8000/";
+const URL = "https://wfg-kol-backend.vercel.app";
 const Axios = axios.create({
   baseURL: URL,
   timeout: 10000,
@@ -10,7 +10,7 @@ const Axios = axios.create({
 
 const AxiosWithAuth = axios.create({
   baseURL: URL,
-  timeout: 30000,
+  timeout: 50000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -18,7 +18,7 @@ const AxiosWithAuth = axios.create({
 
 const AxiosWithAuthFromData = axios.create({
   baseURL: URL,
-  timeout: 30000,
+  timeout: 50000,
   headers: {
     "Content-Type": "multipart/form-data",
   },
