@@ -9,6 +9,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
 import Menu from "@mui/material/Menu";
+import PageLoader from "../../Common/Loader/pageLoader";
 import Avatar from "@mui/material/Avatar";
 import { redirect } from "next/navigation";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
@@ -37,6 +38,9 @@ function ProfileSection() {
     useState<boolean>(false);
   const userProfile = useSelector(
     (state: RootState) => state.profileSection.userProfile
+  );
+  const fetchDetailsLoader = useSelector(
+    (state: RootState) => state.profileSection.fetchDetailsLoader
   );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -82,6 +86,7 @@ function ProfileSection() {
   };
   return (
     <div className="h-screen flex justify-center mt-6 ">
+      {fetchDetailsLoader && <PageLoader />}
       <div className="flex-col gap-6">
         <div className="flex justify-center h-40 w-60">
           {/* <img

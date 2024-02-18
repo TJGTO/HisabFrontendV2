@@ -207,10 +207,6 @@ export const colorListforStatusBG = {
   Paid: "bg-blue-300",
 };
 
-export const AlertmessageList = {
-  NOT_AN_MODERATOR:
-    "Currently, you do not have game moderator privileges. If you wish to become one, please send an email using your registered email ID for further assistance",
-};
 export const gameStatusArr: Array<string> = [
   "Inactive",
   "Active",

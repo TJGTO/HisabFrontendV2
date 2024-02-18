@@ -10,7 +10,7 @@ const Axios = axios.create({
 
 const AxiosWithAuth = axios.create({
   baseURL: URL,
-  timeout: 30000,
+  timeout: 50000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -18,7 +18,7 @@ const AxiosWithAuth = axios.create({
 
 const AxiosWithAuthFromData = axios.create({
   baseURL: URL,
-  timeout: 30000,
+  timeout: 50000,
   headers: {
     "Content-Type": "multipart/form-data",
   },

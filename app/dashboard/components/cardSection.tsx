@@ -9,15 +9,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../lib/store";
 import CreateMatchDialog from "./createMatchDialog";
 import { useRouter } from "next/navigation";
-import {
-  ICreator,
-  VenueDetailsforCard,
-  AlertmessageList,
-} from "../../gamedetails/domain";
+import { ICreator, VenueDetailsforCard } from "../../gamedetails/domain";
+import { checkUserHaveRequiredRole } from "../../Common/functions";
 import { openDialog, closeDialog } from "../../../lib/slices/dashboard";
+import { newsArr, AlertmessageList } from "../domain";
 import useAuth from "@/app/Common/customHooks/useAuth";
 import { fetchActiveGames, resetFlags } from "../../../lib/slices/gamemodule";
-import CreatematchCard from "./creatematchCard";
+import { fetchActiveNews } from "../../../lib/slices/airticle";
+import NewsCard from "./newsCard";
 
 function CardSection() {
   const openFlag = useSelector((state: RootState) => state.dashboard.open);
@@ -38,9 +37,14 @@ function CardSection() {
   const activeGames = useSelector(
     (state: RootState) => state.gameModel.activeGames
   );
+  const activeAirticles = useSelector(
+    (state: RootState) => state.airticle.activeAirticles
+  );
   console.log("activeGames", activeGames);
+  console.log("fetchActiveNews", activeAirticles);
   useEffect(() => {
     dispatch(fetchActiveGames());
+    dispatch(fetchActiveNews());
   }, []);
 
   useEffect(() => {
@@ -60,24 +64,43 @@ function CardSection() {
     dispatch(resetFlags());
   };
   const openMatchCreateDialog = () => {
-    const storedRoleString = localStorage.getItem("roles");
-    let roles: Array<string> | null = null;
-    if (storedRoleString) {
-      roles = JSON.parse(storedRoleString);
-      if (!roles?.includes("Match Moderator") && !roles?.includes("Admin")) {
-        Swal.fire({
-          icon: "error",
-          title: AlertmessageList["NOT_AN_MODERATOR"],
-          showConfirmButton: false,
-          showCancelButton: true,
-          cancelButtonText: "Cancel",
-          timer: 8000,
-        });
-        return;
-      }
+    let isUserhaveanyRole = checkUserHaveRequiredRole([
+      "Match Moderator",
+      "Admin",
+    ]);
+
+    if (!isUserhaveanyRole) {
+      Swal.fire({
+        icon: "error",
+        title: AlertmessageList["NOT_AN_MODERATOR"],
+        showConfirmButton: false,
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        timer: 8000,
+      });
+      return;
     }
 
     dispatch(openDialog());
+  };
+  const gotoCreateMatchPage = () => {
+    let isUserhaveanyRole = checkUserHaveRequiredRole([
+      "Content Creator",
+      "Admin",
+    ]);
+
+    if (!isUserhaveanyRole) {
+      Swal.fire({
+        icon: "error",
+        title: AlertmessageList["NOT_AN_CREATOR"],
+        showConfirmButton: false,
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        timer: 8000,
+      });
+      return;
+    }
+    gotoPage("news/createNews");
   };
   const creator: ICreator = {
     firstName: "Tathagata",
@@ -125,6 +148,38 @@ function CardSection() {
               creator={x.creator ? x.creator : creator}
               price={x.price}
               status={x.status}
+              gotoPage={gotoPage}
+            />
+          ))}
+        </div>
+        <CreateMatchDialog open={openFlag} onClose={handleClose} />
+      </div>
+      <div className="container flex gap-3 mx-auto px-4 md:px-12">
+        <p className="text-lg font-bold">News & Articles</p>
+        <div
+          className="my-0.5 cursor-pointer"
+          onClick={(e) => {
+            gotoCreateMatchPage();
+          }}
+        >
+          {isLoggedIn && (
+            <Tooltip title="Create a Article">
+              <AddCircleIcon style={{ color: "#0051d3" }} />
+            </Tooltip>
+          )}
+        </div>
+      </div>
+      <div className="container my-4 mx-auto px-4 md:px-12">
+        <div className="flex flex-wrap -mx-1 lg:-mx-6">
+          {activeAirticles.map((x, index) => (
+            <NewsCard
+              key={index}
+              _id={x._id}
+              title={x.title}
+              createdAt={x.createdAt}
+              updatedAt={x.updatedAt}
+              createdBy={x.createdBy}
+              profilePictureURL={x.profilePictureURL}
               gotoPage={gotoPage}
             />
           ))}

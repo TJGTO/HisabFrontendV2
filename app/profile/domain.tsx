@@ -40,6 +40,7 @@ export interface ProfileSectionState {
   updateLoader: boolean;
   updateMessage: String;
   errorOnUpdate: boolean;
+  fetchDetailsLoader: boolean;
   states: Array<stateObj> | null;
   userProfile: updateProfileObj;
 }
