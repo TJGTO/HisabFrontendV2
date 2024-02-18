@@ -1,11 +1,11 @@
 "use client";
 
-import CreateNews from "../components/createNews";
+import CreateNewsAPP from "../components/createNewsApp";
 
 export default function Page() {
   return (
     <>
-      <CreateNews />
+      <CreateNewsAPP />
     </>
   );
 }

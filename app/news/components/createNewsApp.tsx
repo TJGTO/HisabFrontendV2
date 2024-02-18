@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { createNewsReqBody } from "../domain";
 
-const CreateNews: React.FC = () => {
+const CreateNewsAPP: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const [title, settitle] = useState<string>("");
@@ -131,4 +131,4 @@ const CreateNews: React.FC = () => {
   );
 };
 
-export default CreateNews;
+export default CreateNewsAPP;
