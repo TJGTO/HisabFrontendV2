@@ -1,10 +1,15 @@
+"use client";
+import dynamic from "next/dynamic";
 import React, { useRef } from "react";
-import JoditEditor from "jodit-react";
+const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
-const TextEditor: React.FC<{
+const TextEditor = ({
+  content,
+  setContent,
+}: {
   content: string;
   setContent: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ content, setContent }) => {
+}) => {
   const editor = useRef<any>(null);
   const handleContentChange = (newContent: string) => {
     setContent(newContent);

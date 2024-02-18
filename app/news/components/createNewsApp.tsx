@@ -1,3 +1,5 @@
+"use client";
+
 import TextEditor from "../../Common/FormComponents/TextEditor";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
