@@ -25,12 +25,7 @@ function NewsCard({
 
         <header className="flex items-center justify-between dark:bg-slate-800 bg-white leading-tight p-2 md:pt-2">
           <h1 className="text-lg">
-            <a
-              className="no-underline hover:underline text-black dark:text-white"
-              href="#"
-            >
-              {title}
-            </a>
+            <p className="no-underline  text-black dark:text-white">{title}</p>
           </h1>
         </header>
 

@@ -94,6 +94,7 @@ const airticleModelSlice = createSlice({
     });
     builder.addCase(fetchcurrentAirticleDetails.rejected, (state, action) => {
       state.AirticleLoader = false;
+      state.currentAirticleDetail = null;
     });
   },
 });

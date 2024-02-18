@@ -12,6 +12,7 @@ import {
 
 const initialState: ProfileSectionState = {
   open: false,
+  fetchDetailsLoader: false,
   updateLoader: false,
   updateMessage: "",
   errorOnUpdate: false,
@@ -119,7 +120,11 @@ const profileSectionSlice = createSlice({
         state.states = action.payload.states;
       }
     });
+    builder.addCase(fetchUserDetails.pending, (state) => {
+      state.fetchDetailsLoader = true;
+    });
     builder.addCase(fetchUserDetails.fulfilled, (state, action) => {
+      state.fetchDetailsLoader = false;
       if (action.payload && action.payload.user) {
         state.userProfile = action.payload.user as updateProfileObj;
       }

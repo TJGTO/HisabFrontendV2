@@ -31,6 +31,9 @@ function NewsDescription({ newsId }: { newsId: string }) {
           <div className="flex justify-between px-4 mx-auto max-w-screen-xl">
             <article className="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
               <header className="mb-4 lg:mb-6 not-format">
+                <h1 className="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">
+                  {currentAirticleDetail?.title}
+                </h1>
                 <address className="flex items-center mb-6 not-italic">
                   <div className="inline-flex items-center gap-3 mr-3 text-sm text-gray-900 dark:text-white">
                     <Avatar
@@ -67,9 +70,6 @@ function NewsDescription({ newsId }: { newsId: string }) {
                     </div>
                   </div>
                 </address>
-                <h1 className="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">
-                  {currentAirticleDetail?.title}
-                </h1>
               </header>
               <div
                 dangerouslySetInnerHTML={{

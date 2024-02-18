@@ -25,12 +25,7 @@ function Card({
 
         <header className="flex items-center justify-between dark:bg-slate-800 bg-white leading-tight p-2 md:pt-2">
           <h1 className="text-lg">
-            <a
-              className="no-underline hover:underline text-black dark:text-white"
-              href="#"
-            >
-              {venue}
-            </a>
+            <p className="no-underline  text-black dark:text-white">{venue}</p>
           </h1>
           <p className="text-black dark:text-white text-sm">{date}</p>
         </header>
@@ -75,7 +70,7 @@ function Card({
             //disabled={!checked}
             onClick={(e) => {
               e.preventDefault();
-              gotoPage(`/news/${cardId}`);
+              gotoPage(`/gamedetails/${cardId}`);
             }}
             className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
           >

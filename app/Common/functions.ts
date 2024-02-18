@@ -72,3 +72,19 @@ export function hasStringContent(htmlContent: string) {
   const textContent = htmlContent.replace(/<[^>]*>/g, "");
   return /\S/.test(textContent);
 }
+
+export function checkUserHaveRequiredRole(requiredRoles: Array<string>) {
+  let roles: Array<string> | null = null;
+  let flag: boolean = false;
+  const storedRoleString = localStorage.getItem("roles");
+  if (storedRoleString) {
+    roles = JSON.parse(storedRoleString);
+    requiredRoles.forEach((x) => {
+      if (roles?.includes(x)) {
+        flag = true;
+      }
+    });
+  }
+
+  return flag;
+}

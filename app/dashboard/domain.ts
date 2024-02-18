@@ -21,6 +21,12 @@ export interface CardObject {
 export interface NewsCardProps extends NewCardObject {
   gotoPage: (link: string) => void;
 }
+export const AlertmessageList = {
+  NOT_AN_MODERATOR:
+    "Currently, you do not have game moderator privileges. If you wish to become one, please send an email using your registered email ID for further assistance",
+  NOT_AN_CREATOR:
+    "Currently, you do not have content creator privileges. If you wish to become one, please send an email using your registered email ID for further assistance",
+};
 export const newsArr: NewCardObject[] = [
   {
     _id: "1",

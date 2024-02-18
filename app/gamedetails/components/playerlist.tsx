@@ -212,33 +212,36 @@ function Playerist({ gameid }: { gameid: string }) {
             </div>
           </div>
           <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-            <Button
-              variant="outlined"
-              onClick={(e) => {
-                e.preventDefault();
-                openRegisterDialogAfterCheck();
-              }}
-            >
-              Register
-            </Button>
-
-            <Button
-              className="flex items-center gap-3"
-              onClick={(e) => {
-                e.preventDefault();
-                setopenTeamDialog(true);
-              }}
-            >
-              {permissionMatrix.editTeam ? (
-                <>
-                  <AddIcon className="h-4 w-4" /> Create Team
-                </>
-              ) : (
-                <>
-                  <RemoveRedEyeIcon className="h-4 w-4" /> View Team
-                </>
-              )}
-            </Button>
+            {gameDetails?.status == "Active" && (
+              <Button
+                variant="outlined"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openRegisterDialogAfterCheck();
+                }}
+              >
+                Register
+              </Button>
+            )}
+            {gameDetails?.status == "Active" && (
+              <Button
+                className="flex items-center gap-3"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setopenTeamDialog(true);
+                }}
+              >
+                {permissionMatrix.editTeam ? (
+                  <>
+                    <AddIcon className="h-4 w-4" /> Create Team
+                  </>
+                ) : (
+                  <>
+                    <RemoveRedEyeIcon className="h-4 w-4" /> View Team
+                  </>
+                )}
+              </Button>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-4">
