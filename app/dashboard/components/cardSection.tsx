@@ -18,7 +18,10 @@ import { openDialog, closeDialog } from "../../../lib/slices/dashboard";
 import { newsArr } from "../domain";
 import useAuth from "@/app/Common/customHooks/useAuth";
 import { fetchActiveGames, resetFlags } from "../../../lib/slices/gamemodule";
+<<<<<<< HEAD
 import { fetchActiveNews } from "../../../lib/slices/airticle";
+=======
+>>>>>>> 43ee4b9814c1a795ff20a2401508a69b291cce52
 import NewsCard from "./newsCard";
 
 function CardSection() {
@@ -155,7 +158,11 @@ function CardSection() {
       </div>
       <div className="container my-4 mx-auto px-4 md:px-12">
         <div className="flex flex-wrap -mx-1 lg:-mx-6">
+<<<<<<< HEAD
           {activeAirticles.map((x, index) => (
+=======
+          {newsArr.map((x, index) => (
+>>>>>>> 43ee4b9814c1a795ff20a2401508a69b291cce52
             <NewsCard
               key={index}
               _id={x._id}
