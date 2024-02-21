@@ -2,11 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   updateProfileObj,
   ProfileSectionState,
+  ISearchUserReqBody,
 } from "../../app/profile/domain";
 import {
   updateUser,
   getStates,
   getUserDetails,
+  searchForPlayers,
   updateProfilePicture,
 } from "../../app/profile/service";
 
@@ -17,6 +19,8 @@ const initialState: ProfileSectionState = {
   updateMessage: "",
   errorOnUpdate: false,
   states: null,
+  searchLoader: false,
+  searchUsers: [],
   userProfile: {
     firstName: "",
     lastName: "",
@@ -62,6 +66,17 @@ export const updateTheUser = createAsyncThunk(
       return response;
     } catch (err) {
       console.log(err);
+    }
+  }
+);
+export const searchUsersProfiles = createAsyncThunk(
+  "profileSection/searchUsers",
+  async (data: ISearchUserReqBody) => {
+    try {
+      const response = await searchForPlayers(data);
+      return response;
+    } catch (err) {
+      throw err;
     }
   }
 );
@@ -150,9 +165,24 @@ const profileSectionSlice = createSlice({
       state.updateMessage =
         action.error?.message || "Failed to Update profile picture";
     });
+    builder.addCase(searchUsersProfiles.pending, (state) => {
+      state.searchLoader = true;
+    });
+    builder.addCase(searchUsersProfiles.fulfilled, (state, action) => {
+      state.searchLoader = false;
+      if (action.payload) {
+        if (action.payload.success) {
+          state.searchUsers = action.payload.usersList;
+        }
+      }
+    });
+    builder.addCase(searchUsersProfiles.rejected, (state, action) => {
+      state.searchLoader = false;
+    });
   },
 });
 
 export const { resetFlags } = profileSectionSlice.actions;
 
 export default profileSectionSlice.reducer;
+//searchUsers

@@ -1,6 +1,6 @@
 import { Console } from "console";
 import { AxiosWithAuth, AxiosWithAuthFromData } from "../../lib/axios";
-import { updateProfileObj } from "./domain";
+import { updateProfileObj, ISearchUserReqBody } from "./domain";
 
 async function updateUser(data: updateProfileObj) {
   let response: any = await AxiosWithAuth.patch("user/update", data);
@@ -86,4 +86,35 @@ async function getUserDetails() {
     }`,
   };
 }
-export { updateUser, getStates, getUserDetails, updateProfilePicture };
+async function searchForPlayers(data: ISearchUserReqBody) {
+  try {
+    let response: any = await AxiosWithAuth.post("user/search", data);
+
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: "Successfull",
+        usersList: response.data.data,
+      };
+    }
+    return {
+      success: false,
+      message: `${
+        response.data.message ? response.data.message : "Failed to search users"
+      }`,
+    };
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to search users");
+    }
+  }
+}
+export {
+  updateUser,
+  getStates,
+  getUserDetails,
+  updateProfilePicture,
+  searchForPlayers,
+};
