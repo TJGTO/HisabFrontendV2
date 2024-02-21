@@ -1,21 +1,65 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { addPlayersDialogProps } from "../domain";
 import CloseIcon from "@mui/icons-material/Close";
 import { Avatar } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Dialog from "@mui/material/Dialog";
-import { ISearchUserReqBody } from "../../profile/domain";
+import { ISearchUserReqBody, ISearchUserObj } from "../../profile/domain";
 import { searchUsersProfiles } from "../../../lib/slices/profileSection";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 
+interface ISearchUserModifiedObj extends ISearchUserObj {
+  added: boolean;
+}
+
 function AddPlayersDialog({ open, onClose }: addPlayersDialogProps) {
   const dispatch = useDispatch<AppDispatch>();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [searchResultCopyArr, setsearchResultCopyArr] = useState<
+    ISearchUserModifiedObj[]
+  >([]);
+  const [addedList, setaddedList] = useState<ISearchUserModifiedObj[]>([]);
   const searchUsers = useSelector(
     (state: RootState) => state.profileSection.searchUsers
   );
+
+  const adduser = (index: number) => {
+    let copyArr = [...searchResultCopyArr];
+    copyArr[index].added = true;
+    setsearchResultCopyArr([...copyArr]);
+    setaddedList([...addedList, copyArr[index]]);
+  };
+  const removeplayerFromAddedList = (id: string) => {
+    let coptOfaddedList = [...addedList];
+    let getIndex = addedList.findIndex((x) => x._id == id);
+    if (getIndex >= 0) {
+      coptOfaddedList[getIndex].added = false;
+    }
+    coptOfaddedList.splice(getIndex, 1);
+    setaddedList([...coptOfaddedList]);
+
+    let coptOfsearchResultCopyArr = [...searchResultCopyArr];
+    let getIndex2 = coptOfsearchResultCopyArr.findIndex((x) => x._id == id);
+    if (getIndex2 >= 0) {
+      coptOfsearchResultCopyArr[getIndex2].added = false;
+    }
+    setsearchResultCopyArr([...coptOfsearchResultCopyArr]);
+
+    console.log(getIndex, getIndex2);
+  };
+  useEffect(() => {
+    let copyArr: ISearchUserModifiedObj[] = searchUsers.map((x) => {
+      let Obj: ISearchUserModifiedObj = {
+        ...x,
+        added: addedList.findIndex((y) => y._id == x._id) >= 0 ? true : false,
+      };
+      return Obj;
+    });
+    setsearchResultCopyArr([...copyArr]);
+  }, [searchUsers]);
+
   console.log("searchUsers", searchUsers);
   const handleClose = () => {
     onClose();
@@ -91,191 +135,83 @@ function AddPlayersDialog({ open, onClose }: addPlayersDialogProps) {
               role="list"
               className="divide-y divide-gray-200 dark:divide-gray-700"
             >
-              <li className="py-3 sm:py-4" key={"1"}>
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <Avatar
-                      src={
-                        "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
-                        "Tathagata_Mondal_2024-02-18_17%3A41%3A58.480Z"
+              {searchResultCopyArr &&
+                searchResultCopyArr.map((x, index) => (
+                  <li className="py-3 sm:py-4" key={index}>
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <Avatar
+                          src={
+                            "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
+                            x.profilePictureURL
+                          }
+                          alt={x.fullName}
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0 ms-4">
+                        <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
+                          {x.fullName}
+                        </p>
+                        <p className="text-sm text-gray-500 truncate dark:text-gray-400">
+                          {x.phone_no}
+                        </p>
+                      </div>
+                      {
+                        <div className="inline-flex cursor-pointer items-center text-base font-semibold text-gray-900 dark:text-white pl-2">
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              adduser(index);
+                            }}
+                            disabled={x.added}
+                            className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            Add <AddIcon className="h-4 w-4" />
+                          </button>
+                        </div>
                       }
-                      alt={"Tathagata"}
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0 ms-4">
-                    <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      {"Tathagata"}
-                    </p>
-                    <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                      {"Hey BC"}
-                    </p>
-                  </div>
-                  {
-                    <div className="inline-flex cursor-pointer items-center text-base font-semibold text-gray-900 dark:text-white pl-2">
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                        }}
-                        className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        Add <AddIcon className="h-4 w-4" />
-                      </button>
                     </div>
-                  }
-                </div>
-              </li>
-              <li className="py-3 sm:py-4" key={"1"}>
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <Avatar
-                      src={
-                        "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
-                        "Tathagata_Mondal_2024-02-18_17%3A41%3A58.480Z"
-                      }
-                      alt={"Tathagata"}
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0 ms-4">
-                    <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      {"Tathagata"}
-                    </p>
-                    <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                      {"Hey BC"}
-                    </p>
-                  </div>
-                  {
-                    <div className="inline-flex cursor-pointer items-center text-base font-semibold text-gray-900 dark:text-white pl-2">
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                        }}
-                        className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        Add <AddIcon className="h-4 w-4" />
-                      </button>
-                    </div>
-                  }
-                </div>
-              </li>
+                  </li>
+                ))}
             </ul>
           </div>
           <div className="py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            <span
-              id="badge-dismiss-default"
-              className="inline-flex items-center px-2 py-1 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
-            >
-              Default
-              <button
-                type="button"
-                className="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
-                data-dismiss-target="#badge-dismiss-default"
-                aria-label="Remove"
-              >
-                <svg
-                  className="w-2 h-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 14"
+            {addedList &&
+              addedList.map((x, index) => (
+                <span
+                  key={index}
+                  id="badge-dismiss-default"
+                  className="inline-flex items-center px-2 py-1 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
                 >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                  />
-                </svg>
-                <span className="sr-only">Remove badge</span>
-              </button>
-            </span>
-            <span
-              id="badge-dismiss-default"
-              className="inline-flex items-center px-2 py-1 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
-            >
-              Default
-              <button
-                type="button"
-                className="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
-                data-dismiss-target="#badge-dismiss-default"
-                aria-label="Remove"
-              >
-                <svg
-                  className="w-2 h-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 14"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                  />
-                </svg>
-                <span className="sr-only">Remove badge</span>
-              </button>
-            </span>
-            <span
-              id="badge-dismiss-default"
-              className="inline-flex items-center px-2 py-1 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
-            >
-              Default
-              <button
-                type="button"
-                className="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
-                data-dismiss-target="#badge-dismiss-default"
-                aria-label="Remove"
-              >
-                <svg
-                  className="w-2 h-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 14"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                  />
-                </svg>
-                <span className="sr-only">Remove badge</span>
-              </button>
-            </span>
-            <span
-              id="badge-dismiss-default"
-              className="inline-flex items-center px-2 py-1 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
-            >
-              Default
-              <button
-                type="button"
-                className="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
-                data-dismiss-target="#badge-dismiss-default"
-                aria-label="Remove"
-              >
-                <svg
-                  className="w-2 h-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 14"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                  />
-                </svg>
-                <span className="sr-only">Remove badge</span>
-              </button>
-            </span>
+                  {x.fullName}
+                  <button
+                    type="button"
+                    className="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
+                    aria-label="Remove"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      removeplayerFromAddedList(x._id);
+                    }}
+                  >
+                    <svg
+                      className="w-2 h-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 14"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                      />
+                    </svg>
+                    <span className="sr-only">Remove badge</span>
+                  </button>
+                </span>
+              ))}
           </div>
           <button
             //disabled={!checked}
