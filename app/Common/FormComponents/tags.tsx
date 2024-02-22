@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { TagsProps } from "./domain";
 
 const TagsComponent: React.FC<TagsProps> = ({
