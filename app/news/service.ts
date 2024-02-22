@@ -124,7 +124,7 @@ async function postComments(reqbody: IPostCommentReqBody) {
     if (response.data && response.data.success) {
       return {
         success: true,
-        message: "Successfully fetched",
+        message: "Successfully updated",
       };
     } else {
       return {
@@ -132,7 +132,7 @@ async function postComments(reqbody: IPostCommentReqBody) {
         message: `${
           response.data.data.message
             ? response.data.data.message
-            : "Failed to fetch the comments"
+            : "Failed to update the comment"
         }`,
       };
     }

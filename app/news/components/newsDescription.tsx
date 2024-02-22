@@ -1,11 +1,13 @@
 import { RootState, AppDispatch } from "../../../lib/store";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   fetchcurrentAirticleComments,
   fetchcurrentAirticleDetails,
   resetFlags,
 } from "../../../lib/slices/airticle";
+import { postComments } from "../service";
 import Avatar from "@mui/material/Avatar";
+import { IPostCommentReqBody } from "../domain";
 import CommentLineItem from "../../Common/CommentSection/comment";
 import { useSelector, useDispatch } from "react-redux";
 import PageLoader from "../../Common/Loader/pageLoader";
@@ -14,6 +16,7 @@ import { CommentData } from "./data";
 
 function NewsDescription({ newsId }: { newsId: string }) {
   const dispatch = useDispatch<AppDispatch>();
+  const cmntRef = useRef<HTMLTextAreaElement>(null);
   const currentAirticleDetail = useSelector(
     (state: RootState) => state.airticle.currentAirticleDetail
   );
@@ -21,13 +24,32 @@ function NewsDescription({ newsId }: { newsId: string }) {
   const AirticleLoader = useSelector(
     (state: RootState) => state.airticle.AirticleLoader
   );
-  console.log(comments);
+
   useEffect(() => {
     if (newsId) {
       dispatch(fetchcurrentAirticleDetails(newsId));
       dispatch(fetchcurrentAirticleComments(newsId));
     }
-  }, []);
+  }, []); //parentId
+  const addpostComment = async (text: string, parentId?: string) => {
+    let requestObj: IPostCommentReqBody = {
+      text: text,
+      articleId: newsId,
+    };
+    if (parentId) {
+      requestObj = {
+        ...requestObj,
+        parentId: parentId,
+      };
+    }
+    try {
+      let response = await postComments(requestObj);
+      if (response.success) {
+        if (cmntRef.current) cmntRef.current.value = "";
+        dispatch(fetchcurrentAirticleComments(newsId));
+      }
+    } catch (error) {}
+  };
   return (
     <>
       {AirticleLoader && <PageLoader />}
@@ -93,6 +115,7 @@ function NewsDescription({ newsId }: { newsId: string }) {
                     <label className="sr-only">Your comment</label>
                     <textarea
                       id="comment"
+                      ref={cmntRef}
                       className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
                       placeholder="Write a comment..."
                       required
@@ -100,6 +123,12 @@ function NewsDescription({ newsId }: { newsId: string }) {
                   </div>
                   <button
                     type="submit"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (cmntRef.current && cmntRef.current.value) {
+                        addpostComment(cmntRef.current.value);
+                      }
+                    }}
                     className="inline-flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Post comment
@@ -107,7 +136,11 @@ function NewsDescription({ newsId }: { newsId: string }) {
                 </form>
                 {comments &&
                   comments.map((x, index) => (
-                    <CommentLineItem key={index} commentData={x} />
+                    <CommentLineItem
+                      key={index}
+                      commentData={x}
+                      submitComment={addpostComment}
+                    />
                   ))}
               </section>
             </article>

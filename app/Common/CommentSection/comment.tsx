@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Avatar } from "@mui/material";
 import { CommentProps } from "./domain";
 
-const CommentLineItem: React.FC<CommentProps> = ({ commentData }) => {
+const CommentLineItem: React.FC<CommentProps> = ({
+  commentData,
+  submitComment,
+}) => {
   const [openReplyInptBox, setopenReplyInptBox] = useState<boolean>(false);
+  const cmntRef = useRef<HTMLTextAreaElement>(null);
   return (
     <>
       <article className="p-3 mb-3 text-base bg-white rounded-lg dark:bg-gray-900">
@@ -56,6 +60,7 @@ const CommentLineItem: React.FC<CommentProps> = ({ commentData }) => {
               <label className="sr-only">Your comment</label>
               <textarea
                 id="comment"
+                ref={cmntRef}
                 className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
                 placeholder="Write a comment..."
               ></textarea>
@@ -63,6 +68,12 @@ const CommentLineItem: React.FC<CommentProps> = ({ commentData }) => {
             <div className="flex gap-3">
               <button
                 type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (cmntRef.current && cmntRef.current.value) {
+                    submitComment(cmntRef.current.value, commentData.commentId);
+                  }
+                }}
                 className="inline-flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Post Reply

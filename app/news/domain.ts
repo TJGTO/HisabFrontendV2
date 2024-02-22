@@ -39,5 +39,5 @@ export interface IAirticleObject {
 export interface IPostCommentReqBody {
   articleId: string;
   text: string;
-  parentId?: number;
+  parentId?: string;
 }
