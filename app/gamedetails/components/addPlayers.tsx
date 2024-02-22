@@ -4,6 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Avatar } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Dialog from "@mui/material/Dialog";
+import TagsComponent from "../../Common/FormComponents/tags";
 import { ISearchUserReqBody, ISearchUserObj } from "../../profile/domain";
 import { searchUsersProfiles } from "../../../lib/slices/profileSection";
 import { RootState, AppDispatch } from "../../../lib/store";
@@ -20,11 +21,17 @@ function AddPlayersDialog({ open, onClose }: addPlayersDialogProps) {
   const [searchResultCopyArr, setsearchResultCopyArr] = useState<
     ISearchUserModifiedObj[]
   >([]);
+
   const [addedList, setaddedList] = useState<ISearchUserModifiedObj[]>([]);
   const searchUsers = useSelector(
     (state: RootState) => state.profileSection.searchUsers
   );
-
+  useEffect(() => {
+    if (!open) {
+      setaddedList([]);
+      setsearchResultCopyArr([]);
+    }
+  }, [open]);
   const adduser = (index: number) => {
     let copyArr = [...searchResultCopyArr];
     copyArr[index].added = true;
@@ -178,39 +185,12 @@ function AddPlayersDialog({ open, onClose }: addPlayersDialogProps) {
           <div className="py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {addedList &&
               addedList.map((x, index) => (
-                <span
+                <TagsComponent
                   key={index}
-                  id="badge-dismiss-default"
-                  className="inline-flex items-center px-2 py-1 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
-                >
-                  {x.fullName}
-                  <button
-                    type="button"
-                    className="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
-                    aria-label="Remove"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      removeplayerFromAddedList(x._id);
-                    }}
-                  >
-                    <svg
-                      className="w-2 h-2"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 14 14"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                      />
-                    </svg>
-                    <span className="sr-only">Remove badge</span>
-                  </button>
-                </span>
+                  text={x.fullName}
+                  onRemove={removeplayerFromAddedList}
+                  keytoIdenify={x._id}
+                />
               ))}
           </div>
           <button
