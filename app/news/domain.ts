@@ -1,4 +1,5 @@
 import { ICreator } from "../gamedetails/domain";
+import { CompleteCommentObj } from "../Common/CommentSection/domain";
 export interface NewCardObject {
   _id: string;
   title: string;
@@ -18,6 +19,7 @@ export interface IAirticleState {
   AirticleMessage: string;
   AirticleFlag: string;
   activeAirticles: NewCardObject[];
+  comments: CompleteCommentObj[];
   currentAirticleDetail: IAirticleObject | null;
 }
 
@@ -31,6 +33,11 @@ export interface IAirticleObject {
   createdAt: string;
   updatedAt: string;
   description: string;
-
   creator: CreatorOfAirticle;
+}
+
+export interface IPostCommentReqBody {
+  articleId: string;
+  text: string;
+  parentId?: number;
 }

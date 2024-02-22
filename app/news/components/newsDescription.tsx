@@ -1,6 +1,7 @@
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useState, useEffect } from "react";
 import {
+  fetchcurrentAirticleComments,
   fetchcurrentAirticleDetails,
   resetFlags,
 } from "../../../lib/slices/airticle";
@@ -16,12 +17,15 @@ function NewsDescription({ newsId }: { newsId: string }) {
   const currentAirticleDetail = useSelector(
     (state: RootState) => state.airticle.currentAirticleDetail
   );
+  const comments = useSelector((state: RootState) => state.airticle.comments);
   const AirticleLoader = useSelector(
     (state: RootState) => state.airticle.AirticleLoader
   );
+  console.log(comments);
   useEffect(() => {
     if (newsId) {
       dispatch(fetchcurrentAirticleDetails(newsId));
+      dispatch(fetchcurrentAirticleComments(newsId));
     }
   }, []);
   return (
@@ -101,8 +105,8 @@ function NewsDescription({ newsId }: { newsId: string }) {
                     Post comment
                   </button>
                 </form>
-                {CommentData &&
-                  CommentData.map((x, index) => (
+                {comments &&
+                  comments.map((x, index) => (
                     <CommentLineItem key={index} commentData={x} />
                   ))}
               </section>
