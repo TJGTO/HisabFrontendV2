@@ -8,6 +8,7 @@ const CommentLineItem: React.FC<CommentProps> = ({
   submitComment,
 }) => {
   const [openReplyInptBox, setopenReplyInptBox] = useState<boolean>(false);
+  const [openReplySection, setopenReplySection] = useState<boolean>(false);
   const cmntRef = useRef<HTMLTextAreaElement>(null);
   const [loader, setloader] = useState<boolean>(false);
   const submitReplyComment = async () => {
@@ -70,9 +71,18 @@ const CommentLineItem: React.FC<CommentProps> = ({
             </svg>
             Reply
           </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              setopenReplySection(!openReplySection);
+            }}
+            className="flex items-center font-medium text-sm text-gray-500 hover:underline cursor-pointer dark:text-gray-400"
+          >
+            {openReplySection ? "Close" : "Expand"}
+          </button>
         </div>
       </article>
-
       <article className="p-3 mb-3 ml-6 lg:ml-12 text-base bg-white rounded-lg dark:bg-gray-900">
         {openReplyInptBox && (
           <form className="mb-6">
@@ -115,29 +125,30 @@ const CommentLineItem: React.FC<CommentProps> = ({
             </div>
           </form>
         )}
-        {commentData.replyComments.map((x, index) => (
-          <div className="mb-6" key={index}>
-            <footer className="flex justify-between items-center mb-2">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <Avatar
-                    src={
-                      "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
-                      x.commentBy.profilePictureURL
-                    }
-                    alt={x.commentBy.fullName}
-                  />
+        {openReplySection &&
+          commentData.replyComments.map((x, index) => (
+            <div className="mb-6" key={index}>
+              <footer className="flex justify-between items-center mb-2">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <Avatar
+                      src={
+                        "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
+                        x.commentBy.profilePictureURL
+                      }
+                      alt={x.commentBy.fullName}
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0 ms-4">
+                    <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
+                      {x.commentBy.fullName}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0 ms-4">
-                  <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                    {x.commentBy.fullName}
-                  </p>
-                </div>
-              </div>
-            </footer>
-            <p>{x.text}</p>
-          </div>
-        ))}
+              </footer>
+              <p>{x.text}</p>
+            </div>
+          ))}
       </article>
     </>
   );

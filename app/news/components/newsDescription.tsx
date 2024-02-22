@@ -60,7 +60,18 @@ function NewsDescription({ newsId }: { newsId: string }) {
       return false;
     }
   };
-
+  const getCommentsCount = () => {
+    if (comments && comments.length > 0) {
+      let count = 0;
+      count += comments.length;
+      comments.forEach((x) => {
+        count += x.replyComments.length;
+      });
+      return count;
+    } else {
+      return 0;
+    }
+  };
   return (
     <>
       {AirticleLoader && <PageLoader />}
@@ -118,7 +129,7 @@ function NewsDescription({ newsId }: { newsId: string }) {
               <section className="not-format">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
-                    Discussion (20)
+                    Discussion ({getCommentsCount()})
                   </h2>
                 </div>
                 <form className="mb-6">
