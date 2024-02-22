@@ -5,6 +5,7 @@ import {
   fetchcurrentAirticleDetails,
   resetFlags,
 } from "../../../lib/slices/airticle";
+import CircularProgress from "@mui/material/CircularProgress";
 import { postComments } from "../service";
 import Avatar from "@mui/material/Avatar";
 import { IPostCommentReqBody } from "../domain";
@@ -21,17 +22,20 @@ function NewsDescription({ newsId }: { newsId: string }) {
     (state: RootState) => state.airticle.currentAirticleDetail
   );
   const comments = useSelector((state: RootState) => state.airticle.comments);
+  const [loader, setloader] = useState<boolean>(false);
   const AirticleLoader = useSelector(
     (state: RootState) => state.airticle.AirticleLoader
   );
-
   useEffect(() => {
     if (newsId) {
       dispatch(fetchcurrentAirticleDetails(newsId));
       dispatch(fetchcurrentAirticleComments(newsId));
     }
-  }, []); //parentId
-  const addpostComment = async (text: string, parentId?: string) => {
+  }, []);
+  const addpostComment = async (
+    text: string,
+    parentId?: string
+  ): Promise<boolean> => {
     let requestObj: IPostCommentReqBody = {
       text: text,
       articleId: newsId,
@@ -43,13 +47,20 @@ function NewsDescription({ newsId }: { newsId: string }) {
       };
     }
     try {
+      setloader(true);
       let response = await postComments(requestObj);
+      setloader(false);
       if (response.success) {
         if (cmntRef.current) cmntRef.current.value = "";
         dispatch(fetchcurrentAirticleComments(newsId));
       }
-    } catch (error) {}
+      return true;
+    } catch (error) {
+      setloader(false);
+      return false;
+    }
   };
+
   return (
     <>
       {AirticleLoader && <PageLoader />}
@@ -123,15 +134,19 @@ function NewsDescription({ newsId }: { newsId: string }) {
                   </div>
                   <button
                     type="submit"
+                    disabled={loader}
                     onClick={(e) => {
-                      e.preventDefault();
                       if (cmntRef.current && cmntRef.current.value) {
                         addpostComment(cmntRef.current.value);
                       }
                     }}
                     className="inline-flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Post comment
+                    {loader ? (
+                      <CircularProgress color="secondary" size={20} />
+                    ) : (
+                      "Post comment"
+                    )}
                   </button>
                 </form>
                 {comments &&

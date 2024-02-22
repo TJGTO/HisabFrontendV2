@@ -16,5 +16,5 @@ export interface CompleteCommentObj extends IcommentObj {
 
 export interface CommentProps {
   commentData: CompleteCommentObj;
-  submitComment: (text: string, parentId?: string) => void;
+  submitComment: (text: string, parentId?: string) => Promise<boolean>;
 }
