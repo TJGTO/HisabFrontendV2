@@ -5,10 +5,14 @@ import {
   fetchcurrentAirticleDetails,
   resetFlags,
 } from "../../../lib/slices/airticle";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
+import useAuth from "../../Common/customHooks/useAuth";
 import CircularProgress from "@mui/material/CircularProgress";
 import { postComments } from "../service";
 import Avatar from "@mui/material/Avatar";
 import { IPostCommentReqBody } from "../domain";
+import Errormessage from "../../Common/FormComponents/errormessage";
 import CommentLineItem from "../../Common/CommentSection/comment";
 import { useSelector, useDispatch } from "react-redux";
 import PageLoader from "../../Common/Loader/pageLoader";
@@ -18,6 +22,7 @@ import { CommentData } from "./data";
 function NewsDescription({ newsId }: { newsId: string }) {
   const dispatch = useDispatch<AppDispatch>();
   const cmntRef = useRef<HTMLTextAreaElement>(null);
+  const router = useRouter();
   const currentAirticleDetail = useSelector(
     (state: RootState) => state.airticle.currentAirticleDetail
   );
@@ -26,6 +31,9 @@ function NewsDescription({ newsId }: { newsId: string }) {
   const AirticleLoader = useSelector(
     (state: RootState) => state.airticle.AirticleLoader
   );
+  const [errorMessage, seterrorMessage] = useState<string>("");
+  const [isLoggedIn, token] = useAuth();
+
   useEffect(() => {
     if (newsId) {
       dispatch(fetchcurrentAirticleDetails(newsId));
@@ -142,13 +150,29 @@ function NewsDescription({ newsId }: { newsId: string }) {
                       placeholder="Write a comment..."
                       required
                     ></textarea>
+                    {errorMessage && <Errormessage message={errorMessage} />}
                   </div>
                   <button
                     type="submit"
                     disabled={loader}
                     onClick={(e) => {
-                      if (cmntRef.current && cmntRef.current.value) {
+                      e.preventDefault();
+                      if (!isLoggedIn) {
+                        Swal.fire({
+                          title: "Please login to comment",
+                          showCancelButton: true,
+                          confirmButtonText: "Go",
+                          cancelButtonText: "Cancel",
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            Swal.close();
+                            router.push("/login");
+                          }
+                        });
+                      } else if (cmntRef.current && cmntRef.current.value) {
                         addpostComment(cmntRef.current.value);
+                      } else {
+                        seterrorMessage("Please write something to comment");
                       }
                     }}
                     className="inline-flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"

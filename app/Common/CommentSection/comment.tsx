@@ -71,16 +71,22 @@ const CommentLineItem: React.FC<CommentProps> = ({
             </svg>
             Reply
           </button>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              setopenReplySection(!openReplySection);
-            }}
-            className="flex items-center font-medium text-sm text-gray-500 hover:underline cursor-pointer dark:text-gray-400"
-          >
-            {openReplySection ? "Close" : "Expand"}
-          </button>
+          {commentData.replyComments.length > 0 && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                setopenReplySection(!openReplySection);
+              }}
+              className="flex items-center font-medium text-sm text-gray-500 hover:underline cursor-pointer dark:text-gray-400"
+            >
+              {openReplySection ? "Close" : "Expand"}
+            </button>
+          )}
+
+          {commentData.replyComments.length > 0 && (
+            <span>{commentData.replyComments.length} replies</span>
+          )}
         </div>
       </article>
       <article className="p-3 mb-3 ml-6 lg:ml-12 text-base bg-white rounded-lg dark:bg-gray-900">
@@ -100,11 +106,7 @@ const CommentLineItem: React.FC<CommentProps> = ({
               <button
                 type="submit"
                 disabled={loader}
-                onClick={async (e) => {
-                  if (cmntRef.current && cmntRef.current.value) {
-                    submitReplyComment();
-                  }
-                }}
+                onClick={async (e) => {}}
                 className="inline-flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loader ? (
