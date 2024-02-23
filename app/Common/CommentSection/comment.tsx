@@ -6,6 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 const CommentLineItem: React.FC<CommentProps> = ({
   commentData,
   submitComment,
+  reqLoginDialogOpen,
 }) => {
   const [openReplyInptBox, setopenReplyInptBox] = useState<boolean>(false);
   const [openReplySection, setopenReplySection] = useState<boolean>(false);
@@ -106,7 +107,10 @@ const CommentLineItem: React.FC<CommentProps> = ({
               <button
                 type="submit"
                 disabled={loader}
-                onClick={async (e) => {}}
+                onClick={async (e) => {
+                  e.preventDefault();
+                  submitReplyComment();
+                }}
                 className="inline-flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loader ? (

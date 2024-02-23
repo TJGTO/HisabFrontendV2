@@ -80,6 +80,19 @@ function NewsDescription({ newsId }: { newsId: string }) {
       return 0;
     }
   };
+  const fireReqloginDialog = () => {
+    Swal.fire({
+      title: "Please login to comment",
+      showCancelButton: true,
+      confirmButtonText: "Go",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.close();
+        router.push("/login");
+      }
+    });
+  };
   return (
     <>
       {AirticleLoader && <PageLoader />}
@@ -158,18 +171,9 @@ function NewsDescription({ newsId }: { newsId: string }) {
                     onClick={(e) => {
                       e.preventDefault();
                       if (!isLoggedIn) {
-                        Swal.fire({
-                          title: "Please login to comment",
-                          showCancelButton: true,
-                          confirmButtonText: "Go",
-                          cancelButtonText: "Cancel",
-                        }).then((result) => {
-                          if (result.isConfirmed) {
-                            Swal.close();
-                            router.push("/login");
-                          }
-                        });
+                        fireReqloginDialog();
                       } else if (cmntRef.current && cmntRef.current.value) {
+                        seterrorMessage("");
                         addpostComment(cmntRef.current.value);
                       } else {
                         seterrorMessage("Please write something to comment");
@@ -190,6 +194,7 @@ function NewsDescription({ newsId }: { newsId: string }) {
                       key={index}
                       commentData={x}
                       submitComment={addpostComment}
+                      reqLoginDialogOpen={fireReqloginDialog}
                     />
                   ))}
               </section>
