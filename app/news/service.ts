@@ -1,4 +1,4 @@
-import { createNewsReqBody } from "./domain";
+import { createNewsReqBody, IPostCommentReqBody } from "./domain";
 import { AxiosWithAuth, Axios, AxiosWithAuthFromData } from "../../lib/axios";
 
 async function createNews(data: createNewsReqBody) {
@@ -86,4 +86,62 @@ async function getNewsDetails(newsId: string) {
     }
   }
 }
-export { createNews, getActiveNews, getNewsDetails };
+async function getComments(newsId: string) {
+  try {
+    let response: any = await Axios.get(`article/comments/${newsId}`);
+
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: "Successfully fetched",
+        comments: response.data.data,
+      };
+    } else {
+      return {
+        success: false,
+        message: `${
+          response.data.data.message
+            ? response.data.data.message
+            : "Failed to fetch the comments"
+        }`,
+      };
+    }
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to fetch the comments");
+    }
+  }
+}
+async function postComments(reqbody: IPostCommentReqBody) {
+  try {
+    let response: any = await AxiosWithAuth.post(
+      `article/updateComment`,
+      reqbody
+    );
+
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: "Successfully updated",
+      };
+    } else {
+      return {
+        success: false,
+        message: `${
+          response.data.data.message
+            ? response.data.data.message
+            : "Failed to update the comment"
+        }`,
+      };
+    }
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to fetch the comments");
+    }
+  }
+}
+export { createNews, getActiveNews, getNewsDetails, getComments, postComments };

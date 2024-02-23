@@ -9,6 +9,8 @@ import UpiDetailsDialog from "./upiDetailsDialog";
 import AddIcon from "@mui/icons-material/Add";
 import Tabs from "./tabs";
 import Swal from "sweetalert2";
+import AddPlayersDialog from "./addPlayers";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { useRouter } from "next/navigation";
 import useAuth from "../../Common/customHooks/useAuth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -43,6 +45,7 @@ function Playerist({ gameid }: { gameid: string }) {
   const [openRegisterDialog, stopenRegisterDialog] = useState<boolean>(false);
   const [openPaymentDetails, setopenPaymentDetails] = useState<boolean>(false);
   const [openTeamDialog, setopenTeamDialog] = useState<boolean>(false);
+  const [openAddPDialog, setopenAddPDialog] = useState<boolean>(false);
   const [isLoggedIn, token] = useAuth();
 
   const gameDetails = useSelector(
@@ -54,6 +57,9 @@ function Playerist({ gameid }: { gameid: string }) {
   const permissionMatrix = useSelector(
     (state: RootState) => state.gameModel.permissionMatrix
   );
+  const closeAddPlayersDialog = () => {
+    setopenAddPDialog(false);
+  };
   const closeTeamDialog = () => {
     setopenTeamDialog(false);
   };
@@ -257,7 +263,18 @@ function Playerist({ gameid }: { gameid: string }) {
               Settings <SettingsIcon className="h-4 w-4" />
             </Button>
           )}
-
+          {permissionMatrix.editSetting && (
+            <Button
+              className="flex items-center gap-2"
+              variant="outlined"
+              onClick={(e) => {
+                e.preventDefault();
+                setopenAddPDialog(true);
+              }}
+            >
+              Add Players <PersonAddIcon className="h-4 w-4" />
+            </Button>
+          )}
           <Button
             className="flex items-center gap-2"
             variant="outlined"
@@ -302,6 +319,11 @@ function Playerist({ gameid }: { gameid: string }) {
         open={openTeamDialog}
         onClose={closeTeamDialog}
         editPermission={permissionMatrix.editTeam}
+      />
+      <AddPlayersDialog
+        gameid={gameid}
+        open={openAddPDialog}
+        onClose={closeAddPlayersDialog}
       />
     </section>
   );

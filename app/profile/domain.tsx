@@ -34,13 +34,26 @@ export interface stateObj {
   _id: String;
   stateName: String;
 }
-
+export interface ISearchUserObj {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  phone_no: string;
+  profilePictureURL: string;
+  fullName: string;
+}
 export interface ProfileSectionState {
   open: boolean;
+  searchLoader: boolean;
+  searchUsers: Array<ISearchUserObj>;
   updateLoader: boolean;
   updateMessage: String;
   errorOnUpdate: boolean;
   fetchDetailsLoader: boolean;
   states: Array<stateObj> | null;
   userProfile: updateProfileObj;
+}
+
+export interface ISearchUserReqBody {
+  userName?: string;
 }

@@ -3,6 +3,7 @@ import { createNewsReqBody, IAirticleState } from "../../app/news/domain";
 
 import {
   createNews,
+  getComments,
   getActiveNews,
   getNewsDetails,
 } from "../../app/news/service";
@@ -12,6 +13,7 @@ const initialState: IAirticleState = {
   AirticleMessage: "",
   AirticleFlag: "",
   activeAirticles: [],
+  comments: [],
   currentAirticleDetail: null,
 };
 
@@ -43,6 +45,17 @@ export const fetchcurrentAirticleDetails = createAsyncThunk(
   async (newsId: string) => {
     try {
       const response = await getNewsDetails(newsId);
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  }
+);
+export const fetchcurrentAirticleComments = createAsyncThunk(
+  "airticleModel/getcurentArticlecomments",
+  async (newsId: string) => {
+    try {
+      const response = await getComments(newsId);
       return response;
     } catch (err) {
       throw err;
@@ -95,6 +108,11 @@ const airticleModelSlice = createSlice({
     builder.addCase(fetchcurrentAirticleDetails.rejected, (state, action) => {
       state.AirticleLoader = false;
       state.currentAirticleDetail = null;
+    });
+    builder.addCase(fetchcurrentAirticleComments.fulfilled, (state, action) => {
+      if (action.payload && action.payload.success) {
+        state.comments = action.payload.comments;
+      }
     });
   },
 });

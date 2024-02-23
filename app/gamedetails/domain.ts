@@ -34,6 +34,8 @@ export interface teamConfigObj {
   teamKey: string;
   name: string;
 }
+export interface addPlayersDialogProps extends settingDialogProps {}
+
 export interface registerDialogProps extends settingDialogProps {}
 
 export interface viewDialogProps extends settingDialogProps {
