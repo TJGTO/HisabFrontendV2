@@ -17,7 +17,6 @@ import CommentLineItem from "../../Common/CommentSection/comment";
 import { useSelector, useDispatch } from "react-redux";
 import PageLoader from "../../Common/Loader/pageLoader";
 import { stringToColor } from "../../Common/functions";
-import { CommentData } from "./data";
 
 function NewsDescription({ newsId }: { newsId: string }) {
   const dispatch = useDispatch<AppDispatch>();

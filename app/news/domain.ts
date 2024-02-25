@@ -41,3 +41,8 @@ export interface IPostCommentReqBody {
   text: string;
   parentId?: string;
 }
+
+export interface ICreateEditArticleProps {
+  newsId?: string;
+  mode?: string;
+}

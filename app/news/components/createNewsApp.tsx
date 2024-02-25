@@ -4,15 +4,19 @@ import TextEditor from "../../Common/FormComponents/TextEditor";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import CircularProgress from "@mui/material/CircularProgress";
-import { createTheNews, resetFlags } from "../../../lib/slices/airticle";
+import {
+  createTheNews,
+  resetFlags,
+  fetchcurrentAirticleDetails,
+} from "../../../lib/slices/airticle";
 import { hasStringContent } from "../../Common/functions";
 import Errormessage from "../../Common/FormComponents/errormessage";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { createNewsReqBody } from "../domain";
+import { createNewsReqBody, ICreateEditArticleProps } from "../domain";
 
-const CreateNewsAPP: React.FC = () => {
+const CreateNewsAPP: React.FC<ICreateEditArticleProps> = ({ newsId, mode }) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const [title, settitle] = useState<string>("");
@@ -28,11 +32,23 @@ const CreateNewsAPP: React.FC = () => {
   const AirticleFlag = useSelector(
     (state: RootState) => state.airticle.AirticleFlag
   );
+  const currentAirticleDetail = useSelector(
+    (state: RootState) => state.airticle.currentAirticleDetail
+  );
   useEffect(() => {
+    if (newsId) {
+      dispatch(fetchcurrentAirticleDetails(newsId));
+    }
     return () => {
       resetFlags();
     };
   }, []);
+  useEffect(() => {
+    if (newsId && mode == "edit") {
+      settitle(currentAirticleDetail?.title || "");
+      setContent(currentAirticleDetail?.description || "");
+    }
+  }, [currentAirticleDetail]);
   useEffect(() => {
     if (!AirticleLoader && AirticleMessage) {
       Swal.fire({
@@ -87,6 +103,7 @@ const CreateNewsAPP: React.FC = () => {
               id="first_name"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="John"
+              value={title}
               required
               onChange={(e) => {
                 e.preventDefault();
