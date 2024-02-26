@@ -6,6 +6,7 @@ import {
   getComments,
   getActiveNews,
   getNewsDetails,
+  getPermissionMatrix,
 } from "../../app/news/service";
 
 const initialState: IAirticleState = {
@@ -15,6 +16,10 @@ const initialState: IAirticleState = {
   activeAirticles: [],
   comments: [],
   currentAirticleDetail: null,
+  permissions: {
+    editArticle: false,
+    approveOrReject: false,
+  },
 };
 
 export const createTheNews = createAsyncThunk(
@@ -23,6 +28,17 @@ export const createTheNews = createAsyncThunk(
     try {
       const response = await createNews(data);
       dispatch(fetchActiveNews());
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  }
+);
+export const fetchPermissions = createAsyncThunk(
+  "airticleModel/fetchPermissions",
+  async (newsId: string) => {
+    try {
+      const response = await getPermissionMatrix(newsId);
       return response;
     } catch (err) {
       throw err;
@@ -112,6 +128,12 @@ const airticleModelSlice = createSlice({
     builder.addCase(fetchcurrentAirticleComments.fulfilled, (state, action) => {
       if (action.payload && action.payload.success) {
         state.comments = action.payload.comments;
+      }
+    });
+
+    builder.addCase(fetchPermissions.fulfilled, (state, action) => {
+      if (action.payload && action.payload.success) {
+        state.permissions = action.payload.permissionData;
       }
     });
   },

@@ -3,21 +3,24 @@ import { useState, useEffect, useRef } from "react";
 import {
   fetchcurrentAirticleComments,
   fetchcurrentAirticleDetails,
-  resetFlags,
+  fetchPermissions,
 } from "../../../lib/slices/airticle";
 import Swal from "sweetalert2";
+import EditIcon from "@mui/icons-material/Edit";
+import Tooltip from "@mui/material/Tooltip";
 import { useRouter } from "next/navigation";
 import useAuth from "../../Common/customHooks/useAuth";
 import CircularProgress from "@mui/material/CircularProgress";
 import { postComments } from "../service";
 import Avatar from "@mui/material/Avatar";
 import { IPostCommentReqBody } from "../domain";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import Errormessage from "../../Common/FormComponents/errormessage";
 import CommentLineItem from "../../Common/CommentSection/comment";
 import { useSelector, useDispatch } from "react-redux";
 import PageLoader from "../../Common/Loader/pageLoader";
 import { stringToColor } from "../../Common/functions";
-import { CommentData } from "./data";
 
 function NewsDescription({ newsId }: { newsId: string }) {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,6 +28,9 @@ function NewsDescription({ newsId }: { newsId: string }) {
   const router = useRouter();
   const currentAirticleDetail = useSelector(
     (state: RootState) => state.airticle.currentAirticleDetail
+  );
+  const permissions = useSelector(
+    (state: RootState) => state.airticle.permissions
   );
   const comments = useSelector((state: RootState) => state.airticle.comments);
   const [loader, setloader] = useState<boolean>(false);
@@ -38,6 +44,7 @@ function NewsDescription({ newsId }: { newsId: string }) {
     if (newsId) {
       dispatch(fetchcurrentAirticleDetails(newsId));
       dispatch(fetchcurrentAirticleComments(newsId));
+      dispatch(fetchPermissions(newsId));
     }
   }, []);
   const addpostComment = async (
@@ -141,6 +148,43 @@ function NewsDescription({ newsId }: { newsId: string }) {
                   </div>
                 </address>
               </header>
+              <div className="flex  gap-4 mb-2">
+                <Tooltip title="Like">
+                  <div
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // router.push(`/news/edit/${newsId}`);
+                    }}
+                  >
+                    {" "}
+                    <ThumbUpAltIcon className="cursor-not-allowed" />
+                  </div>
+                </Tooltip>
+                <Tooltip title="Dislike">
+                  <div
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // router.push(`/news/edit/${newsId}`);
+                    }}
+                  >
+                    {" "}
+                    <ThumbDownIcon className="cursor-not-allowed" />
+                  </div>
+                </Tooltip>
+                {permissions.editArticle && (
+                  <Tooltip title="Edit Article">
+                    <div
+                      onClick={(e) => {
+                        e.preventDefault();
+                        router.push(`/news/edit/${newsId}`);
+                      }}
+                    >
+                      {" "}
+                      <EditIcon className="cursor-pointer" />
+                    </div>
+                  </Tooltip>
+                )}
+              </div>
               <div
                 dangerouslySetInnerHTML={{
                   __html: currentAirticleDetail?.description || "",

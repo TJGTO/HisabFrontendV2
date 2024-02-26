@@ -10,8 +10,15 @@ export interface NewCardObject {
 }
 
 export interface createNewsReqBody {
+  articleId?: string;
+  createdBy?: string;
   title: string;
   description: string;
+}
+
+export interface IArticlePermission {
+  editArticle: boolean;
+  approveOrReject: boolean;
 }
 
 export interface IAirticleState {
@@ -20,6 +27,7 @@ export interface IAirticleState {
   AirticleFlag: string;
   activeAirticles: NewCardObject[];
   comments: CompleteCommentObj[];
+  permissions: IArticlePermission;
   currentAirticleDetail: IAirticleObject | null;
 }
 
@@ -40,4 +48,9 @@ export interface IPostCommentReqBody {
   articleId: string;
   text: string;
   parentId?: string;
+}
+
+export interface ICreateEditArticleProps {
+  newsId?: string;
+  mode?: string;
 }

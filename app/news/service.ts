@@ -3,12 +3,18 @@ import { AxiosWithAuth, Axios, AxiosWithAuthFromData } from "../../lib/axios";
 
 async function createNews(data: createNewsReqBody) {
   try {
-    let response: any = await AxiosWithAuth.post("article/create", data);
+    let Url = "";
+    if (data.articleId) {
+      Url = "article/update";
+    } else {
+      Url = "article/create";
+    }
+    let response: any = await AxiosWithAuth.post(Url, data);
 
     if (response.data && response.data.success) {
       return {
         success: true,
-        message: "Airticle is created",
+        message: `Airticle is ${data.articleId ? "updated" : "created"}`,
         data: response.data.data,
       };
     } else {
@@ -17,7 +23,7 @@ async function createNews(data: createNewsReqBody) {
         data: `${
           response.data.data.message
             ? response.data.data.message
-            : "Failed to create the Airticle"
+            : `Failed to ${data.articleId ? "update" : "create"} the Airticle`
         }`,
       };
     }
@@ -144,4 +150,41 @@ async function postComments(reqbody: IPostCommentReqBody) {
     }
   }
 }
-export { createNews, getActiveNews, getNewsDetails, getComments, postComments };
+async function getPermissionMatrix(newsId: string) {
+  try {
+    let response: any = await AxiosWithAuth.get(
+      `article/permissionMatrix/${newsId}`
+    );
+
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: "Successfully fetched",
+        permissionData: response.data.data,
+      };
+    } else {
+      return {
+        success: false,
+        message: `${
+          response.data.data.message
+            ? response.data.data.message
+            : "Failed to fetch the article permissions"
+        }`,
+      };
+    }
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to fetch the article permissions");
+    }
+  }
+}
+export {
+  createNews,
+  getActiveNews,
+  getNewsDetails,
+  getComments,
+  postComments,
+  getPermissionMatrix,
+};
