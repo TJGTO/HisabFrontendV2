@@ -40,7 +40,7 @@ const CreateNewsAPP: React.FC<ICreateEditArticleProps> = ({ newsId, mode }) => {
       dispatch(fetchcurrentAirticleDetails(newsId));
     }
     return () => {
-      resetFlags();
+      dispatch(resetFlags());
     };
   }, []);
   useEffect(() => {
@@ -58,12 +58,16 @@ const CreateNewsAPP: React.FC<ICreateEditArticleProps> = ({ newsId, mode }) => {
         timer: 1500,
       });
       setTimeout(() => {
-        resetFlags();
-        router.push("/dashboard");
+        dispatch(resetFlags());
+        if (mode == "edit") {
+          router.push(`/news/${newsId}`);
+        } else {
+          router.push("/dashboard");
+        }
       }, 1600);
     }
     return () => {
-      resetFlags();
+      dispatch(resetFlags());
     };
   }, [AirticleLoader, AirticleMessage]);
   const onSubmitForm = () => {
@@ -79,10 +83,15 @@ const CreateNewsAPP: React.FC<ICreateEditArticleProps> = ({ newsId, mode }) => {
     } else {
       settitleError(false);
     }
+
     let requestObj: createNewsReqBody = {
       title: title,
       description: content,
     };
+    if (mode == "edit") {
+      requestObj.articleId = newsId;
+      requestObj.createdBy = currentAirticleDetail?.creator._id;
+    }
     dispatch(createTheNews(requestObj));
   };
   return (

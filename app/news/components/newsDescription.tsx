@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   fetchcurrentAirticleComments,
   fetchcurrentAirticleDetails,
-  resetFlags,
+  fetchPermissions,
 } from "../../../lib/slices/airticle";
 import Swal from "sweetalert2";
 import EditIcon from "@mui/icons-material/Edit";
@@ -29,6 +29,9 @@ function NewsDescription({ newsId }: { newsId: string }) {
   const currentAirticleDetail = useSelector(
     (state: RootState) => state.airticle.currentAirticleDetail
   );
+  const permissions = useSelector(
+    (state: RootState) => state.airticle.permissions
+  );
   const comments = useSelector((state: RootState) => state.airticle.comments);
   const [loader, setloader] = useState<boolean>(false);
   const AirticleLoader = useSelector(
@@ -41,6 +44,7 @@ function NewsDescription({ newsId }: { newsId: string }) {
     if (newsId) {
       dispatch(fetchcurrentAirticleDetails(newsId));
       dispatch(fetchcurrentAirticleComments(newsId));
+      dispatch(fetchPermissions(newsId));
     }
   }, []);
   const addpostComment = async (
@@ -167,17 +171,19 @@ function NewsDescription({ newsId }: { newsId: string }) {
                     <ThumbDownIcon className="cursor-not-allowed" />
                   </div>
                 </Tooltip>
-                <Tooltip title="Edit Article">
-                  <div
-                    onClick={(e) => {
-                      e.preventDefault();
-                      router.push(`/news/edit/${newsId}`);
-                    }}
-                  >
-                    {" "}
-                    <EditIcon className="cursor-pointer" />
-                  </div>
-                </Tooltip>
+                {permissions.editArticle && (
+                  <Tooltip title="Edit Article">
+                    <div
+                      onClick={(e) => {
+                        e.preventDefault();
+                        router.push(`/news/edit/${newsId}`);
+                      }}
+                    >
+                      {" "}
+                      <EditIcon className="cursor-pointer" />
+                    </div>
+                  </Tooltip>
+                )}
               </div>
               <div
                 dangerouslySetInnerHTML={{
