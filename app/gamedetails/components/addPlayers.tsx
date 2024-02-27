@@ -11,7 +11,10 @@ import AddIcon from "@mui/icons-material/Add";
 import Dialog from "@mui/material/Dialog";
 import TagsComponent from "../../Common/FormComponents/tags";
 import { ISearchUserReqBody, ISearchUserObj } from "../../profile/domain";
-import { searchUsersProfiles } from "../../../lib/slices/profileSection";
+import {
+  searchUsersProfiles,
+  resetSearchResult,
+} from "../../../lib/slices/profileSection";
 import { fetchGameDetails } from "../../../lib/slices/gamemodule";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
@@ -25,7 +28,9 @@ function AddPlayersDialog({ gameid, open, onClose }: addPlayersDialogProps) {
   const [searchResultCopyArr, setsearchResultCopyArr] = useState<
     ISearchUserModifiedObj[]
   >([]);
-
+  const searchLoader = useSelector(
+    (state: RootState) => state.profileSection.searchLoader
+  );
   const [addedList, setaddedList] = useState<ISearchUserModifiedObj[]>([]);
   const searchUsers = useSelector(
     (state: RootState) => state.profileSection.searchUsers
@@ -34,6 +39,7 @@ function AddPlayersDialog({ gameid, open, onClose }: addPlayersDialogProps) {
     if (!open) {
       setaddedList([]);
       setsearchResultCopyArr([]);
+      dispatch(resetSearchResult());
     }
   }, [open]);
   const adduser = (index: number) => {
@@ -94,11 +100,11 @@ function AddPlayersDialog({ gameid, open, onClose }: addPlayersDialogProps) {
         showConfirmButton: false,
         timer: 1500,
       });
-    } catch (error) {
+    } catch (error: any) {
       setloader(false);
       Swal.fire({
         icon: "error",
-        title: "Failed to register",
+        title: error.message,
         showConfirmButton: false,
         timer: 1500,
       });
@@ -147,24 +153,31 @@ function AddPlayersDialog({ gameid, open, onClose }: addPlayersDialogProps) {
                   />
                   <button
                     type="submit"
-                    className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    disabled={searchLoader}
+                    className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <svg
-                      className="w-4 h-4"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                      />
-                    </svg>
-                    <span className="sr-only">Search</span>
+                    {searchLoader ? (
+                      <CircularProgress color="secondary" size={20} />
+                    ) : (
+                      <>
+                        <svg
+                          className="w-4 h-4"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                          />
+                        </svg>
+                        <span className="sr-only">Search</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </div>

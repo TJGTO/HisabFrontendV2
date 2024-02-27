@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { viewDialogProps } from "../domain";
 import Dialog from "@mui/material/Dialog";
+import Errormessage from "../../Common/FormComponents/errormessage";
+import FileUploadSection from "../../Common/FormComponents/fileUploadSection";
 import { RootState } from "../../../lib/store";
 import { useSelector } from "react-redux";
+import CircularProgress from "@mui/material/CircularProgress";
 import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
 
@@ -21,6 +24,9 @@ function ViewDialog({
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
   );
+  const [file, setfile] = useState<File>();
+  const [position, setposition] = useState<string>("");
+  const [positionError, setpositionError] = useState<boolean>(false);
   const handleClose = () => {
     onClose();
   };
@@ -33,6 +39,9 @@ function ViewDialog({
     } else {
       return 0;
     }
+  };
+  const getFileFromInput = (fileObj: File) => {
+    setfile(fileObj);
   };
   return (
     <Dialog onClose={handleClose} open={open} maxWidth={"md"}>
@@ -49,15 +58,64 @@ function ViewDialog({
               />
             </div>
             <div className="space-y-4 md:space-y-6">
-              <div className="flex h-60 w-60">
-                <img
-                  src={
-                    "https://wfgimagebucket.s3.amazonaws.com/paymentpictures/" +
-                    paymentImageurl[0]
-                  }
+              {paymentImageurl[0] && (
+                <div className="flex h-60 w-60">
+                  <img
+                    src={
+                      "https://wfgimagebucket.s3.amazonaws.com/paymentpictures/" +
+                      paymentImageurl[0]
+                    }
+                  />
+                </div>
+              )}
+
+              {/* <div className="space-y-4 md:space-y-6">
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Position
+                  </label>
+                  <div className="flex w-full">
+                    <select
+                      id="position"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      onChange={(e) => {
+                        setposition(e.target.value);
+                        if (!e.target.value) {
+                          setpositionError(true);
+                        }
+                      }}
+                    >
+                      <option value="">{"Please Select"}</option>
+                      <option value="Defence">{"Defence"}</option>
+                      <option value="Midfield">{"Midfield"}</option>
+                      <option value="Attack">{"Attack"}</option>
+                      <option value="Keeper">{"Keeper"}</option>
+                    </select>
+                  </div>
+                  {positionError && (
+                    <Errormessage message={"Please select a position"} />
+                  )}
+                </div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Upload Payment Screenshot
+                </label>
+                <FileUploadSection
+                  fileObject={file}
+                  setFunction={getFileFromInput}
                 />
-              </div>
-              {status == "Paid" && actionsPflag && (
+
+                <button
+                  type="submit"
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}
+                  disabled={!file}
+                  className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Upload
+                </button>
+              </div> */}
+              {paymentImageurl[0] && status == "Paid" && actionsPflag && (
                 <div className="flex gap-3">
                   <button
                     onClick={(e) => {

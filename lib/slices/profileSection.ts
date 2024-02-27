@@ -113,6 +113,9 @@ const profileSectionSlice = createSlice({
       state.updateLoader = false;
       state.states = null;
     },
+    resetSearchResult: (state) => {
+      state.searchUsers = [];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(updateTheUser.pending, (state) => {
@@ -182,7 +185,7 @@ const profileSectionSlice = createSlice({
   },
 });
 
-export const { resetFlags } = profileSectionSlice.actions;
+export const { resetFlags, resetSearchResult } = profileSectionSlice.actions;
 
 export default profileSectionSlice.reducer;
 //searchUsers
