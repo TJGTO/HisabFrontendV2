@@ -38,9 +38,10 @@ export interface ISearchUserObj {
   _id: string;
   firstName: string;
   lastName: string;
-  phone_no: string;
-  profilePictureURL: string;
-  fullName: string;
+  phoneNumber: string;
+  profilepictureurl: string;
+  name: string;
+  DOB: string;
 }
 export interface ProfileSectionState {
   open: boolean;

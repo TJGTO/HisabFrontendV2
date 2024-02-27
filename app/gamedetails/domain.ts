@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import React from "react";
 import { SeparatorConfig } from "tailwindcss/types/config";
+import { ISearchUserObj } from "../profile/domain";
 
 export type tabsObject = {
   label: string;
@@ -193,6 +194,13 @@ export type IUpdateTeamReqObj = {
   teams: Iplayers[];
   number_of_teams: number;
 };
+export interface ISearchUserModifiedObj extends ISearchUserObj {
+  added: boolean;
+}
+export interface IadduserToGameReqBody {
+  gameid: string;
+  players: ISearchUserModifiedObj[];
+}
 export const colorListforStatus = {
   Approved: "text-green-700",
   Rejected: "text-red-700",

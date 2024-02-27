@@ -148,7 +148,7 @@ function Playerist({ gameid }: { gameid: string }) {
             age={age}
             paymentImageurl={paymentImageurl}
             phoneNumber={phoneNumber}
-            position={position.toString()}
+            position={position ? position.toString() : ""}
             classes={classes}
             gameId={gameid}
             player_id={player_id}
@@ -263,7 +263,7 @@ function Playerist({ gameid }: { gameid: string }) {
               Settings <SettingsIcon className="h-4 w-4" />
             </Button>
           )}
-          {/* {permissionMatrix.editSetting && (
+          {permissionMatrix.editSetting && (
             <Button
               className="flex items-center gap-2"
               variant="outlined"
@@ -274,7 +274,7 @@ function Playerist({ gameid }: { gameid: string }) {
             >
               Add Players <PersonAddIcon className="h-4 w-4" />
             </Button>
-          )} */}
+          )}
           <Button
             className="flex items-center gap-2"
             variant="outlined"
