@@ -35,6 +35,7 @@ const initialState: gameModelStateObj = {
     editSetting: false,
     approveOrReject: false,
     editTeam: false,
+    player_id: "",
   },
 };
 

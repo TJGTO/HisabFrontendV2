@@ -1,6 +1,5 @@
 import * as yup from "yup";
 import React from "react";
-import { SeparatorConfig } from "tailwindcss/types/config";
 import { ISearchUserObj } from "../profile/domain";
 
 export type tabsObject = {
@@ -82,7 +81,13 @@ export interface activeGamesObj {
   creator?: ICreator;
 }
 
-type Status = "Approved" | "Rejected" | "Withdrawn" | "Removed" | "Paid";
+type Status =
+  | "Added"
+  | "Approved"
+  | "Rejected"
+  | "Withdrawn"
+  | "Removed"
+  | "Paid";
 
 export interface Iplayers {
   name: string;
@@ -104,6 +109,7 @@ export type GamePermissionMatrix = {
   editSetting: boolean;
   approveOrReject: boolean;
   editTeam: boolean;
+  player_id: string;
 };
 export interface gameModelStateObj {
   gameLoader: boolean;
@@ -218,6 +224,7 @@ export const colorListforStatus = {
   Withdrawn: "text-orange-700",
   Removed: "text-gray-700",
   Paid: "text-blue-700",
+  Added: "text-purple-700",
 };
 
 export const colorListforStatusBG = {
@@ -226,6 +233,7 @@ export const colorListforStatusBG = {
   Withdrawn: "bg-orange-300",
   Removed: "bg-gray-300",
   Paid: "bg-blue-300",
+  Added: "bg-purple-300",
 };
 
 export const gameStatusArr: Array<string> = [

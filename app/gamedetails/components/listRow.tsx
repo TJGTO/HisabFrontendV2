@@ -5,6 +5,7 @@ import Menu from "@mui/material/Menu";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import React from "react";
+import useAuth from "../../Common/customHooks/useAuth";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ConfirmDialog from "../../Common/ConfirmDialog/confirmDialog";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -35,6 +36,7 @@ function ListRow({
   team,
 }: PlayerObjinGameList) {
   const dispatch = useDispatch<AppDispatch>();
+  const [isLoggedIn, token] = useAuth();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openViewDialog, setopenViewDialog] = useState<boolean>(false);
   const [openConfirmDialog, setopenConfirmDialog] = useState<boolean>(false);
@@ -142,11 +144,16 @@ function ListRow({
         </Typography>
       </td>
       <td className={classes}>
-        <div onClick={handleClick}>
-          <Tooltip title="Edit User">
-            <CreateIcon className="h-4 w-4 dark:text-white" />
-          </Tooltip>
-        </div>
+        {isLoggedIn &&
+          (permissionMatrix.editSetting ||
+            permissionMatrix.player_id == player_id) && (
+            <div onClick={handleClick}>
+              <Tooltip title="Edit User">
+                <CreateIcon className="h-4 w-4 dark:text-white" />
+              </Tooltip>
+            </div>
+          )}
+
         <Menu
           anchorEl={anchorEl}
           id="account-menu"
