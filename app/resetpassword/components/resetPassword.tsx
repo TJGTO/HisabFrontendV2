@@ -33,7 +33,7 @@ function ResetPassword() {
     let obj: IChangePasswordrequestBody = {
       email: data.email,
       oldpassword: data.oldpassword,
-      password: data.password,
+      newpassword: data.password,
     };
     try {
       setloader(true);

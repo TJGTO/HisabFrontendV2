@@ -20,5 +20,5 @@ export const resetPasswordSchema = yup
 export interface IChangePasswordrequestBody {
   email: string;
   oldpassword: string;
-  password: string;
+  newpassword: string;
 }
