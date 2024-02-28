@@ -2,13 +2,10 @@ import React, { useEffect, useState } from "react";
 import { viewDialogProps } from "../domain";
 import Dialog from "@mui/material/Dialog";
 import RegisterFormField from "./registerForm";
-import Errormessage from "../../Common/FormComponents/errormessage";
-import FileUploadSection from "../../Common/FormComponents/fileUploadSection";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchGameDetails } from "../../../lib/slices/gamemodule";
 import { uploadPaymentSnapAfterAddedByAdmin } from "../service";
-import CircularProgress from "@mui/material/CircularProgress";
 import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
 
