@@ -155,15 +155,14 @@ function ResetPassword() {
                     Submit
                   </button>
                 )}
-
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Don&rsquo;t have an account?{" "}
+                  Go back to Login?{" "}
                   <Link
-                    href="/registration"
+                    href="/login"
                     className="font-medium text-blue-700 hover:underline"
                   >
                     {" "}
-                    Register here
+                    Click here
                   </Link>
                 </p>
               </form>
