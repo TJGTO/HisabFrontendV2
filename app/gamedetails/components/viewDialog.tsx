@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { viewDialogProps } from "../domain";
 import Dialog from "@mui/material/Dialog";
-import { RootState } from "../../../lib/store";
-import { useSelector } from "react-redux";
+import RegisterFormField from "./registerForm";
+import { RootState, AppDispatch } from "../../../lib/store";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchGameDetails } from "../../../lib/slices/gamemodule";
+import { uploadPaymentSnapAfterAddedByAdmin } from "../service";
 import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
 
@@ -15,12 +18,23 @@ function ViewDialog({
   setConfirmDialogTitle,
   setactionType,
   status,
+  player_id,
   paymentImageurl,
   actionsPflag,
 }: viewDialogProps) {
+  const dispatch = useDispatch<AppDispatch>();
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
   );
+  const [file, setfile] = useState<File>();
+  const [loader, setloader] = useState<boolean>(false);
+  const [position, setposition] = useState<string>("");
+  useEffect(() => {
+    if (!open) {
+      setfile(undefined);
+      setposition("");
+    }
+  }, [open]);
   const handleClose = () => {
     onClose();
   };
@@ -33,6 +47,42 @@ function ViewDialog({
     } else {
       return 0;
     }
+  };
+  const getFileFromInput = (fileObj: File) => {
+    setfile(fileObj);
+  };
+  const onSubmitOfForm = async () => {
+    try {
+      const formData = new FormData();
+      let blobdata = file as Blob;
+      formData.append(`file`, blobdata);
+      formData.append("position", position);
+      formData.append("gameid", gameid);
+      formData.append("player_id", player_id);
+      setloader(true);
+      let success: boolean = false;
+      let response = await uploadPaymentSnapAfterAddedByAdmin(formData);
+      setloader(false);
+      if (response.success) {
+        success = true;
+        dispatch(fetchGameDetails(gameid));
+      }
+      Swal.fire({
+        icon: !success ? "error" : "success",
+        title: response.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error: any) {
+      setloader(false);
+      Swal.fire({
+        icon: "error",
+        title: error.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+    handleClose();
   };
   return (
     <Dialog onClose={handleClose} open={open} maxWidth={"md"}>
@@ -49,15 +99,28 @@ function ViewDialog({
               />
             </div>
             <div className="space-y-4 md:space-y-6">
-              <div className="flex h-60 w-60">
-                <img
-                  src={
-                    "https://wfgimagebucket.s3.amazonaws.com/paymentpictures/" +
-                    paymentImageurl[0]
-                  }
+              {paymentImageurl[0] && (
+                <div className="flex h-60 w-60">
+                  <img
+                    src={
+                      "https://wfgimagebucket.s3.amazonaws.com/paymentpictures/" +
+                      paymentImageurl[0]
+                    }
+                  />
+                </div>
+              )}
+              {!paymentImageurl[0] && (
+                <RegisterFormField
+                  position={position}
+                  setposition={setposition}
+                  file={file}
+                  getFileFromInput={getFileFromInput}
+                  registerSlotLoader={loader}
+                  onsubmitfn={onSubmitOfForm}
                 />
-              </div>
-              {status == "Paid" && actionsPflag && (
+              )}
+
+              {paymentImageurl[0] && status == "Paid" && actionsPflag && (
                 <div className="flex gap-3">
                   <button
                     onClick={(e) => {

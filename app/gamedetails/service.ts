@@ -3,6 +3,7 @@ import {
   createGameReqBody,
   updateGameReqBody,
   IUpdateTeamReqObj,
+  IadduserToGameReqBody,
   updatePlayerStatusReqBody,
 } from "./domain";
 
@@ -34,7 +35,34 @@ async function createaGame(data: createGameReqBody) {
     }
   }
 }
+async function addPlayersInGame(data: IadduserToGameReqBody) {
+  try {
+    let response: any = await AxiosWithAuth.post("game/registerInGroup", data);
 
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: "Registration is successfull",
+        userdata: response.data.data,
+      };
+    } else {
+      return {
+        success: false,
+        message: `${
+          response.data.data.message
+            ? response.data.data.message
+            : "Failed to register"
+        }`,
+      };
+    }
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to register");
+    }
+  }
+}
 async function getActiveMatches() {
   let response: any = await Axios.get("game/activematch");
 
@@ -122,7 +150,34 @@ async function registerIngame(data: FormData) {
     }
   }
 }
+async function uploadPaymentSnapAfterAddedByAdmin(data: FormData) {
+  try {
+    let response: any = await AxiosWithAuthFromData.post(
+      "game/updatepaymentsforAddedPlayers",
+      data
+    );
 
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: "Upload is Successful",
+        userdata: response.data.data,
+      };
+    }
+    return {
+      success: false,
+      message: `${
+        response.data.message ? response.data.message : "Failed to upload"
+      }`,
+    };
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to upload");
+    }
+  }
+}
 async function updateGame(data: updateGameReqBody) {
   let response: any = await AxiosWithAuth.post("game/updateGame", data);
 
@@ -225,4 +280,6 @@ export {
   updatePlayerStatus,
   getVenueList,
   getMatchPermissions,
+  addPlayersInGame,
+  uploadPaymentSnapAfterAddedByAdmin,
 };

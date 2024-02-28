@@ -9,7 +9,7 @@ import Footer from "./Footer/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const authorizationRoutes = ["/registration", "/login"];
+const authorizationRoutes = ["/registration", "/login", , "/resetpassword"];
 
 export default function RootLayout({
   children,

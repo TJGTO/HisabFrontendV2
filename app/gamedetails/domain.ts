@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import React from "react";
-import { SeparatorConfig } from "tailwindcss/types/config";
+import { ISearchUserObj } from "../profile/domain";
 
 export type tabsObject = {
   label: string;
@@ -44,6 +44,7 @@ export interface viewDialogProps extends settingDialogProps {
   setConfirmDialogTitle: React.Dispatch<React.SetStateAction<string>>;
   setactionType: React.Dispatch<React.SetStateAction<string>>;
   status: string;
+  player_id: string;
   actionsPflag?: boolean;
   paymentImageurl: string[];
 }
@@ -80,7 +81,13 @@ export interface activeGamesObj {
   creator?: ICreator;
 }
 
-type Status = "Approved" | "Rejected" | "Withdrawn" | "Removed" | "Paid";
+type Status =
+  | "Added"
+  | "Approved"
+  | "Rejected"
+  | "Withdrawn"
+  | "Removed"
+  | "Paid";
 
 export interface Iplayers {
   name: string;
@@ -102,6 +109,7 @@ export type GamePermissionMatrix = {
   editSetting: boolean;
   approveOrReject: boolean;
   editTeam: boolean;
+  player_id: string;
 };
 export interface gameModelStateObj {
   gameLoader: boolean;
@@ -193,12 +201,30 @@ export type IUpdateTeamReqObj = {
   teams: Iplayers[];
   number_of_teams: number;
 };
+export interface ISearchUserModifiedObj extends ISearchUserObj {
+  added: boolean;
+}
+export interface IadduserToGameReqBody {
+  gameid: string;
+  players: ISearchUserModifiedObj[];
+}
+
+export interface IRegisterFormProps {
+  position: string;
+  setposition: React.Dispatch<React.SetStateAction<string>>;
+  file: File | undefined;
+  getFileFromInput: (fileObj: File) => void;
+  registerSlotLoader: boolean;
+  onsubmitfn: () => Promise<void>;
+}
+
 export const colorListforStatus = {
   Approved: "text-green-700",
   Rejected: "text-red-700",
   Withdrawn: "text-orange-700",
   Removed: "text-gray-700",
   Paid: "text-blue-700",
+  Added: "text-purple-700",
 };
 
 export const colorListforStatusBG = {
@@ -207,6 +233,7 @@ export const colorListforStatusBG = {
   Withdrawn: "bg-orange-300",
   Removed: "bg-gray-300",
   Paid: "bg-blue-300",
+  Added: "bg-purple-300",
 };
 
 export const gameStatusArr: Array<string> = [
