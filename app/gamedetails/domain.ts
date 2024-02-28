@@ -45,6 +45,7 @@ export interface viewDialogProps extends settingDialogProps {
   setConfirmDialogTitle: React.Dispatch<React.SetStateAction<string>>;
   setactionType: React.Dispatch<React.SetStateAction<string>>;
   status: string;
+  player_id: string;
   actionsPflag?: boolean;
   paymentImageurl: string[];
 }
@@ -201,6 +202,16 @@ export interface IadduserToGameReqBody {
   gameid: string;
   players: ISearchUserModifiedObj[];
 }
+
+export interface IRegisterFormProps {
+  position: string;
+  setposition: React.Dispatch<React.SetStateAction<string>>;
+  file: File | undefined;
+  getFileFromInput: (fileObj: File) => void;
+  registerSlotLoader: boolean;
+  onsubmitfn: () => Promise<void>;
+}
+
 export const colorListforStatus = {
   Approved: "text-green-700",
   Rejected: "text-red-700",

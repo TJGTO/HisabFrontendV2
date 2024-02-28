@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { viewDialogProps } from "../domain";
 import Dialog from "@mui/material/Dialog";
+import RegisterFormField from "./registerForm";
 import Errormessage from "../../Common/FormComponents/errormessage";
 import FileUploadSection from "../../Common/FormComponents/fileUploadSection";
-import { RootState } from "../../../lib/store";
-import { useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../../lib/store";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchGameDetails } from "../../../lib/slices/gamemodule";
+import { uploadPaymentSnapAfterAddedByAdmin } from "../service";
 import CircularProgress from "@mui/material/CircularProgress";
 import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
@@ -18,15 +21,23 @@ function ViewDialog({
   setConfirmDialogTitle,
   setactionType,
   status,
+  player_id,
   paymentImageurl,
   actionsPflag,
 }: viewDialogProps) {
+  const dispatch = useDispatch<AppDispatch>();
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
   );
   const [file, setfile] = useState<File>();
+  const [loader, setloader] = useState<boolean>(false);
   const [position, setposition] = useState<string>("");
-  const [positionError, setpositionError] = useState<boolean>(false);
+  useEffect(() => {
+    if (!open) {
+      setfile(undefined);
+      setposition("");
+    }
+  }, [open]);
   const handleClose = () => {
     onClose();
   };
@@ -42,6 +53,39 @@ function ViewDialog({
   };
   const getFileFromInput = (fileObj: File) => {
     setfile(fileObj);
+  };
+  const onSubmitOfForm = async () => {
+    try {
+      const formData = new FormData();
+      let blobdata = file as Blob;
+      formData.append(`file`, blobdata);
+      formData.append("position", position);
+      formData.append("gameid", gameid);
+      formData.append("player_id", player_id);
+      setloader(true);
+      let success: boolean = false;
+      let response = await uploadPaymentSnapAfterAddedByAdmin(formData);
+      setloader(false);
+      if (response.success) {
+        success = true;
+        dispatch(fetchGameDetails(gameid));
+      }
+      Swal.fire({
+        icon: !success ? "error" : "success",
+        title: response.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error: any) {
+      setloader(false);
+      Swal.fire({
+        icon: "error",
+        title: error.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+    handleClose();
   };
   return (
     <Dialog onClose={handleClose} open={open} maxWidth={"md"}>
@@ -68,53 +112,17 @@ function ViewDialog({
                   />
                 </div>
               )}
-
-              {/* <div className="space-y-4 md:space-y-6">
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Position
-                  </label>
-                  <div className="flex w-full">
-                    <select
-                      id="position"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      onChange={(e) => {
-                        setposition(e.target.value);
-                        if (!e.target.value) {
-                          setpositionError(true);
-                        }
-                      }}
-                    >
-                      <option value="">{"Please Select"}</option>
-                      <option value="Defence">{"Defence"}</option>
-                      <option value="Midfield">{"Midfield"}</option>
-                      <option value="Attack">{"Attack"}</option>
-                      <option value="Keeper">{"Keeper"}</option>
-                    </select>
-                  </div>
-                  {positionError && (
-                    <Errormessage message={"Please select a position"} />
-                  )}
-                </div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Upload Payment Screenshot
-                </label>
-                <FileUploadSection
-                  fileObject={file}
-                  setFunction={getFileFromInput}
+              {!paymentImageurl[0] && (
+                <RegisterFormField
+                  position={position}
+                  setposition={setposition}
+                  file={file}
+                  getFileFromInput={getFileFromInput}
+                  registerSlotLoader={loader}
+                  onsubmitfn={onSubmitOfForm}
                 />
+              )}
 
-                <button
-                  type="submit"
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
-                  disabled={!file}
-                  className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Upload
-                </button>
-              </div> */}
               {paymentImageurl[0] && status == "Paid" && actionsPflag && (
                 <div className="flex gap-3">
                   <button

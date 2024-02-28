@@ -150,7 +150,34 @@ async function registerIngame(data: FormData) {
     }
   }
 }
+async function uploadPaymentSnapAfterAddedByAdmin(data: FormData) {
+  try {
+    let response: any = await AxiosWithAuthFromData.post(
+      "game/updatepaymentsforAddedPlayers",
+      data
+    );
 
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: "Upload is Successful",
+        userdata: response.data.data,
+      };
+    }
+    return {
+      success: false,
+      message: `${
+        response.data.message ? response.data.message : "Failed to upload"
+      }`,
+    };
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to upload");
+    }
+  }
+}
 async function updateGame(data: updateGameReqBody) {
   let response: any = await AxiosWithAuth.post("game/updateGame", data);
 
@@ -254,4 +281,5 @@ export {
   getVenueList,
   getMatchPermissions,
   addPlayersInGame,
+  uploadPaymentSnapAfterAddedByAdmin,
 };

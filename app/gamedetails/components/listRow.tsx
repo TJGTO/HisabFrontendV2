@@ -213,6 +213,7 @@ function ListRow({
         onClose={closeViewDialog}
         gameid={gameId}
         status={status}
+        player_id={player_id}
         setactionType={setactionType}
         paymentImageurl={paymentImageurl}
         actionsPflag={permissionMatrix.approveOrReject}
