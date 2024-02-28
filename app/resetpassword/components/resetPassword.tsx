@@ -1,73 +1,65 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import useAuth from "@/app/Common/customHooks/useAuth";
 import Swal from "sweetalert2";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import useAuth from "@/app/Common/customHooks/useAuth";
+import Errormessage from "../../Common/FormComponents/errormessage";
 import WFGLogo from "../../Common/logo";
 import { redirect } from "next/navigation";
-import { useSelector, useDispatch } from "react-redux";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Errormessage from "../../Common/FormComponents/errormessage";
-import { loginSchema } from "../domain";
+import { useRouter } from "next/navigation";
+import { resetPasswordSchema, IChangePasswordrequestBody } from "../domain";
+import { useForm } from "react-hook-form";
+import { changePassword } from "../service";
 import CircularProgress from "@mui/material/CircularProgress";
-import { loginOfUser } from "../../../lib/slices/authorization";
-import { RootState, AppDispatch } from "../../../lib/store";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-function LoginForm() {
+function ResetPassword() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(resetPasswordSchema),
   });
   const router = useRouter();
-  const [submitted, setsubmitted] = useState<boolean>(false);
   const [isLoggedIn, token] = useAuth();
-
   useEffect(() => {
     if (isLoggedIn) {
       redirect("/dashboard");
     }
   }, [isLoggedIn]);
 
-  const loginLoader = useSelector(
-    (state: RootState) => state.authorization.loginLoader
-  );
-  const userDetail = useSelector(
-    (state: RootState) => state.authorization.userDetail
-  );
-  const loginMessage = useSelector(
-    (state: RootState) => state.authorization.loginMessage
-  );
-  const dispatch = useDispatch<AppDispatch>();
-  useEffect(() => {
-    if (submitted && !loginLoader && userDetail) {
+  const [loader, setloader] = useState<boolean>(false);
+  const onSubmit = async (data: any) => {
+    let obj: IChangePasswordrequestBody = {
+      email: data.email,
+      oldpassword: data.oldpassword,
+      password: data.password,
+    };
+    try {
+      setloader(true);
+      let success: boolean = false;
+      let response = await changePassword(obj);
+      setloader(false);
+      if (response.success) {
+        success = true;
+        router.push("/login");
+      }
       Swal.fire({
-        icon: "success",
-        title: loginMessage,
+        icon: !success ? "error" : "success",
+        title: response.message,
         showConfirmButton: false,
         timer: 1500,
       });
-      setsubmitted(false);
-      router.push("/dashboard");
-    }
-    if (submitted && !loginLoader && !userDetail) {
+    } catch (error: any) {
+      setloader(false);
       Swal.fire({
         icon: "error",
-        title: loginMessage,
+        title: error.message,
         showConfirmButton: false,
         timer: 1500,
       });
-      setsubmitted(false);
     }
-  }, [loginLoader, userDetail]);
-  const onSubmit = (data: any) => {
-    setsubmitted(true);
-    dispatch(loginOfUser(data));
+    console.log(obj);
   };
   return (
     <div>
@@ -77,7 +69,7 @@ function LoginForm() {
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <div className="flex gap-3 justify-between">
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                  Login
+                  Reset Password
                 </h1>
                 <WFGLogo />
               </div>
@@ -95,11 +87,24 @@ function LoginForm() {
                     id="email"
                     autoComplete="nope"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@company.com"
                     {...register("email")}
                   />
                   {errors && errors.email && (
                     <Errormessage message={errors.email.message} />
+                  )}
+                </div>
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Old Password
+                  </label>
+                  <input
+                    id="oldpassword"
+                    autoComplete="nope"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    {...register("oldpassword")}
+                  />
+                  {errors && errors.oldpassword && (
+                    <Errormessage message={errors.oldpassword.message} />
                   )}
                 </div>
 
@@ -118,7 +123,22 @@ function LoginForm() {
                     <Errormessage message={errors.password.message} />
                   )}
                 </div>
-                {loginLoader ? (
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Confirm Password
+                  </label>
+                  <input
+                    type="cpassword"
+                    id="cpassword"
+                    placeholder="••••••••"
+                    {...register("cpassword")}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  />
+                  {errors && errors.cpassword && (
+                    <Errormessage message={errors.cpassword.message} />
+                  )}
+                </div>
+                {loader ? (
                   <button
                     type="submit"
                     disabled={true}
@@ -132,7 +152,7 @@ function LoginForm() {
                     disabled={false}
                     className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Login
+                    Submit
                   </button>
                 )}
 
@@ -146,16 +166,6 @@ function LoginForm() {
                     Register here
                   </Link>
                 </p>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Change Password?{" "}
-                  <Link
-                    href="/resetpassword"
-                    className="font-medium text-blue-700 hover:underline"
-                  >
-                    {" "}
-                    Click here
-                  </Link>
-                </p>
               </form>
             </div>
           </div>
@@ -165,4 +175,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default ResetPassword;
