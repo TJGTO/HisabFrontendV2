@@ -1,11 +1,6 @@
 import { registerDialogProps } from "../domain";
-import { updateProfilePic } from "../../../lib/slices/profileSection";
 import { useState, useEffect } from "react";
-import Errormessage from "../../Common/FormComponents/errormessage";
-import FileUploadSection from "../../Common/FormComponents/fileUploadSection";
 import CloseIcon from "@mui/icons-material/Close";
-import Swal from "sweetalert2";
-import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
