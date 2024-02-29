@@ -14,7 +14,11 @@ import Errormessage from "../../Common/FormComponents/errormessage";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { createNewsReqBody, ICreateEditArticleProps } from "../domain";
+import {
+  createNewsReqBody,
+  ICreateEditArticleProps,
+  maxtitleLength,
+} from "../domain";
 
 const CreateNewsAPP: React.FC<ICreateEditArticleProps> = ({ newsId, mode }) => {
   const router = useRouter();
@@ -103,23 +107,29 @@ const CreateNewsAPP: React.FC<ICreateEditArticleProps> = ({ newsId, mode }) => {
             onSubmitForm();
           }}
         >
-          <div className="mb-2">
+          <div className="mb-2 flex flex-col">
             <label className="block mb-2 text-md font-medium text-gray-900 dark:text-white">
               Title
             </label>
             <input
               type="text"
-              id="first_name"
+              id="title"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="John"
+              placeholder="Enter title"
               value={title}
-              required
               onChange={(e) => {
                 e.preventDefault();
+                if (e.target.value.length >= maxtitleLength) {
+                  settitle(e.target.value.slice(0, maxtitleLength));
+                  return;
+                }
                 settitle(e.target.value);
               }}
+              required
             />
-            {titleError && <Errormessage message={"Please enter a title"} />}
+            <div className="text-red-500 text-sm self-end">
+              {title.length}/{maxtitleLength} characters
+            </div>
           </div>
           <div className="mb-4">
             <label className="block mb-2 text-md font-medium text-gray-900 dark:text-white">
