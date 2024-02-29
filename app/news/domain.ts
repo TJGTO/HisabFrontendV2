@@ -1,5 +1,7 @@
 import { ICreator } from "../gamedetails/domain";
 import { CompleteCommentObj } from "../Common/CommentSection/domain";
+
+export const maxtitleLength: number = 70;
 export interface NewCardObject {
   _id: string;
   title: string;

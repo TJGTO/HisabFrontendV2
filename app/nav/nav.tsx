@@ -33,6 +33,9 @@ export default function NavBar() {
                 Beta
               </span>
             </div>
+            <div className="mt-2 ml-2 text-lg text-zinc-600 font-medium hidden lg:block">
+              Weekend Football Group
+            </div>
           </div>
 
           {/* <div

@@ -1,5 +1,6 @@
 import { NewsCardProps } from "../domain";
 import Avatar from "@mui/material/Avatar";
+import { maxtitleLength } from "../../news/domain";
 import { stringToColor, createSortFromForAvator } from "../../Common/functions";
 function NewsCard({
   _id,
@@ -10,6 +11,10 @@ function NewsCard({
   gotoPage,
   profilePictureURL,
 }: NewsCardProps) {
+  const truncatedTitle =
+    title.length > maxtitleLength
+      ? `${title.slice(0, maxtitleLength)}...`
+      : title;
   return (
     <div className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
       <article className="overflow-hidden rounded-lg shadow-lg">
@@ -23,9 +28,11 @@ function NewsCard({
           />
         </a>
 
-        <header className="flex items-center justify-between dark:bg-slate-800 bg-white leading-tight p-2 md:pt-2">
-          <h1 className="text-sm">
-            <p className="no-underline text-black dark:text-white">{title}</p>
+        <header className="flex items-center justify-between dark:bg-slate-800 bg-white leading-tight p-2 md:pt-2 h-14 overflow-hidden">
+          <h1 className="text-md">
+            <p className="no-underline text-black dark:text-white">
+              {truncatedTitle}
+            </p>
           </h1>
         </header>
 
