@@ -83,10 +83,19 @@ function Playerist({ gameid }: { gameid: string }) {
         { id: 3, label: "Age" },
         { id: 4, label: "Status" },
         { id: 5, label: "Food" },
-        { id: 5, label: "Type" },
-        { id: 6, label: "Actions" },
+        { id: 6, label: "Type" },
+        { id: 7, label: "Actions" },
       ];
       setTableHeaderArr(ObjArr);
+    } else {
+      setTableHeaderArr([
+        { id: 1, label: "Player" },
+        { id: 2, label: "Position" },
+        { id: 3, label: "Age" },
+        { id: 4, label: "Status" },
+        { id: 5, label: "Team" },
+        { id: 6, label: "Actions" },
+      ]);
     }
   };
   useEffect(() => {
@@ -247,25 +256,26 @@ function Playerist({ gameid }: { gameid: string }) {
                 Register
               </Button>
             )}
-            {gameDetails?.status == "Active" && (
-              <Button
-                className="flex items-center gap-3"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setopenTeamDialog(true);
-                }}
-              >
-                {permissionMatrix.editTeam ? (
-                  <>
-                    <AddIcon className="h-4 w-4" /> Create Team
-                  </>
-                ) : (
-                  <>
-                    <RemoveRedEyeIcon className="h-4 w-4" /> View Team
-                  </>
-                )}
-              </Button>
-            )}
+            {gameDetails?.status == "Active" &&
+              gameDetails?.matchType != "Tournament" && (
+                <Button
+                  className="flex items-center gap-3"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setopenTeamDialog(true);
+                  }}
+                >
+                  {permissionMatrix.editTeam ? (
+                    <>
+                      <AddIcon className="h-4 w-4" /> Create Team
+                    </>
+                  ) : (
+                    <>
+                      <RemoveRedEyeIcon className="h-4 w-4" /> View Team
+                    </>
+                  )}
+                </Button>
+              )}
           </div>
         </div>
         <div className="flex items-center gap-4">
