@@ -304,6 +304,7 @@ function Playerist({ gameid }: { gameid: string }) {
         open={openRegisterDialog}
         onClose={closeRsgisterDialog}
         gameid={gameid}
+        matchType={gameDetails?.matchType}
       />
       <MessageBox action={dialogsafterSuccess} />
       {gameDetailsLoader && <PageLoader />}

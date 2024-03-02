@@ -36,7 +36,9 @@ export interface teamConfigObj {
 }
 export interface addPlayersDialogProps extends settingDialogProps {}
 
-export interface registerDialogProps extends settingDialogProps {}
+export interface registerDialogProps extends settingDialogProps {
+  matchType?: string;
+}
 
 export interface viewDialogProps extends settingDialogProps {
   setConfirmDialogState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -78,6 +80,7 @@ export interface activeGamesObj {
   venueDetails: VenueDetailsforCard;
   number_of_teams?: number;
   status: string;
+  matchType?: string;
   creator?: ICreator;
 }
 
@@ -133,6 +136,7 @@ export interface createGameReqBody {
   end_time: string;
   number_of_players: number;
   price: number;
+  matchType: string;
 }
 
 export interface updateGameReqBody {
@@ -157,6 +161,7 @@ export const createMatchSchema = yup.object({
   date: yup.date().required("Date is required").typeError("Date is required"),
   start_time: yup.string().required("Start time is required"),
   end_time: yup.string().required("End time is required"),
+  matchType: yup.string().required("Match Type id required"),
   number_of_players: yup
     .number()
     .required("No of players are required")
@@ -182,7 +187,11 @@ export const settingsDialogSchema = yup.object({
     .required("Please enter a valid price")
     .typeError("Pricing is required"),
 });
-
+export const tournamentFormSchema = yup.object({
+  postion: yup.string().trim().required("postion is required"),
+  foodtype: yup.string().required("foodtype is required"),
+  player_type: yup.string().required("player type is required"),
+});
 export type PlayerObjinGameList = {
   profilepictureurl: string;
   name: string;
@@ -217,7 +226,12 @@ export interface IRegisterFormProps {
   registerSlotLoader: boolean;
   onsubmitfn: () => Promise<void>;
 }
-
+export interface IRegisterTournamentProps {
+  file: File | undefined;
+  getFileFromInput: (fileObj: File) => void;
+  registerSlotLoader: boolean;
+  onsubmitfn: () => Promise<void>;
+}
 export const colorListforStatus = {
   Approved: "text-green-700",
   Rejected: "text-red-700",

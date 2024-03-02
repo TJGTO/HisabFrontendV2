@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchGameDetails } from "../../../lib/slices/gamemodule";
 import { uploadPaymentSnapAfterAddedByAdmin } from "../service";
 import CloseIcon from "@mui/icons-material/Close";
+import TournamentForm from "./tournamentFrom";
 import Swal from "sweetalert2";
 
 function ViewDialog({
@@ -109,7 +110,7 @@ function ViewDialog({
                   />
                 </div>
               )}
-              {!paymentImageurl[0] && (
+              {!paymentImageurl[0] && gameDetails?.matchType != "Tournament" ? (
                 <RegisterFormField
                   position={position}
                   setposition={setposition}
@@ -117,6 +118,13 @@ function ViewDialog({
                   getFileFromInput={getFileFromInput}
                   registerSlotLoader={loader}
                   onsubmitfn={onSubmitOfForm}
+                />
+              ) : (
+                <TournamentForm
+                  file={file}
+                  getFileFromInput={getFileFromInput}
+                  onsubmitfn={onSubmitOfForm}
+                  registerSlotLoader={loader}
                 />
               )}
 

@@ -218,6 +218,25 @@ function CreateMatchDialog(props: SimpleDialogProps) {
                   )}
                 </div>
               </div>
+              <div className="flex flex-col md:flex-row gap-3">
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Match Type
+                  </label>
+                  <select
+                    id="matchType"
+                    {...register("matchType")}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-48 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option value="">{"Please Select"}</option>
+                    <option value="Match">{"Match"}</option>
+                    <option value="Tournament">{"Tournament"}</option>
+                  </select>
+                  {errors && errors.matchType && (
+                    <Errormessage message={errors.matchType.message} />
+                  )}
+                </div>
+              </div>
               {gameLoader ? (
                 <button
                   type="submit"
