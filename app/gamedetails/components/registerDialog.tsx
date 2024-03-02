@@ -72,7 +72,7 @@ function RegisterInGameDialog({
               <div className="w-50">
                 <p className="text-sm leading-tight tracking-tight text-gray-900 dark:text-white underline">
                   we require your picture, date of birth, and address. If you
-                  haven't provided this information yet, please visit your
+                  haven&rsquo;t provided this information yet, please visit your
                   profile and complete these fields first. While filling in your
                   Instagram or Facebook ID is optional, doing so allows us to
                   tag you on social media.
