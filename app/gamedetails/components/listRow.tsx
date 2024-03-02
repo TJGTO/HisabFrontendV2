@@ -34,6 +34,9 @@ function ListRow({
   player_id,
   status,
   team,
+  player_type,
+  foodtype,
+  matchType,
 }: PlayerObjinGameList) {
   const dispatch = useDispatch<AppDispatch>();
   const [isLoggedIn, token] = useAuth();
@@ -138,11 +141,27 @@ function ListRow({
           </div>
         </div>
       </td>
-      <td className={classes}>
-        <Typography color="blue-gray" className="font-normal dark:text-white">
-          {team || ""}
-        </Typography>
-      </td>
+      {matchType && matchType == "Tournament" && (
+        <td className={classes}>
+          <Typography color="blue-gray" className="font-normal dark:text-white">
+            {foodtype || ""}
+          </Typography>
+        </td>
+      )}
+      {matchType && matchType == "Tournament" && (
+        <td className={classes}>
+          <Typography color="blue-gray" className="font-normal dark:text-white">
+            {player_type || ""}
+          </Typography>
+        </td>
+      )}
+      {matchType && matchType != "Tournament" && (
+        <td className={classes}>
+          <Typography color="blue-gray" className="font-normal dark:text-white">
+            {team || ""}
+          </Typography>
+        </td>
+      )}
       <td className={classes}>
         {isLoggedIn &&
           (permissionMatrix.editSetting ||
