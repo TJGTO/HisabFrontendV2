@@ -52,17 +52,11 @@ function ViewDialog({
   const getFileFromInput = (fileObj: File) => {
     setfile(fileObj);
   };
-  const onSubmitOfForm = async () => {
+  const sendRequest = async (data: FormData) => {
     try {
-      const formData = new FormData();
-      let blobdata = file as Blob;
-      formData.append(`file`, blobdata);
-      formData.append("position", position);
-      formData.append("gameid", gameid);
-      formData.append("player_id", player_id);
       setloader(true);
       let success: boolean = false;
-      let response = await uploadPaymentSnapAfterAddedByAdmin(formData);
+      let response = await uploadPaymentSnapAfterAddedByAdmin(data);
       setloader(false);
       if (response.success) {
         success = true;
@@ -84,6 +78,27 @@ function ViewDialog({
       });
     }
     handleClose();
+  };
+  const onSubmitOfForm = async () => {
+    const formData = new FormData();
+    let blobdata = file as Blob;
+    formData.append(`file`, blobdata);
+    formData.append("position", position);
+    formData.append("gameid", gameid);
+    formData.append("player_id", player_id);
+    sendRequest(formData);
+  };
+  const updateTournamentRegistration = async (data: any) => {
+    const formData = new FormData();
+    let blobdata = file as Blob;
+    formData.append(`file`, blobdata);
+    formData.append("position", data.position);
+    formData.append("foodtype", data.foodtype);
+    formData.append("player_type", data.player_type);
+    formData.append("gameid", gameid);
+    formData.append("matchType", "Tournament");
+    formData.append("player_id", player_id);
+    sendRequest(formData);
   };
   return (
     <Dialog onClose={handleClose} open={open} maxWidth={"md"}>
@@ -110,22 +125,26 @@ function ViewDialog({
                   />
                 </div>
               )}
-              {!paymentImageurl[0] && gameDetails?.matchType != "Tournament" ? (
-                <RegisterFormField
-                  position={position}
-                  setposition={setposition}
-                  file={file}
-                  getFileFromInput={getFileFromInput}
-                  registerSlotLoader={loader}
-                  onsubmitfn={onSubmitOfForm}
-                />
-              ) : (
-                <TournamentForm
-                  file={file}
-                  getFileFromInput={getFileFromInput}
-                  onsubmitfn={onSubmitOfForm}
-                  registerSlotLoader={loader}
-                />
+              {!paymentImageurl[0] && (
+                <>
+                  {gameDetails?.matchType != "Tournament" ? (
+                    <RegisterFormField
+                      position={position}
+                      setposition={setposition}
+                      file={file}
+                      getFileFromInput={getFileFromInput}
+                      registerSlotLoader={loader}
+                      onsubmitfn={onSubmitOfForm}
+                    />
+                  ) : (
+                    <TournamentForm
+                      file={file}
+                      getFileFromInput={getFileFromInput}
+                      onsubmitfn={updateTournamentRegistration}
+                      registerSlotLoader={loader}
+                    />
+                  )}
+                </>
               )}
 
               {paymentImageurl[0] && status == "Paid" && actionsPflag && (

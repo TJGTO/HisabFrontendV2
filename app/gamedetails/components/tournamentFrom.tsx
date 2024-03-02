@@ -23,6 +23,7 @@ function TournamentForm({
 
   const onSubmitofForm = (data: any) => {
     console.log("data", data);
+    onsubmitfn(data);
   };
   return (
     <form
@@ -37,7 +38,7 @@ function TournamentForm({
         <div className="flex w-full">
           <select
             id="position"
-            {...register("postion")}
+            {...register("position")}
             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option value="">{"Please Select"}</option>
@@ -47,8 +48,8 @@ function TournamentForm({
             <option value="Keeper">{"Keeper"}</option>
           </select>
         </div>
-        {errors && errors.postion && (
-          <Errormessage message={errors.postion.message} />
+        {errors && errors.position && (
+          <Errormessage message={errors.position.message} />
         )}
       </div>
       <div>
@@ -82,8 +83,8 @@ function TournamentForm({
             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option value="">{"Please Select"}</option>
-            <option value="Defence">{"Player"}</option>
-            <option value="Midfield">{"Owner"}</option>
+            <option value="Player">{"Player"}</option>
+            <option value="Owner">{"Owner"}</option>
           </select>
         </div>
         {errors && errors.player_type && (
@@ -97,7 +98,7 @@ function TournamentForm({
 
       <button
         type="submit"
-        // disabled={!file}
+        disabled={!file}
         className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {registerSlotLoader ? (

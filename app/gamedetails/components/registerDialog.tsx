@@ -34,6 +34,17 @@ function RegisterInGameDialog({
     formData.append("gameid", gameid);
     dispatch(registerSlot(formData));
   };
+  const updateTournamentRegistration = async (data: any) => {
+    const formData = new FormData();
+    let blobdata = file as Blob;
+    formData.append(`file`, blobdata);
+    formData.append("position", data.position);
+    formData.append("foodtype", data.foodtype);
+    formData.append("player_type", data.player_type);
+    formData.append("gameid", gameid);
+    formData.append("matchType", "Tournament");
+    dispatch(registerSlot(formData));
+  };
   const getFileFromInput = (fileObj: File) => {
     setfile(fileObj);
   };
@@ -80,7 +91,7 @@ function RegisterInGameDialog({
               <TournamentForm
                 file={file}
                 getFileFromInput={getFileFromInput}
-                onsubmitfn={updateProfilePicture}
+                onsubmitfn={updateTournamentRegistration}
                 registerSlotLoader={registerSlotLoader}
               />
             )}

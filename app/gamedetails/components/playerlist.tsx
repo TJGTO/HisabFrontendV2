@@ -28,15 +28,10 @@ import CreateTeamDialog from "./createTeamDialog";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { Card, CardHeader, Input, Typography, Button } from "@mui/material";
 
-const TableheaderArr = [
-  { id: 1, label: "Player" },
-  { id: 2, label: "Position" },
-  { id: 3, label: "Age" },
-  { id: 4, label: "Status" },
-  { id: 5, label: "Team" },
-  { id: 6, label: "Actions" },
-];
-
+interface TableHeaderObj {
+  id: number;
+  label: string;
+}
 function Playerist({ gameid }: { gameid: string }) {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
@@ -46,6 +41,9 @@ function Playerist({ gameid }: { gameid: string }) {
   const [openPaymentDetails, setopenPaymentDetails] = useState<boolean>(false);
   const [openTeamDialog, setopenTeamDialog] = useState<boolean>(false);
   const [openAddPDialog, setopenAddPDialog] = useState<boolean>(false);
+  const [TableHeaderArr, setTableHeaderArr] = useState<Array<TableHeaderObj>>(
+    []
+  );
   const [isLoggedIn, token] = useAuth();
 
   const gameDetails = useSelector(
@@ -77,6 +75,20 @@ function Playerist({ gameid }: { gameid: string }) {
     closeSettingDialog();
     closeTeamDialog();
   };
+  const setTableHeaderColumns = () => {
+    if (gameDetails && gameDetails.matchType == "Tournament") {
+      let ObjArr = [
+        { id: 1, label: "Player" },
+        { id: 2, label: "Position" },
+        { id: 3, label: "Age" },
+        { id: 4, label: "Status" },
+        { id: 5, label: "Food" },
+        { id: 5, label: "Type" },
+        { id: 6, label: "Actions" },
+      ];
+      setTableHeaderArr(ObjArr);
+    }
+  };
   useEffect(() => {
     if (gameid) {
       dispatch(fetchGameDetails(gameid));
@@ -92,6 +104,7 @@ function Playerist({ gameid }: { gameid: string }) {
   useEffect(() => {
     if (gameDetails) {
       createTableRows();
+      setTableHeaderColumns();
     }
   }, [gameDetails]);
 
@@ -136,6 +149,8 @@ function Playerist({ gameid }: { gameid: string }) {
           player_id,
           status,
           team,
+          player_type,
+          foodtype,
         },
         index
       ) => {
@@ -154,6 +169,9 @@ function Playerist({ gameid }: { gameid: string }) {
             player_id={player_id}
             status={status}
             team={team}
+            player_type={player_type}
+            foodtype={foodtype}
+            matchType={gameDetails.matchType || ""}
           />
         );
         arr.push(row);
@@ -292,7 +310,7 @@ function Playerist({ gameid }: { gameid: string }) {
       </div>
       <div className="overflow-x-scroll px-0 ml-2 mr-2 mt-2">
         {tablerows.length > 0 && (
-          <CustomTable tablehead={TableheaderArr} tablerows={tablerows} />
+          <CustomTable tablehead={TableHeaderArr} tablerows={tablerows} />
         )}
       </div>
       <SettingDialog

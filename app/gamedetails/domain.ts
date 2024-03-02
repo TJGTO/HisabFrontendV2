@@ -103,6 +103,8 @@ export interface Iplayers {
   position: Position;
   status: Status;
   team?: string;
+  player_type?: string;
+  foodtype?: string;
 }
 
 export interface IgameDetailsObj extends activeGamesObj {
@@ -188,7 +190,7 @@ export const settingsDialogSchema = yup.object({
     .typeError("Pricing is required"),
 });
 export const tournamentFormSchema = yup.object({
-  postion: yup.string().trim().required("postion is required"),
+  position: yup.string().trim().required("postion is required"),
   foodtype: yup.string().required("foodtype is required"),
   player_type: yup.string().required("player type is required"),
 });
@@ -204,6 +206,9 @@ export type PlayerObjinGameList = {
   player_id: string;
   status: Status;
   team?: string;
+  player_type?: string;
+  foodtype?: string;
+  matchType?: string;
 };
 export type IUpdateTeamReqObj = {
   gameId: string;
@@ -230,7 +235,7 @@ export interface IRegisterTournamentProps {
   file: File | undefined;
   getFileFromInput: (fileObj: File) => void;
   registerSlotLoader: boolean;
-  onsubmitfn: () => Promise<void>;
+  onsubmitfn: (data: any) => Promise<void>;
 }
 export const colorListforStatus = {
   Approved: "text-green-700",
