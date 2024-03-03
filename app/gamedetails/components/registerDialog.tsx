@@ -68,7 +68,7 @@ function RegisterInGameDialog({
                 style={{ color: "red", cursor: "pointer" }}
               />
             </div>
-            {matchType && matchType != "Tournament" && (
+            {matchType && matchType == "Tournament" && (
               <div className="w-50">
                 <p className="text-sm leading-tight tracking-tight text-gray-900 dark:text-white underline">
                   we require your picture, date of birth, and address. If you
