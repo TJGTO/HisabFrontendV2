@@ -70,7 +70,7 @@ export const updateTheUser = createAsyncThunk(
   async (data: updateProfileObj, { getState, dispatch }) => {
     try {
       const response = await updateUser(data);
-      dispatch(fetchUserDetails());
+      dispatch(fetchUserDetails(""));
       return response;
     } catch (err) {
       console.log(err);
@@ -93,7 +93,7 @@ export const updateProfilePic = createAsyncThunk(
   async (data: FormData, { getState, dispatch }) => {
     try {
       const response = await updateProfilePicture(data);
-      dispatch(fetchUserDetails());
+      dispatch(fetchUserDetails(""));
       return response;
     } catch (err) {
       throw err;
