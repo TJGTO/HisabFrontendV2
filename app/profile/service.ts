@@ -65,11 +65,20 @@ async function getStates() {
     }`,
   };
 }
-async function getUserDetails() {
-  let response: any = await AxiosWithAuth.get("user/userdetails");
+async function getUserDetails(userid?: string) {
+  let url = "";
+  if (userid) {
+    url = `user/userdetails/${userid}`;
+  } else {
+    url = "user/userdetails";
+  }
+  let response: any = await AxiosWithAuth.get(url);
 
   if (response.data && response.data.success) {
-    if (response.data.data.profilePictureURL) {
+    if (
+      response.data.data.cansaveProfilePicture &&
+      response.data.data.profilePictureURL
+    ) {
       localStorage.setItem("profileURL", response.data.data.profilePictureURL);
     }
     return {
@@ -111,10 +120,41 @@ async function searchForPlayers(data: ISearchUserReqBody) {
     }
   }
 }
+
+async function getProfilePermission(userid: string) {
+  try {
+    let response: any = await AxiosWithAuth.get(
+      `user/profilepermission/${userid}`
+    );
+
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        permissiondata: response.data.data,
+        message: "Permissions are fetched successfully",
+      };
+    }
+    return {
+      success: false,
+      message: `${
+        response.data.message
+          ? response.data.message
+          : "Failed to fetch the permission"
+      }`,
+    };
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to search users");
+    }
+  }
+}
 export {
   updateUser,
   getStates,
   getUserDetails,
   updateProfilePicture,
+  getProfilePermission,
   searchForPlayers,
 };

@@ -5,6 +5,7 @@ import Menu from "@mui/material/Menu";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import React from "react";
+import Link from "next/link";
 import useAuth from "../../Common/customHooks/useAuth";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ConfirmDialog from "../../Common/ConfirmDialog/confirmDialog";
@@ -76,29 +77,31 @@ function ListRow({
   return (
     <tr>
       <td className={`${classes}`}>
-        <div className="flex items-center gap-3">
-          <Avatar
-            src={
-              "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
-              profilepictureurl
-            }
-            alt={name}
-          />
-          <div className="flex flex-col">
-            <Typography
-              color="blue-gray"
-              className="font-normal dark:text-white"
-            >
-              {name}
-            </Typography>
-            <Typography
-              color="blue-gray"
-              className="font-normal opacity-70 dark:text-white"
-            >
-              {phoneNumber}
-            </Typography>
+        <Link href={`/profile/${player_id}`} target="_blank">
+          <div className="flex items-center gap-3 cursor-pointer">
+            <Avatar
+              src={
+                "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
+                profilepictureurl
+              }
+              alt={name}
+            />
+            <div className="flex flex-col cursor-pointer hover:underline">
+              <Typography
+                color="blue-gray"
+                className="font-normal dark:text-white"
+              >
+                {name}
+              </Typography>
+              <Typography
+                color="blue-gray"
+                className="font-normal opacity-70 dark:text-white"
+              >
+                {phoneNumber}
+              </Typography>
+            </div>
           </div>
-        </div>
+        </Link>
       </td>
       <td className={classes}>
         <div className="flex flex-col">

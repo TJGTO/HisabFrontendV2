@@ -53,6 +53,9 @@ export interface ProfileSectionState {
   fetchDetailsLoader: boolean;
   states: Array<stateObj> | null;
   userProfile: updateProfileObj;
+  permissionMatrix: {
+    editProfile: boolean;
+  };
 }
 
 export interface ISearchUserReqBody {

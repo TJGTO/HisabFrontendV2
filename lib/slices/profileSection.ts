@@ -9,6 +9,7 @@ import {
   getStates,
   getUserDetails,
   searchForPlayers,
+  getProfilePermission,
   updateProfilePicture,
 } from "../../app/profile/service";
 
@@ -44,13 +45,16 @@ const initialState: ProfileSectionState = {
       },
     },
   },
+  permissionMatrix: {
+    editProfile: false,
+  },
 };
 
 export const fetchUserDetails = createAsyncThunk(
   "profileSection/fetchUserDetails",
-  async () => {
+  async (userid?: string) => {
     try {
-      const response = await getUserDetails();
+      const response = await getUserDetails(userid);
       return response;
     } catch (err) {
       console.log(err);
@@ -99,7 +103,18 @@ export const fetchAllStates = createAsyncThunk(
       const response = await getStates();
       return response;
     } catch (err) {
-      console.log(err);
+      throw err;
+    }
+  }
+);
+export const fetchPermissionData = createAsyncThunk(
+  "profileSection/fetchPermissionData",
+  async (userid: string) => {
+    try {
+      const response = await getProfilePermission(userid);
+      return response;
+    } catch (err) {
+      throw err;
     }
   }
 );
@@ -181,6 +196,13 @@ const profileSectionSlice = createSlice({
     });
     builder.addCase(searchUsersProfiles.rejected, (state, action) => {
       state.searchLoader = false;
+    });
+    builder.addCase(fetchPermissionData.fulfilled, (state, action) => {
+      if (action.payload) {
+        if (action.payload.success) {
+          state.permissionMatrix = action.payload.permissiondata;
+        }
+      }
     });
   },
 });

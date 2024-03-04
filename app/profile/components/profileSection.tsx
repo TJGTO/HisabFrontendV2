@@ -27,13 +27,14 @@ import {
   fetchAllStates,
   fetchUserDetails,
   resetFlags,
+  fetchPermissionData,
 } from "../../../lib/slices/profileSection";
 import EditProfileDialog from "./editProfileDialog";
 import EditAddressDialog from "./editAddressDialog";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 
-function ProfileSection() {
+function ProfileSection({ userid }: { userid?: string }) {
   const [openSocialMediaDialog, setopenSocialMediaDialog] =
     useState<boolean>(false);
   const userProfile = useSelector(
@@ -42,16 +43,37 @@ function ProfileSection() {
   const fetchDetailsLoader = useSelector(
     (state: RootState) => state.profileSection.fetchDetailsLoader
   );
+  const permissionMatrix = useSelector(
+    (state: RootState) => state.profileSection.permissionMatrix
+  );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch<AppDispatch>();
   const [isLoggedIn, token, fullname] = useAuth();
+  const [showEditButton, setshowEditButton] = useState<boolean>(false);
   const [openAddressDialog, setopenAddressDialog] = useState<boolean>(false);
   const [openpictureDialog, setopenpictureDialog] = useState<boolean>(false);
 
   useEffect(() => {
+    if (!userid) {
+      setshowEditButton(true);
+      return;
+    } else if (permissionMatrix.editProfile) {
+      setshowEditButton(true);
+      return;
+    }
+    setshowEditButton(false);
+  }, [permissionMatrix]);
+
+  useEffect(() => {
     dispatch(fetchAllStates());
-    dispatch(fetchUserDetails());
+
+    if (userid) {
+      dispatch(fetchPermissionData(userid));
+      dispatch(fetchUserDetails(userid));
+    } else {
+      dispatch(fetchUserDetails());
+    }
     return () => {
       dispatch(resetFlags());
     };
@@ -98,7 +120,9 @@ function ProfileSection() {
             overlap="circular"
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             badgeContent={
-              <CameraAltIcon onClick={(e) => setopenpictureDialog(true)} />
+              showEditButton && (
+                <CameraAltIcon onClick={(e) => setopenpictureDialog(true)} />
+              )
             }
           >
             <Avatar
@@ -141,28 +165,32 @@ function ProfileSection() {
               </div>
             </Tooltip>
           )}
-          <Tooltip title="Edit Profile">
-            <div onClick={handleClickOnEdit}>
-              {" "}
-              <EditIcon className="cursor-pointer" />
-            </div>
-          </Tooltip>
-          <Menu
-            anchorEl={anchorEl}
-            id="account-menu"
-            open={open}
-            onClose={handleClose}
-            onClick={handleClose}
-            transformOrigin={{ horizontal: "right", vertical: "top" }}
-            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-          >
-            <MenuItem onClick={(e) => setopenAddressDialog(true)}>
-              Edit Addrerss & Name
-            </MenuItem>
-            <MenuItem onClick={(e) => setopenSocialMediaDialog(true)}>
-              Edit Social Media
-            </MenuItem>
-          </Menu>
+          {showEditButton && (
+            <>
+              <Tooltip title="Edit Profile">
+                <div onClick={handleClickOnEdit}>
+                  {" "}
+                  <EditIcon className="cursor-pointer" />
+                </div>
+              </Tooltip>
+              <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={open}
+                onClose={handleClose}
+                onClick={handleClose}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+              >
+                <MenuItem onClick={(e) => setopenAddressDialog(true)}>
+                  Edit Addrerss & Name
+                </MenuItem>
+                <MenuItem onClick={(e) => setopenSocialMediaDialog(true)}>
+                  Edit Social Media
+                </MenuItem>
+              </Menu>
+            </>
+          )}
         </div>
         {userProfile?.email && (
           <div className="flex justify-center gap-2 mt-4 w-60">
