@@ -72,7 +72,7 @@ function ProfileSection({ userid }: { userid?: string }) {
       dispatch(fetchPermissionData(userid));
       dispatch(fetchUserDetails(userid));
     } else {
-      dispatch(fetchUserDetails());
+      dispatch(fetchUserDetails(""));
     }
     return () => {
       dispatch(resetFlags());

@@ -54,7 +54,11 @@ export const fetchUserDetails = createAsyncThunk(
   "profileSection/fetchUserDetails",
   async (userid?: string) => {
     try {
-      const response = await getUserDetails(userid);
+      let data = "";
+      if (userid) {
+        data = userid;
+      }
+      const response = await getUserDetails(data);
       return response;
     } catch (err) {
       console.log(err);
