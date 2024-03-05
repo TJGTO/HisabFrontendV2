@@ -1,4 +1,8 @@
-import { createNewsReqBody, IPostCommentReqBody } from "./domain";
+import {
+  createNewsReqBody,
+  IPostCommentReqBody,
+  IupdateLikeDislikeCountReqBody,
+} from "./domain";
 import { AxiosWithAuth, Axios, AxiosWithAuthFromData } from "../../lib/axios";
 
 async function createNews(data: createNewsReqBody) {
@@ -180,11 +184,41 @@ async function getPermissionMatrix(newsId: string) {
     }
   }
 }
+
+async function updatelikedislikecount(data: IupdateLikeDislikeCountReqBody) {
+  try {
+    let response: any = await AxiosWithAuth.post(`article/likedislike`, data);
+
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: "Successfully Updated",
+        likeordislike: response.data.data,
+      };
+    } else {
+      return {
+        success: false,
+        message: `${
+          response.data.data.message
+            ? response.data.data.message
+            : "Failed to update"
+        }`,
+      };
+    }
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed to update");
+    }
+  }
+}
 export {
   createNews,
   getActiveNews,
   getNewsDetails,
   getComments,
   postComments,
+  updatelikedislikecount,
   getPermissionMatrix,
 };

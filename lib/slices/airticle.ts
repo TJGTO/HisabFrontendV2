@@ -87,6 +87,13 @@ const airticleModelSlice = createSlice({
       state.AirticleMessage = "";
       state.AirticleFlag = "";
     },
+    setlikeordislike: (state, action) => {
+      if (state.currentAirticleDetail) {
+        state.currentAirticleDetail.likesCount = action.payload.likesCount;
+        state.currentAirticleDetail.dislikesCount =
+          action.payload.dislikesCount;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(createTheNews.pending, (state) => {
@@ -138,6 +145,6 @@ const airticleModelSlice = createSlice({
     });
   },
 });
-export const { resetFlags } = airticleModelSlice.actions;
+export const { resetFlags, setlikeordislike } = airticleModelSlice.actions;
 
 export default airticleModelSlice.reducer;

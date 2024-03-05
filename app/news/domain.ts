@@ -21,6 +21,8 @@ export interface createNewsReqBody {
 export interface IArticlePermission {
   editArticle: boolean;
   approveOrReject: boolean;
+  liked?: boolean;
+  disliked?: boolean;
 }
 
 export interface IAirticleState {
@@ -44,6 +46,8 @@ export interface IAirticleObject {
   updatedAt: string;
   description: string;
   creator: CreatorOfAirticle;
+  likesCount: number;
+  dislikesCount: number;
 }
 
 export interface IPostCommentReqBody {
@@ -52,7 +56,15 @@ export interface IPostCommentReqBody {
   parentId?: string;
 }
 
+export interface IupdateLikeDislikeCountReqBody {
+  articleId: string;
+  flag: string;
+}
 export interface ICreateEditArticleProps {
   newsId?: string;
   mode?: string;
+}
+
+export interface likedislikeCompProps {
+  newsId: string;
 }

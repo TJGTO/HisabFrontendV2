@@ -91,3 +91,19 @@ export function checkUserHaveRequiredRole(requiredRoles: Array<string>) {
 
   return flag;
 }
+
+type Func = (...args: any[]) => void;
+
+export function debounce(func: Func, delay: number): Func {
+  let timeoutId: ReturnType<typeof setTimeout>;
+
+  return function (this: any, ...args: any[]) {
+    const context = this;
+
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      func.apply(context, args);
+    }, delay);
+  };
+}
