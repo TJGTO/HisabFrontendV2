@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
 import { useRouter } from "next/navigation";
+import useAuth from "../../Common/customHooks/useAuth";
 import { updatelikedislikecount } from "../service";
 import {
   IupdateLikeDislikeCountReqBody,
@@ -14,7 +15,10 @@ import { setlikeordislike } from "../../../lib/slices/airticle";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 
-function Likedislikesection({ newsId }: likedislikeCompProps) {
+function Likedislikesection({
+  newsId,
+  fireReqloginDialog,
+}: likedislikeCompProps) {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const [flag, setflag] = useState<string>("");
@@ -25,6 +29,7 @@ function Likedislikesection({ newsId }: likedislikeCompProps) {
   const permissions = useSelector(
     (state: RootState) => state.airticle.permissions
   );
+  const [isLoggedIn, token] = useAuth();
   useEffect(() => {
     if (permissions && permissions.liked) {
       setflag("like");
@@ -57,6 +62,10 @@ function Likedislikesection({ newsId }: likedislikeCompProps) {
   };
   const debouncedLikeorDislike = debounce(updatelikeordislike, 1000);
   const setlike = () => {
+    if (!isLoggedIn) {
+      fireReqloginDialog();
+      return;
+    }
     if (flag == "dislike" && currentAirticleDetail) {
       dispatch(
         setlikeordislike({
@@ -75,6 +84,10 @@ function Likedislikesection({ newsId }: likedislikeCompProps) {
     setflag("like");
   };
   const setdislike = () => {
+    if (!isLoggedIn) {
+      fireReqloginDialog();
+      return;
+    }
     if (flag == "like" && currentAirticleDetail) {
       dispatch(
         setlikeordislike({

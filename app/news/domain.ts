@@ -67,4 +67,5 @@ export interface ICreateEditArticleProps {
 
 export interface likedislikeCompProps {
   newsId: string;
+  fireReqloginDialog: () => void;
 }

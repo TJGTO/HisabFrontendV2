@@ -26,9 +26,6 @@ function NewsDescription({ newsId }: { newsId: string }) {
   const currentAirticleDetail = useSelector(
     (state: RootState) => state.airticle.currentAirticleDetail
   );
-  const permissions = useSelector(
-    (state: RootState) => state.airticle.permissions
-  );
   const comments = useSelector((state: RootState) => state.airticle.comments);
   const [loader, setloader] = useState<boolean>(false);
   const AirticleLoader = useSelector(
@@ -87,7 +84,7 @@ function NewsDescription({ newsId }: { newsId: string }) {
   };
   const fireReqloginDialog = () => {
     Swal.fire({
-      title: "Please login to comment",
+      title: "Please login to do like and comment",
       showCancelButton: true,
       confirmButtonText: "Go",
       cancelButtonText: "Cancel",
@@ -147,7 +144,10 @@ function NewsDescription({ newsId }: { newsId: string }) {
                   </div>
                 </address>
               </header>
-              <Likedislikesection newsId={newsId} />
+              <Likedislikesection
+                newsId={newsId}
+                fireReqloginDialog={fireReqloginDialog}
+              />
               <div
                 dangerouslySetInnerHTML={{
                   __html: currentAirticleDetail?.description || "",
