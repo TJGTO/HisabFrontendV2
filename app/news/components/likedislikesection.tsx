@@ -40,7 +40,9 @@ function Likedislikesection({
   }, [permissions]);
 
   useEffect(() => {
-    debouncedLikeorDislike(deferredFlag);
+    if (deferredFlag) {
+      debouncedLikeorDislike(deferredFlag);
+    }
   }, [deferredFlag]);
 
   const updatelikeordislike = async (flag: string) => {
@@ -83,6 +85,18 @@ function Likedislikesection({
     }
     setflag("like");
   };
+  const outlike = () => {
+    if (currentAirticleDetail) {
+      dispatch(
+        setlikeordislike({
+          likesCount: currentAirticleDetail.likesCount - 1,
+          dislikesCount: currentAirticleDetail.dislikesCount,
+        })
+      );
+      setflag("");
+      updatelikeordislike("outlike");
+    }
+  };
   const setdislike = () => {
     if (!isLoggedIn) {
       fireReqloginDialog();
@@ -105,6 +119,18 @@ function Likedislikesection({
     }
     setflag("dislike");
   };
+  const outdislike = () => {
+    if (currentAirticleDetail) {
+      dispatch(
+        setlikeordislike({
+          likesCount: currentAirticleDetail.likesCount,
+          dislikesCount: currentAirticleDetail.dislikesCount - 1,
+        })
+      );
+      setflag("");
+      updatelikeordislike("outdislike");
+    }
+  };
   return (
     <div className="flex  gap-4 mb-2">
       <Tooltip title="Like">
@@ -113,6 +139,8 @@ function Likedislikesection({
             e.preventDefault();
             if (flag != "like") {
               setlike();
+            } else {
+              outlike();
             }
           }}
           className="flex gap-2"
@@ -132,6 +160,8 @@ function Likedislikesection({
             e.preventDefault();
             if (flag != "dislike") {
               setdislike();
+            } else {
+              outdislike();
             }
           }}
           className="flex gap-2"

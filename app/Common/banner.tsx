@@ -38,8 +38,8 @@ function Banner() {
           </svg>{" "}
           Details
         </Link>
-        {/* <a
-          href="#"
+        <Link
+          href="/gamedetails/65e873ab210af316c71c27e7"
           className="inline-flex items-center justify-center px-3 py-2 me-2 text-xs font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
         >
           Register{" "}
@@ -58,7 +58,7 @@ function Banner() {
               d="M1 5h12m0 0L9 1m4 4L9 9"
             />
           </svg>
-        </a> */}
+        </Link>
         <button
           data-dismiss-target="#informational-banner"
           type="button"
