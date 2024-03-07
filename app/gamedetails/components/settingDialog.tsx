@@ -5,6 +5,7 @@ import {
   IPaymentOptionsObj,
   priceOptionsSchema,
 } from "../domain";
+import Swal from "sweetalert2";
 import CloseIcon from "@mui/icons-material/Close";
 import { timingsArray, gameStatusArr } from "../../gamedetails/domain";
 import Errormessage from "../../Common/FormComponents/errormessage";
@@ -55,13 +56,36 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
       } else {
         setValue("upiId", "");
       }
+      if (gameDetails.paymentOptions) {
+        setoptionsArr([...gameDetails.paymentOptions]);
+      }
     }
   }, [gameDetails]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     console.log(data);
     data.gameid = gameid;
-    dispatch(updateTheGame(data));
+    let isValidated = await validateOptionArr([...optionsArr]);
+    if (isValidated) {
+      data.paymentOptions = [...optionsArr];
+      dispatch(updateTheGame(data));
+    } else {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Please provide values in payment options",
+      });
+    }
   };
   const addinoptions = () => {
     let copyOptionsArr: IPaymentOptionsObj[] = [...optionsArr];
@@ -72,6 +96,33 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
     let copyOptionsArr: IPaymentOptionsObj[] = [...optionsArr];
     copyOptionsArr.splice(index, 1);
     setoptionsArr([...copyOptionsArr]);
+  };
+  const addvaluesonOptions = (
+    index: number,
+    value: string | number,
+    flag: string
+  ) => {
+    let copyOptionsArr: IPaymentOptionsObj[] = [...optionsArr];
+    if (flag == "price" && typeof value == "number") {
+      copyOptionsArr[index] = { ...copyOptionsArr[index], price: value };
+    }
+    if (flag == "paymentType" && typeof value == "string") {
+      copyOptionsArr[index] = { ...copyOptionsArr[index], paymentType: value };
+    }
+    setoptionsArr([...copyOptionsArr]);
+  };
+  const validateOptionArr = (Values: any[]): Promise<boolean> => {
+    return Promise.all(
+      Values.map((obj) =>
+        priceOptionsSchema.validate(obj, { abortEarly: false })
+      )
+    )
+      .then(() => {
+        return true;
+      })
+      .catch((errors) => {
+        return false;
+      });
   };
   return (
     <Dialog
@@ -231,7 +282,9 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
               {optionsArr.map((x, index) => (
                 <Paymentoptionsinput
                   indexNo={index}
+                  values={x}
                   removeOptions={removeOptions}
+                  addvaluesonOptions={addvaluesonOptions}
                 />
               ))}
 
