@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
-import { settingDialogProps, settingsDialogSchema } from "../domain";
-import MultiSelect from "../../Common/FormComponents/multiSelect";
-import DialogTitle from "@mui/material/DialogTitle";
+import {
+  settingDialogProps,
+  settingsDialogSchema,
+  IPaymentOptionsObj,
+  priceOptionsSchema,
+} from "../domain";
+import Swal from "sweetalert2";
 import CloseIcon from "@mui/icons-material/Close";
 import { timingsArray, gameStatusArr } from "../../gamedetails/domain";
 import Errormessage from "../../Common/FormComponents/errormessage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { updateTheGame } from "../../../lib/slices/gamemodule";
+import Paymentoptionsinput from "./paymentoptionsinput";
 import { useForm } from "react-hook-form";
 import Dialog from "@mui/material/Dialog";
 
@@ -26,7 +32,7 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
   } = useForm({ resolver: yupResolver(settingsDialogSchema) });
 
   const dispatch = useDispatch<AppDispatch>();
-
+  const [optionsArr, setoptionsArr] = useState<IPaymentOptionsObj[]>([]);
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
   );
@@ -50,13 +56,73 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
       } else {
         setValue("upiId", "");
       }
+      if (gameDetails.paymentOptions) {
+        setoptionsArr([...gameDetails.paymentOptions]);
+      }
     }
   }, [gameDetails]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     console.log(data);
     data.gameid = gameid;
-    dispatch(updateTheGame(data));
+    let isValidated = await validateOptionArr([...optionsArr]);
+    if (isValidated) {
+      data.paymentOptions = [...optionsArr];
+      dispatch(updateTheGame(data));
+    } else {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Please provide values in payment options",
+      });
+    }
+  };
+  const addinoptions = () => {
+    let copyOptionsArr: IPaymentOptionsObj[] = [...optionsArr];
+    copyOptionsArr.push({ paymentType: "", price: 0 });
+    setoptionsArr([...copyOptionsArr]);
+  };
+  const removeOptions = (index: number) => {
+    let copyOptionsArr: IPaymentOptionsObj[] = [...optionsArr];
+    copyOptionsArr.splice(index, 1);
+    setoptionsArr([...copyOptionsArr]);
+  };
+  const addvaluesonOptions = (
+    index: number,
+    value: string | number,
+    flag: string
+  ) => {
+    let copyOptionsArr: IPaymentOptionsObj[] = [...optionsArr];
+    if (flag == "price" && typeof value == "number") {
+      copyOptionsArr[index] = { ...copyOptionsArr[index], price: value };
+    }
+    if (flag == "paymentType" && typeof value == "string") {
+      copyOptionsArr[index] = { ...copyOptionsArr[index], paymentType: value };
+    }
+    setoptionsArr([...copyOptionsArr]);
+  };
+  const validateOptionArr = (Values: any[]): Promise<boolean> => {
+    return Promise.all(
+      Values.map((obj) =>
+        priceOptionsSchema.validate(obj, { abortEarly: false })
+      )
+    )
+      .then(() => {
+        return true;
+      })
+      .catch((errors) => {
+        return false;
+      });
   };
   return (
     <Dialog
@@ -196,6 +262,33 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
                   )}
                 </div>
               </div>
+              {/* <div className="grid grid-cols-3 gap-3">
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  paymentType
+                </label>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Price ( ₹ )
+                </label>
+              </div> */}
+              <div className="flex gap-3 justify-between">
+                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                  Payment Options
+                </h1>
+                <AddCircleOutlineIcon
+                  onClick={addinoptions}
+                  style={{ color: "blue", cursor: "pointer" }}
+                />
+              </div>
+              {optionsArr.map((x, index) => (
+                <Paymentoptionsinput
+                  key={index + 1}
+                  indexNo={index}
+                  values={x}
+                  removeOptions={removeOptions}
+                  addvaluesonOptions={addvaluesonOptions}
+                />
+              ))}
+
               <button
                 type="submit"
                 //disabled={!checked}

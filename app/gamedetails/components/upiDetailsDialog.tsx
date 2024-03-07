@@ -12,7 +12,9 @@ function UpiDetailsDialog({
   paymentNo,
   upiId,
   price,
+  paymentOptions,
 }: paymentDetailsDialogProps) {
+  console.log("paymentOptions", paymentOptions);
   const paymentNORef = useRef(null);
   const handleClose = () => {
     onClose();
@@ -41,13 +43,28 @@ function UpiDetailsDialog({
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <div className="flex gap-3 justify-between">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Per Head - ₹ {price}
+                Per Head -{" "}
+                {paymentOptions && paymentOptions.length > 0
+                  ? "Variable"
+                  : `₹ ${price}`}
               </h1>
               <CloseIcon
                 onClick={handleClose}
                 style={{ color: "red", cursor: "pointer" }}
               />
             </div>
+            {paymentOptions && paymentOptions.length > 0 && (
+              <ul>
+                {paymentOptions.map((x, index) => (
+                  <li key={index}>
+                    <p className="text-md font-bold leading-tight tracking-tight text-gray-900  dark:text-white">
+                      {x.paymentType} - {x.price}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Payment Number
             </label>
