@@ -342,6 +342,7 @@ function Playerist({ gameid }: { gameid: string }) {
         paymentNo={gameDetails?.paymentNo}
         upiId={gameDetails?.upiId}
         price={gameDetails?.price}
+        paymentOptions={gameDetails?.paymentOptions}
       />
       <CreateTeamDialog
         gameid={gameid}

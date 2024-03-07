@@ -55,10 +55,15 @@ export interface createTeamDialogProps extends settingDialogProps {
   editPermission: boolean;
 }
 
+export interface IPaymentOptionsObj {
+  paymentType: string;
+  price: number;
+}
 export interface paymentDetailsDialogProps extends BasicDialogProps {
   paymentNo?: string;
   upiId?: string;
   price?: number;
+  paymentOptions?: Array<IPaymentOptionsObj>;
 }
 
 export interface ICreator {
@@ -66,6 +71,11 @@ export interface ICreator {
   firstName: string;
   lastName: string;
   profilePictureURL: string;
+}
+
+export interface IPaymentOptionsObj {
+  paymentType: string;
+  price: number;
 }
 export interface activeGamesObj {
   gameId: string;
@@ -82,6 +92,7 @@ export interface activeGamesObj {
   status: string;
   matchType?: string;
   creator?: ICreator;
+  paymentOptions?: IPaymentOptionsObj[];
 }
 
 type Status =
@@ -184,6 +195,13 @@ export const settingsDialogSchema = yup.object({
     .number()
     .required("Please enter a valid number")
     .typeError("No of slots are required"),
+  price: yup
+    .number()
+    .required("Please enter a valid price")
+    .typeError("Pricing is required"),
+});
+export const priceOptionsSchema = yup.object({
+  paymentType: yup.string().required(),
   price: yup
     .number()
     .required("Please enter a valid price")

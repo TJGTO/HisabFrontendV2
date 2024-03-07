@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
-import { settingDialogProps, settingsDialogSchema } from "../domain";
-import MultiSelect from "../../Common/FormComponents/multiSelect";
-import DialogTitle from "@mui/material/DialogTitle";
+import {
+  settingDialogProps,
+  settingsDialogSchema,
+  IPaymentOptionsObj,
+  priceOptionsSchema,
+} from "../domain";
 import CloseIcon from "@mui/icons-material/Close";
 import { timingsArray, gameStatusArr } from "../../gamedetails/domain";
 import Errormessage from "../../Common/FormComponents/errormessage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { updateTheGame } from "../../../lib/slices/gamemodule";
+import Paymentoptionsinput from "./paymentoptionsinput";
 import { useForm } from "react-hook-form";
 import Dialog from "@mui/material/Dialog";
 
@@ -26,7 +31,7 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
   } = useForm({ resolver: yupResolver(settingsDialogSchema) });
 
   const dispatch = useDispatch<AppDispatch>();
-
+  const [optionsArr, setoptionsArr] = useState<IPaymentOptionsObj[]>([]);
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
   );
@@ -57,6 +62,16 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
     console.log(data);
     data.gameid = gameid;
     dispatch(updateTheGame(data));
+  };
+  const addinoptions = () => {
+    let copyOptionsArr: IPaymentOptionsObj[] = [...optionsArr];
+    copyOptionsArr.push({ paymentType: "", price: 0 });
+    setoptionsArr([...copyOptionsArr]);
+  };
+  const removeOptions = (index: number) => {
+    let copyOptionsArr: IPaymentOptionsObj[] = [...optionsArr];
+    copyOptionsArr.splice(index, 1);
+    setoptionsArr([...copyOptionsArr]);
   };
   return (
     <Dialog
@@ -196,6 +211,30 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
                   )}
                 </div>
               </div>
+              {/* <div className="grid grid-cols-3 gap-3">
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  paymentType
+                </label>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Price ( ₹ )
+                </label>
+              </div> */}
+              <div className="flex gap-3 justify-between">
+                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                  Payment Options
+                </h1>
+                <AddCircleOutlineIcon
+                  onClick={addinoptions}
+                  style={{ color: "blue", cursor: "pointer" }}
+                />
+              </div>
+              {optionsArr.map((x, index) => (
+                <Paymentoptionsinput
+                  indexNo={index}
+                  removeOptions={removeOptions}
+                />
+              ))}
+
               <button
                 type="submit"
                 //disabled={!checked}
