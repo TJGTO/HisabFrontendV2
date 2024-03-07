@@ -39,6 +39,7 @@ const CreateNewsAPP: React.FC<ICreateEditArticleProps> = ({ newsId, mode }) => {
   const currentAirticleDetail = useSelector(
     (state: RootState) => state.airticle.currentAirticleDetail
   );
+  console.log(AirticleLoader);
   useEffect(() => {
     if (newsId) {
       dispatch(fetchcurrentAirticleDetails(newsId));
@@ -70,9 +71,6 @@ const CreateNewsAPP: React.FC<ICreateEditArticleProps> = ({ newsId, mode }) => {
         }
       }, 1600);
     }
-    return () => {
-      dispatch(resetFlags());
-    };
   }, [AirticleLoader, AirticleMessage]);
   const onSubmitForm = () => {
     if (!title) {
