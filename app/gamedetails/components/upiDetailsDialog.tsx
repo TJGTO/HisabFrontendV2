@@ -55,8 +55,8 @@ function UpiDetailsDialog({
             </div>
             {paymentOptions && paymentOptions.length > 0 && (
               <ul>
-                {paymentOptions.map((x) => (
-                  <li>
+                {paymentOptions.map((x, index) => (
+                  <li key={index}>
                     <p className="text-md font-bold leading-tight tracking-tight text-gray-900  dark:text-white">
                       {x.paymentType} - {x.price}
                     </p>
