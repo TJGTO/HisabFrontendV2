@@ -281,6 +281,7 @@ function SettingDialog({ open, onClose, gameid }: settingDialogProps) {
               </div>
               {optionsArr.map((x, index) => (
                 <Paymentoptionsinput
+                  key={index + 1}
                   indexNo={index}
                   values={x}
                   removeOptions={removeOptions}
