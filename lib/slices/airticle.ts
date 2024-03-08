@@ -86,6 +86,8 @@ const airticleModelSlice = createSlice({
       state.AirticleLoader = false;
       state.AirticleMessage = "";
       state.AirticleFlag = "";
+      state.currentAirticleDetail = null;
+      state.comments = [];
     },
     setlikeordislike: (state, action) => {
       if (state.currentAirticleDetail) {

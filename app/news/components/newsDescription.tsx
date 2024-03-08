@@ -4,6 +4,7 @@ import {
   fetchcurrentAirticleComments,
   fetchcurrentAirticleDetails,
   fetchPermissions,
+  resetFlags,
 } from "../../../lib/slices/airticle";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
@@ -40,6 +41,9 @@ function NewsDescription({ newsId }: { newsId: string }) {
       dispatch(fetchcurrentAirticleComments(newsId));
       dispatch(fetchPermissions(newsId));
     }
+    return () => {
+      dispatch(resetFlags());
+    };
   }, []);
   const addpostComment = async (
     text: string,
