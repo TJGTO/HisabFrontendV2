@@ -15,7 +15,7 @@ function MessageBox({ action }: { action: () => void }) {
     (state: RootState) => state.gameModel.messageboxType
   );
   const dispatch = useDispatch<AppDispatch>();
-
+  console.log(messageBoxFlag, messageBoxMessage);
   useEffect(() => {
     if (messageBoxFlag) {
       Swal.fire({

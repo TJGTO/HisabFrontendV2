@@ -210,7 +210,7 @@ const gameModelSlice = createSlice({
     builder.addCase(registerSlot.rejected, (state, action) => {
       state.registerSlotLoader = false;
       state.messageBoxFlag = true;
-      state.gameCreationMessage = action.error?.message || "Failed to register";
+      state.messageBoxMessage = action.error?.message || "Failed to register";
       state.messageboxType = "error";
     });
     builder.addCase(updateTheGame.fulfilled, (state, action) => {
