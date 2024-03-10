@@ -9,6 +9,7 @@ import UpiDetailsDialog from "./upiDetailsDialog";
 import AddIcon from "@mui/icons-material/Add";
 import Tabs from "./tabs";
 import Swal from "sweetalert2";
+import CircularProgress from "@mui/material/CircularProgress";
 import AddPlayersDialog from "./addPlayers";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { useRouter } from "next/navigation";
@@ -17,6 +18,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SettingDialog from "./settingDialog";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
+import { downloadExcelofPlayers } from "../service";
 import {
   fetchGameDetails,
   fetchGamePermission,
@@ -35,6 +37,7 @@ interface TableHeaderObj {
 function Playerist({ gameid }: { gameid: string }) {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const [excelloader, setexcelloader] = useState(false);
   const [tablerows, settablerows] = useState<Array<JSX.Element>>([]);
   const [openDialog, setopenDialog] = useState<boolean>(false);
   const [openRegisterDialog, stopenRegisterDialog] = useState<boolean>(false);
@@ -205,6 +208,17 @@ function Playerist({ gameid }: { gameid: string }) {
       }
     });
   };
+  const downloadExcel = async () => {
+    try {
+      setexcelloader(true);
+      const response = await downloadExcelofPlayers(gameid);
+      setexcelloader(false);
+      console.log(response);
+    } catch (error: any) {
+      setexcelloader(false);
+      console.log(error.message);
+    }
+  };
   return (
     <section className="h-full w-full dark:bg-slate-800">
       <div className="ml-2 mr-2 mt-2">
@@ -257,6 +271,22 @@ function Playerist({ gameid }: { gameid: string }) {
                 }}
               >
                 Register
+              </Button>
+            )}
+            {permissionMatrix?.excelDownload && (
+              <Button
+                variant="outlined"
+                disabled={excelloader}
+                onClick={(e) => {
+                  e.preventDefault();
+                  downloadExcel();
+                }}
+              >
+                {excelloader ? (
+                  <CircularProgress color="secondary" size={20} />
+                ) : (
+                  "Download"
+                )}
               </Button>
             )}
             {gameDetails?.status == "Active" &&

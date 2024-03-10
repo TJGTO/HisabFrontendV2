@@ -270,6 +270,34 @@ async function updateTeamsofPlayers(data: IUpdateTeamReqObj) {
   };
 }
 
+async function downloadExcelofPlayers(gameid: string) {
+  try {
+    let response: any = await AxiosWithAuth.get(
+      `game/exportregistrationdetails/${gameid}`
+    );
+
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: "Successfull",
+        data: response.data.data,
+      };
+    } else {
+      return {
+        success: false,
+        message: `${
+          response.data.data.message ? response.data.data.message : "Failed"
+        }`,
+      };
+    }
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error("Failed");
+    }
+  }
+}
 export {
   createaGame,
   updateTeamsofPlayers,
@@ -281,5 +309,6 @@ export {
   getVenueList,
   getMatchPermissions,
   addPlayersInGame,
+  downloadExcelofPlayers,
   uploadPaymentSnapAfterAddedByAdmin,
 };

@@ -126,6 +126,7 @@ export type GamePermissionMatrix = {
   approveOrReject: boolean;
   editTeam: boolean;
   player_id: string;
+  excelDownload: boolean;
 };
 export interface gameModelStateObj {
   gameLoader: boolean;
