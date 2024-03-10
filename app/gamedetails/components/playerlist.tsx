@@ -78,23 +78,25 @@ function Playerist({ gameid }: { gameid: string }) {
   const setTableHeaderColumns = () => {
     if (gameDetails && gameDetails.matchType == "Tournament") {
       let ObjArr = [
-        { id: 1, label: "Player" },
-        { id: 2, label: "Position" },
-        { id: 3, label: "Age" },
-        { id: 4, label: "Status" },
-        { id: 5, label: "Food" },
-        { id: 6, label: "Type" },
-        { id: 7, label: "Actions" },
+        { id: 1, label: "SL No." },
+        { id: 2, label: "Player" },
+        { id: 3, label: "Position" },
+        { id: 4, label: "Age" },
+        { id: 5, label: "Status" },
+        { id: 6, label: "Food" },
+        { id: 7, label: "Type" },
+        { id: 8, label: "Actions" },
       ];
       setTableHeaderArr(ObjArr);
     } else {
       setTableHeaderArr([
-        { id: 1, label: "Player" },
-        { id: 2, label: "Position" },
-        { id: 3, label: "Age" },
-        { id: 4, label: "Status" },
-        { id: 5, label: "Team" },
-        { id: 6, label: "Actions" },
+        { id: 1, label: "SL No." },
+        { id: 2, label: "Player" },
+        { id: 3, label: "Position" },
+        { id: 4, label: "Age" },
+        { id: 5, label: "Status" },
+        { id: 6, label: "Team" },
+        { id: 7, label: "Actions" },
       ]);
     }
   };
@@ -167,6 +169,7 @@ function Playerist({ gameid }: { gameid: string }) {
         let classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
         const row: JSX.Element = (
           <ListRow
+            slno={index + 1}
             profilepictureurl={profilepictureurl}
             name={name}
             age={age}

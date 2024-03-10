@@ -227,6 +227,7 @@ export type PlayerObjinGameList = {
   player_type?: string;
   foodtype?: string;
   matchType?: string;
+  slno?: number;
 };
 export type IUpdateTeamReqObj = {
   gameId: string;

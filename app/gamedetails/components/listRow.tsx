@@ -27,6 +27,7 @@ function ListRow({
   profilepictureurl,
   name,
   age,
+  slno,
   paymentImageurl,
   phoneNumber,
   position,
@@ -76,6 +77,13 @@ function ListRow({
   };
   return (
     <tr>
+      <td className={classes}>
+        <div className="flex flex-col">
+          <Typography color="blue-gray" className="font-normal dark:text-white">
+            {slno ? slno : 0}
+          </Typography>
+        </div>
+      </td>
       <td className={`${classes}`}>
         <Link href={`/profile/${player_id}`} target="_blank">
           <div className="flex items-center gap-3 cursor-pointer">
