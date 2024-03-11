@@ -273,23 +273,29 @@ async function updateTeamsofPlayers(data: IUpdateTeamReqObj) {
 async function downloadExcelofPlayers(gameid: string) {
   try {
     let response: any = await AxiosWithAuth.get(
-      `game/exportregistrationdetails/${gameid}`
+      `game/exportregistrationdetails/${gameid}`,
+      {
+        responseType: "blob", // Specify responseType as 'blob' to receive binary data
+      }
     );
 
-    if (response.data && response.data.success) {
-      return {
-        success: true,
-        message: "Successfull",
-        data: response.data.data,
-      };
-    } else {
+    if (!response.data) {
       return {
         success: false,
-        message: `${
-          response.data.data.message ? response.data.data.message : "Failed"
-        }`,
+        message: `Failed`,
       };
     }
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "players_data.xlsx");
+    document.body.appendChild(link);
+    link.click();
+    return {
+      success: true,
+      message: `Success`,
+    };
   } catch (error: any) {
     if (error.response?.data?.message) {
       throw new Error(error.response.data.message);

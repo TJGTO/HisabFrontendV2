@@ -107,3 +107,16 @@ export function debounce(func: Func, delay: number): Func {
     }, delay);
   };
 }
+
+export const downloadExcelFile = (excelData: ArrayBuffer) => {
+  const excelBlob = new Blob([excelData], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(excelBlob);
+  link.download = "players_data.xlsx";
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};

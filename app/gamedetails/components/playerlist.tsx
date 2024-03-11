@@ -9,6 +9,7 @@ import UpiDetailsDialog from "./upiDetailsDialog";
 import AddIcon from "@mui/icons-material/Add";
 import Tabs from "./tabs";
 import Swal from "sweetalert2";
+import { downloadExcelFile } from "../../Common/functions";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddPlayersDialog from "./addPlayers";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -213,7 +214,6 @@ function Playerist({ gameid }: { gameid: string }) {
       setexcelloader(true);
       const response = await downloadExcelofPlayers(gameid);
       setexcelloader(false);
-      console.log(response);
     } catch (error: any) {
       setexcelloader(false);
       console.log(error.message);
