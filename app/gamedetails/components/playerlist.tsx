@@ -9,6 +9,8 @@ import UpiDetailsDialog from "./upiDetailsDialog";
 import AddIcon from "@mui/icons-material/Add";
 import Tabs from "./tabs";
 import Swal from "sweetalert2";
+import { downloadExcelFile } from "../../Common/functions";
+import CircularProgress from "@mui/material/CircularProgress";
 import AddPlayersDialog from "./addPlayers";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { useRouter } from "next/navigation";
@@ -17,6 +19,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SettingDialog from "./settingDialog";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
+import { downloadExcelofPlayers } from "../service";
 import {
   fetchGameDetails,
   fetchGamePermission,
@@ -35,6 +38,7 @@ interface TableHeaderObj {
 function Playerist({ gameid }: { gameid: string }) {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const [excelloader, setexcelloader] = useState(false);
   const [tablerows, settablerows] = useState<Array<JSX.Element>>([]);
   const [openDialog, setopenDialog] = useState<boolean>(false);
   const [openRegisterDialog, stopenRegisterDialog] = useState<boolean>(false);
@@ -78,23 +82,25 @@ function Playerist({ gameid }: { gameid: string }) {
   const setTableHeaderColumns = () => {
     if (gameDetails && gameDetails.matchType == "Tournament") {
       let ObjArr = [
-        { id: 1, label: "Player" },
-        { id: 2, label: "Position" },
-        { id: 3, label: "Age" },
-        { id: 4, label: "Status" },
-        { id: 5, label: "Food" },
-        { id: 6, label: "Type" },
-        { id: 7, label: "Actions" },
+        { id: 1, label: "SL No." },
+        { id: 2, label: "Player" },
+        { id: 3, label: "Position" },
+        { id: 4, label: "Age" },
+        { id: 5, label: "Status" },
+        { id: 6, label: "Food" },
+        { id: 7, label: "Type" },
+        { id: 8, label: "Actions" },
       ];
       setTableHeaderArr(ObjArr);
     } else {
       setTableHeaderArr([
-        { id: 1, label: "Player" },
-        { id: 2, label: "Position" },
-        { id: 3, label: "Age" },
-        { id: 4, label: "Status" },
-        { id: 5, label: "Team" },
-        { id: 6, label: "Actions" },
+        { id: 1, label: "SL No." },
+        { id: 2, label: "Player" },
+        { id: 3, label: "Position" },
+        { id: 4, label: "Age" },
+        { id: 5, label: "Status" },
+        { id: 6, label: "Team" },
+        { id: 7, label: "Actions" },
       ]);
     }
   };
@@ -167,6 +173,7 @@ function Playerist({ gameid }: { gameid: string }) {
         let classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
         const row: JSX.Element = (
           <ListRow
+            slno={index + 1}
             profilepictureurl={profilepictureurl}
             name={name}
             age={age}
@@ -201,6 +208,16 @@ function Playerist({ gameid }: { gameid: string }) {
         Swal.close();
       }
     });
+  };
+  const downloadExcel = async () => {
+    try {
+      setexcelloader(true);
+      const response = await downloadExcelofPlayers(gameid);
+      setexcelloader(false);
+    } catch (error: any) {
+      setexcelloader(false);
+      console.log(error.message);
+    }
   };
   return (
     <section className="h-full w-full dark:bg-slate-800">
@@ -254,6 +271,22 @@ function Playerist({ gameid }: { gameid: string }) {
                 }}
               >
                 Register
+              </Button>
+            )}
+            {permissionMatrix?.excelDownload && (
+              <Button
+                variant="outlined"
+                disabled={excelloader}
+                onClick={(e) => {
+                  e.preventDefault();
+                  downloadExcel();
+                }}
+              >
+                {excelloader ? (
+                  <CircularProgress color="secondary" size={20} />
+                ) : (
+                  "Download"
+                )}
               </Button>
             )}
             {gameDetails?.status == "Active" &&

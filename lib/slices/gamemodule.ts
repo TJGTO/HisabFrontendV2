@@ -36,6 +36,7 @@ const initialState: gameModelStateObj = {
     approveOrReject: false,
     editTeam: false,
     player_id: "",
+    excelDownload: false,
   },
 };
 
