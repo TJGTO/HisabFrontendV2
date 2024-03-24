@@ -85,6 +85,7 @@ function TournamentForm({
             <option value="">{"Please Select"}</option>
             <option value="Regular Player">{"Regular Player"}</option>
             <option value="Non-Regular Player">{"Non-Regular Player"}</option>
+            <option value="outsider">{"outsider"}</option>
             <option value="Regular Owner">{"Regular Owner"}</option>
             <option value="Non-Regular Owner">{"Non-Regular Owner"}</option>
           </select>
