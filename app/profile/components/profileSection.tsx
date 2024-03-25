@@ -15,6 +15,7 @@ import { redirect } from "next/navigation";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import SchoolIcon from "@mui/icons-material/School";
 import MenuItem from "@mui/material/MenuItem";
+import FullviewpictureDialog from "../../Common/fullviewpictureDialog";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { createAddressStringFromObj, fromatDate } from "../../Common/functions";
@@ -37,6 +38,8 @@ import { useSelector, useDispatch } from "react-redux";
 function ProfileSection({ userid }: { userid?: string }) {
   const [openSocialMediaDialog, setopenSocialMediaDialog] =
     useState<boolean>(false);
+  const [openfullImageDialog, setopenfullImageDialog] =
+    useState<boolean>(false);
   const userProfile = useSelector(
     (state: RootState) => state.profileSection.userProfile
   );
@@ -53,6 +56,12 @@ function ProfileSection({ userid }: { userid?: string }) {
   const [showEditButton, setshowEditButton] = useState<boolean>(false);
   const [openAddressDialog, setopenAddressDialog] = useState<boolean>(false);
   const [openpictureDialog, setopenpictureDialog] = useState<boolean>(false);
+  const currentImageUrl =
+    "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
+    userProfile?.profilePictureURL?.toString();
+  const currentuserName = userProfile
+    ? userProfile?.firstName + " " + userProfile?.lastName
+    : "";
 
   useEffect(() => {
     if (!userid) {
@@ -93,6 +102,9 @@ function ProfileSection({ userid }: { userid?: string }) {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const closefullImageDialog = () => {
+    setopenfullImageDialog(false);
   };
   const closeEditSocialMediaDialog = () => {
     setopenSocialMediaDialog(false);
@@ -135,19 +147,13 @@ function ProfileSection({ userid }: { userid?: string }) {
                 "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
                 userProfile?.profilePictureURL?.toString()
               }
+              onClick={(e) => {
+                setopenfullImageDialog(true);
+              }}
             >
               {fullname && createSortFromForAvator(fullname.toString())}
             </Avatar>
           </Badge>
-          {/* <Avatar
-            sx={{
-              width: 150,
-              height: 150,
-              bgcolor: fullname ? stringToColor(fullname.toString()) : "",
-            }}
-          >
-            {fullname && createSortFromForAvator(fullname.toString())}
-          </Avatar> */}
         </div>
         <div className="flex justify-center gap-2 mt-4 w-60">
           {userProfile?.firstName + " " + userProfile?.lastName}
@@ -261,6 +267,12 @@ function ProfileSection({ userid }: { userid?: string }) {
       <EditProfilePictureDialog
         open={openpictureDialog}
         onClose={closeEditPictureDialog}
+      />
+      <FullviewpictureDialog
+        open={openfullImageDialog}
+        headerText={currentuserName}
+        onClose={closefullImageDialog}
+        imageurl={currentImageUrl}
       />
     </div>
   );
