@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import useAuth from "@/app/Common/customHooks/useAuth";
+import AchievementSection from "../../Common/achievementSection/acheivementSection";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { createSortFromForAvator, stringToColor } from "../../Common/functions";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -40,6 +42,7 @@ function ProfileSection({ userid }: { userid?: string }) {
     useState<boolean>(false);
   const [openfullImageDialog, setopenfullImageDialog] =
     useState<boolean>(false);
+  const [openbadgesDialog, setopenbadgesDialog] = useState<boolean>(false);
   const userProfile = useSelector(
     (state: RootState) => state.profileSection.userProfile
   );
@@ -103,6 +106,9 @@ function ProfileSection({ userid }: { userid?: string }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const closeBadgeDialog = () => {
+    setopenbadgesDialog(false);
+  };
   const closefullImageDialog = () => {
     setopenfullImageDialog(false);
   };
@@ -155,6 +161,22 @@ function ProfileSection({ userid }: { userid?: string }) {
             </Avatar>
           </Badge>
         </div>
+        {/* <div className="flex justify-center gap-3 mt-4 w-60">
+          <div className="inline-block text-orange-500">
+            5 Badges{" "}
+            <VisibilityIcon
+              sx={{ fontSize: "16px", cursor: "pointer" }}
+              onClick={(e) => {
+                e.preventDefault();
+                setopenbadgesDialog(true);
+              }}
+            />
+          </div>
+          <AchievementSection
+            open={openbadgesDialog}
+            onClose={closeBadgeDialog}
+          />
+        </div> */}
         <div className="flex justify-center gap-2 mt-4 w-60">
           {userProfile?.firstName + " " + userProfile?.lastName}
           {userProfile?.academic == "Working Professional" && (
