@@ -9,6 +9,9 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 function Slider() {
   const slides: Array<SlidingImageObject> = [
     {
+      URL: "https://wfgimagebucket.s3.ap-south-1.amazonaws.com/dashboard/WhatsApp+Image+2024-03-28+at+18.28.07.jpeg",
+    },
+    {
       URL: "https://firebasestorage.googleapis.com/v0/b/wfgkol2023.appspot.com/o/sliderPictures%2FWhatsApp123.jpeg?alt=media&token=cc9de9e1-4c48-4b5f-8814-94fe46ba2691",
     },
     {
