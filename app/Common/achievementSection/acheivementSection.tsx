@@ -56,6 +56,11 @@ function AchievementSection({ open, onClose }: achivementDialogProps) {
                         </svg>
                       </div>
                       <div className="flex justify-center w-full">
+                        <p className="leading-relaxed ">
+                          &#9733;&#9733;&#9733;&#9733;&#9733;
+                        </p>
+                      </div>
+                      <div className="flex justify-center w-full">
                         <p className="leading-relaxed ">{"WFT 6.0 Winners"}</p>
                       </div>
                     </div>
@@ -84,6 +89,11 @@ function AchievementSection({ open, onClose }: achivementDialogProps) {
                             stroke-linejoin="round"
                           ></path>
                         </svg>
+                      </div>
+                      <div className="flex justify-center w-full">
+                        <p className="leading-relaxed ">
+                          &#9733;&#9733;&#9733;&#9733;&#9733;
+                        </p>
                       </div>
                       <div className="flex justify-center w-full">
                         <p className="leading-relaxed ">
@@ -119,6 +129,11 @@ function AchievementSection({ open, onClose }: achivementDialogProps) {
                         </svg>
                       </div>
                       <div className="flex justify-center w-full">
+                        <p className="leading-relaxed ">
+                          &#9733;&#9733;&#9733;&#9733;&#9733;
+                        </p>
+                      </div>
+                      <div className="flex justify-center w-full">
                         <p className="leading-relaxed ">{"WFT 6.0 Winners"}</p>
                       </div>
                     </div>
@@ -147,6 +162,11 @@ function AchievementSection({ open, onClose }: achivementDialogProps) {
                             stroke-linejoin="round"
                           ></path>
                         </svg>
+                      </div>
+                      <div className="flex justify-center w-full">
+                        <p className="leading-relaxed ">
+                          &#9733;&#9733;&#9733;&#9733;&#9733;
+                        </p>
                       </div>
                       <div className="flex justify-center w-full">
                         <p className="leading-relaxed ">{"WFT 6.0 Winners"}</p>
