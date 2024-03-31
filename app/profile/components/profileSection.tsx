@@ -161,7 +161,7 @@ function ProfileSection({ userid }: { userid?: string }) {
             </Avatar>
           </Badge>
         </div>
-        {userProfile?.badges && (
+        {userProfile?.badges && userProfile?.badges.length > 0 && (
           <div className="flex justify-center gap-3 mt-4 w-60">
             <div className="inline-block text-orange-500">
               {userProfile?.badges.length} Badge
