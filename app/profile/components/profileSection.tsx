@@ -161,22 +161,26 @@ function ProfileSection({ userid }: { userid?: string }) {
             </Avatar>
           </Badge>
         </div>
-        {/* <div className="flex justify-center gap-3 mt-4 w-60">
-          <div className="inline-block text-orange-500">
-            5 Badges{" "}
-            <VisibilityIcon
-              sx={{ fontSize: "16px", cursor: "pointer" }}
-              onClick={(e) => {
-                e.preventDefault();
-                setopenbadgesDialog(true);
-              }}
+        {userProfile?.badges && (
+          <div className="flex justify-center gap-3 mt-4 w-60">
+            <div className="inline-block text-orange-500">
+              {userProfile?.badges.length} Badge
+              {userProfile?.badges.length > 1 ? "s" : ""}{" "}
+              <VisibilityIcon
+                sx={{ fontSize: "16px", cursor: "pointer" }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setopenbadgesDialog(true);
+                }}
+              />
+            </div>
+            <AchievementSection
+              open={openbadgesDialog}
+              onClose={closeBadgeDialog}
+              data={userProfile?.badges}
             />
           </div>
-          <AchievementSection
-            open={openbadgesDialog}
-            onClose={closeBadgeDialog}
-          />
-        </div> */}
+        )}
         <div className="flex justify-center gap-2 mt-4 w-60">
           {userProfile?.firstName + " " + userProfile?.lastName}
           {userProfile?.academic == "Working Professional" && (

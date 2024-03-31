@@ -14,6 +14,11 @@ export interface addressObj {
   };
 }
 
+export interface badgesObj {
+  title: string;
+  level: number;
+  priority: number;
+}
 export interface updateProfileObj {
   firstName?: String;
   lastName?: String;
@@ -28,6 +33,7 @@ export interface updateProfileObj {
   about?: String;
   address?: addressObj;
   isAddress?: boolean;
+  badges?: badgesObj[];
 }
 
 export interface stateObj {
