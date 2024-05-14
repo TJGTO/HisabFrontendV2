@@ -1,7 +1,18 @@
-import React from "react";
-import AddIcon from "@mui/icons-material/Add";
+import React, { useState } from "react";
+import AdduserDialog from "../../Common/AddUser/adduser";
+import { ISearchUserModifiedObj } from "../../gamedetails/domain";
+import { set } from "react-hook-form";
 
 function Searchbox() {
+  const [open, setopen] = useState<boolean>(false);
+
+  const closeDialog = () => {
+    setopen(false);
+  };
+
+  const onsubmitmembership = (userlist: ISearchUserModifiedObj[]) => {
+    console.log(userlist);
+  };
   return (
     <form className="flex items-center max-w-sm mx-auto">
       <label className="sr-only">Search</label>
@@ -36,7 +47,10 @@ function Searchbox() {
         <span className="sr-only">Search</span>
       </button>
       <button
-        type="submit"
+        onClick={(e) => {
+          e.preventDefault();
+          setopen(true);
+        }}
         className="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
         {/* <AddIcon fontSize="5px" /> */}
@@ -56,6 +70,12 @@ function Searchbox() {
         </svg>
         <span className="sr-only">Add</span>
       </button>
+      <AdduserDialog
+        open={open}
+        dialogTitle={"Add Users"}
+        onClose={closeDialog}
+        onsave={onsubmitmembership}
+      />
     </form>
   );
 }
