@@ -30,6 +30,9 @@ function ProfileAvatar(props: {
   const gotoDashboardPage = () => {
     router.push("/dashboard");
   };
+  const gotoAdmin = () => {
+    router.push("/membership");
+  };
   const logout = () => {
     localStorage.removeItem("token");
     window.location.reload();
@@ -71,6 +74,7 @@ function ProfileAvatar(props: {
         <Divider />
         <MenuItem onClick={gotoDashboardPage}>Dashboard</MenuItem>
         <MenuItem onClick={gotoProfilePage}>Profile</MenuItem>
+        <MenuItem onClick={gotoAdmin}>Admin</MenuItem>
         <Divider />
         <MenuItem onClick={logout}>
           <ListItemIcon>
