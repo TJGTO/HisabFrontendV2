@@ -2,6 +2,7 @@ import React from "react";
 import { createSortFromForAvator, stringToColor } from "../Common/functions";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
+import { checkUserHaveRequiredRole } from "../Common/functions";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import { useRouter } from "next/navigation";
@@ -74,7 +75,9 @@ function ProfileAvatar(props: {
         <Divider />
         <MenuItem onClick={gotoDashboardPage}>Dashboard</MenuItem>
         <MenuItem onClick={gotoProfilePage}>Profile</MenuItem>
-        <MenuItem onClick={gotoAdmin}>Admin</MenuItem>
+        {checkUserHaveRequiredRole(["Admin"]) && (
+          <MenuItem onClick={gotoAdmin}>Admin</MenuItem>
+        )}
         <Divider />
         <MenuItem onClick={logout}>
           <ListItemIcon>
