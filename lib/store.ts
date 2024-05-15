@@ -4,6 +4,7 @@ import dashboardReducer from "./slices/dashboard";
 import profileSectionReducer from "./slices/profileSection";
 import gameModelReducer from "./slices/gamemodule";
 import airticleModelSlice from "./slices/airticle";
+import membershipModelSlice from "./slices/membership";
 
 export const makeStore = () => {
   return configureStore({
@@ -13,6 +14,7 @@ export const makeStore = () => {
       profileSection: profileSectionReducer,
       gameModel: gameModelReducer,
       airticle: airticleModelSlice,
+      membership: membershipModelSlice,
     },
   });
 };

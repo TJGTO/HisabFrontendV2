@@ -1,17 +1,62 @@
 import React, { useState } from "react";
+import { usersObj, CreateMembershipReqBody } from "../domain";
 import AdduserDialog from "../../Common/AddUser/adduser";
 import { ISearchUserModifiedObj } from "../../gamedetails/domain";
-import { set } from "react-hook-form";
+import { createMembershipRecords } from "../service";
+import { RootState, AppDispatch } from "../../../lib/store";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchmembershipcards } from "../../../lib/slices/membership";
+import Swal from "sweetalert2";
 
 function Searchbox() {
+  const dispatch = useDispatch<AppDispatch>();
   const [open, setopen] = useState<boolean>(false);
+  const [loader, setloader] = useState<boolean>(false);
 
   const closeDialog = () => {
     setopen(false);
   };
 
-  const onsubmitmembership = (userlist: ISearchUserModifiedObj[]) => {
-    console.log(userlist);
+  const onsubmitmembership = async (userlist: ISearchUserModifiedObj[]) => {
+    const usersmap: usersObj[] = userlist.map(
+      (item: ISearchUserModifiedObj) => {
+        return {
+          userId: item._id,
+          userName: item.name,
+          profilePictureURL: item.profilepictureurl,
+        };
+      }
+    );
+    const validToDate = new Date();
+    validToDate.setDate(validToDate.getDate() + 7);
+    const reqbody: CreateMembershipReqBody = {
+      membershipId: "664266129f04623deb00110e",
+      membershipName: "WFG Membership",
+      validfrom: new Date().toString(),
+      validto: validToDate.toString(),
+      users: usersmap,
+    };
+    try {
+      setloader(true);
+      let response = await createMembershipRecords(reqbody);
+      Swal.fire({
+        icon: response.success ? "success" : "error",
+        title: response.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      dispatch(fetchmembershipcards());
+      setloader(false);
+      setopen(false);
+    } catch (error) {
+      setloader(false);
+      Swal.fire({
+        icon: "error",
+        title: "Failed to create the membership record",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
   };
   return (
     <form className="flex items-center max-w-sm mx-auto">
@@ -72,6 +117,7 @@ function Searchbox() {
       </button>
       <AdduserDialog
         open={open}
+        submitloader={loader}
         dialogTitle={"Add Users"}
         onClose={closeDialog}
         onsave={onsubmitmembership}

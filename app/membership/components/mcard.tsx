@@ -1,25 +1,44 @@
 import React from "react";
+import { createSortFromForAvator, stringToColor } from "../../Common/functions";
+import Avatar from "@mui/material/Avatar";
+import { members } from "../domain";
 
-function Mcard() {
+function Mcard({
+  cardId,
+  membershipName,
+  userName,
+  userId,
+  validfrom,
+  validto,
+  profilePictureURL,
+}: members) {
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="flex justify-end px-2 pt-2">
         <div className={`h-3.5 w-3.5 rounded-full bg-green-300 mr-2`}></div>
       </div>
       <div className="flex flex-col items-center pb-6 mt-2">
-        <img
-          className="w-24 h-24 mb-3 rounded-full shadow-lg"
-          src="https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg"
-          alt="Bonnie image"
-        />
+        <Avatar
+          sx={{
+            width: 100,
+            height: 100,
+            bgcolor: userName ? stringToColor(userName.toString()) : "",
+          }}
+          src={
+            "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
+            profilePictureURL
+          }
+        >
+          {userName && createSortFromForAvator(userName.toString())}
+        </Avatar>
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-          Bonnie Green
+          {userName}
         </h5>
         <span className="text-sm text-gray-500 dark:text-gray-400">
-          From - 14/05/2024
+          From - {validfrom}
         </span>
         <span className="text-sm text-gray-500 dark:text-gray-400">
-          To - 14/06/2024
+          To - {validto}
         </span>
         <div className="flex mt-4 md:mt-6">
           <a

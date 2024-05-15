@@ -4,4 +4,5 @@ export interface AddUserDialogProps {
   onClose: () => void;
   onsave: (userlist: ISearchUserModifiedObj[]) => void;
   dialogTitle: string;
+  submitloader: boolean;
 }
