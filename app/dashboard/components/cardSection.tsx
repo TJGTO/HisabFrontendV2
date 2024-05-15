@@ -40,8 +40,7 @@ function CardSection() {
   const activeAirticles = useSelector(
     (state: RootState) => state.airticle.activeAirticles
   );
-  console.log("activeGames", activeGames);
-  console.log("fetchActiveNews", activeAirticles);
+
   useEffect(() => {
     dispatch(fetchActiveGames());
     dispatch(fetchActiveNews());
