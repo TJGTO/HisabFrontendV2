@@ -26,3 +26,9 @@ export interface MembershipStoreState {
   fetchLoader: boolean;
   fetchError: boolean;
 }
+
+export interface extendmembershipReq {
+  cardId: string;
+  validfrom: string;
+  validto: string;
+}

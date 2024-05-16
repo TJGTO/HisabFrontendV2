@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { createSortFromForAvator, stringToColor } from "../../Common/functions";
 import Avatar from "@mui/material/Avatar";
-import { members } from "../domain";
+import Swal from "sweetalert2";
+import ConfirmDialog from "../../Common/ConfirmDialog/confirmDialog";
+import { fetchmembershipcards } from "../../../lib/slices/membership";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../../../lib/store";
+import { members, extendmembershipReq } from "../domain";
+import { extendMembership, removeMembership } from "../service";
 
 function Mcard({
   cardId,
@@ -12,6 +18,54 @@ function Mcard({
   validto,
   profilePictureURL,
 }: members) {
+  const [open, setopen] = useState<boolean>(false);
+  const [headerTest, setheaderTest] = useState<string>("");
+  const [action, setaction] = useState<string>("");
+  const dispatch = useDispatch<AppDispatch>();
+  const closeConfirmDialog = () => {
+    setopen(false);
+  };
+  const submitextendmembership = async () => {
+    const validToDate = new Date();
+    validToDate.setDate(validToDate.getDate() + 30);
+    const reqbody: extendmembershipReq = {
+      validfrom: new Date().toString(),
+      validto: validToDate.toString(),
+      cardId: cardId,
+    };
+    let response;
+    try {
+      // setloader(true);
+      if (action == "extend") {
+        response = await extendMembership(reqbody);
+        Swal.fire({
+          icon: response.success ? "success" : "error",
+          title: response.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else if (action == "remove") {
+        response = await removeMembership(cardId);
+        Swal.fire({
+          icon: response.success ? "success" : "error",
+          title: response.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+
+      dispatch(fetchmembershipcards());
+      // setloader(false);
+    } catch (error) {
+      // setloader(false);
+      Swal.fire({
+        icon: "error",
+        title: "Failed to update the record",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="flex justify-end px-2 pt-2">
@@ -42,19 +96,34 @@ function Mcard({
         </span>
         <div className="flex mt-4 md:mt-6">
           <a
-            href="#"
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            onClick={(e) => {
+              setopen(true);
+              setheaderTest("Do you want to extend?");
+              setaction("extend");
+            }}
+            className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
           >
             Extend
           </a>
           <a
-            href="#"
-            className="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            onClick={(e) => {
+              setopen(true);
+              setheaderTest("Do you want to remove?");
+              setaction("remove");
+            }}
+            className="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 cursor-pointer"
           >
             Remove
           </a>
         </div>
       </div>
+      <ConfirmDialog
+        open={open}
+        headerText={headerTest}
+        titleText=""
+        onClose={closeConfirmDialog}
+        onConfirm={submitextendmembership}
+      />
     </div>
   );
 }

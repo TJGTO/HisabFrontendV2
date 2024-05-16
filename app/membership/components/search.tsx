@@ -28,7 +28,7 @@ function Searchbox() {
       }
     );
     const validToDate = new Date();
-    validToDate.setDate(validToDate.getDate() + 7);
+    validToDate.setDate(validToDate.getDate() + 30);
     const reqbody: CreateMembershipReqBody = {
       membershipId: "664266129f04623deb00110e",
       membershipName: "WFG Membership",
