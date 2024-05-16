@@ -6,7 +6,7 @@ import CardSection from "./components/cardSection";
 export default function Page() {
   return (
     <>
-      <Banner />
+      {/* <Banner /> */}
       <Slider />
       <StatisticsSection />
       <CardSection />
