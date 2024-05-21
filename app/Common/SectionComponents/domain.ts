@@ -23,7 +23,7 @@ export const dataForStatisticsSection: IsatsCard[] = [
   },
   {
     id: "3",
-    statsText: "62k",
+    statsText: "75k",
     secondaryText: "Views",
     icon: "/assets/youtubeIcon.png",
     subject: "Youtube",

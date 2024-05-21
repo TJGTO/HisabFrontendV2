@@ -19,6 +19,14 @@ export interface badgesObj {
   level: number;
   priority: number;
 }
+export interface membership {
+  membershipId: string;
+  membershipName: string;
+  userId: string;
+  userName: string;
+  validfrom: string;
+  validto: string;
+}
 export interface updateProfileObj {
   firstName?: String;
   lastName?: String;
@@ -34,6 +42,8 @@ export interface updateProfileObj {
   address?: addressObj;
   isAddress?: boolean;
   badges?: badgesObj[];
+  membershipDetails?: membership[];
+  activemembership?: boolean;
 }
 
 export interface stateObj {
