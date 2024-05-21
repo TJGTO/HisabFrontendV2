@@ -23,6 +23,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { createAddressStringFromObj, fromatDate } from "../../Common/functions";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import Swal from "sweetalert2";
+import StarIcon from "@mui/icons-material/Star";
 import Badge from "@mui/material/Badge";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import EditProfilePictureDialog from "./profilePictureEditDialog";
@@ -56,6 +57,7 @@ function ProfileSection({ userid }: { userid?: string }) {
   const open = Boolean(anchorEl);
   const dispatch = useDispatch<AppDispatch>();
   const [isLoggedIn, token, fullname] = useAuth();
+  const [showachivementDiv, setshowachivementDiv] = useState<boolean>(false);
   const [showEditButton, setshowEditButton] = useState<boolean>(false);
   const [openAddressDialog, setopenAddressDialog] = useState<boolean>(false);
   const [openpictureDialog, setopenpictureDialog] = useState<boolean>(false);
@@ -66,6 +68,13 @@ function ProfileSection({ userid }: { userid?: string }) {
     ? userProfile?.firstName + " " + userProfile?.lastName
     : "";
 
+  useEffect(() => {
+    if (userProfile && userProfile.badges && userProfile.badges.length > 0) {
+      setshowachivementDiv(true);
+    } else if (userProfile && userProfile?.activemembership) {
+      setshowachivementDiv(true);
+    }
+  }, [userProfile]);
   useEffect(() => {
     if (!userid) {
       setshowEditButton(true);
@@ -124,6 +133,7 @@ function ProfileSection({ userid }: { userid?: string }) {
   const fireALertWithValue = (value: string | undefined) => {
     Swal.fire(value ? value : "");
   };
+
   return (
     <div className="h-screen flex justify-center mt-6 ">
       {fetchDetailsLoader && <PageLoader />}
@@ -161,26 +171,50 @@ function ProfileSection({ userid }: { userid?: string }) {
             </Avatar>
           </Badge>
         </div>
-        {userProfile?.badges && userProfile?.badges.length > 0 && (
+        {showachivementDiv && (
           <div className="flex justify-center gap-3 mt-4 w-60">
-            <div className="inline-block text-orange-500">
-              {userProfile?.badges.length} Badge
-              {userProfile?.badges.length > 1 ? "s" : ""}{" "}
-              <VisibilityIcon
-                sx={{ fontSize: "16px", cursor: "pointer" }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setopenbadgesDialog(true);
-                }}
-              />
-            </div>
-            <AchievementSection
-              open={openbadgesDialog}
-              onClose={closeBadgeDialog}
-              data={userProfile?.badges}
-            />
+            {userProfile?.badges && userProfile?.badges.length > 0 && (
+              <div className="inline-block text-orange-500">
+                {userProfile?.badges.length} Badge
+                {userProfile?.badges.length > 1 ? "s" : ""}{" "}
+                <VisibilityIcon
+                  sx={{ fontSize: "16px", cursor: "pointer" }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setopenbadgesDialog(true);
+                  }}
+                />
+                <AchievementSection
+                  open={openbadgesDialog}
+                  onClose={closeBadgeDialog}
+                  data={userProfile?.badges}
+                />
+              </div>
+            )}
+            {userProfile?.activemembership && (
+              <>
+                <Tooltip title="Member">
+                  <div
+                    onClick={(e) => {
+                      if (
+                        userProfile &&
+                        userProfile.membershipDetails &&
+                        userProfile?.membershipDetails[0]
+                      ) {
+                        fireALertWithValue(
+                          `Membership Valid upto ${userProfile?.membershipDetails[0].validto}`
+                        );
+                      }
+                    }}
+                  >
+                    <StarIcon className="text-yellow-500" />
+                  </div>
+                </Tooltip>
+              </>
+            )}
           </div>
         )}
+
         <div className="flex justify-center gap-2 mt-4 w-60">
           {userProfile?.firstName + " " + userProfile?.lastName}
           {userProfile?.academic == "Working Professional" && (
@@ -197,6 +231,7 @@ function ProfileSection({ userid }: { userid?: string }) {
               </div>
             </Tooltip>
           )}
+
           {showEditButton && (
             <>
               <Tooltip title="Edit Profile">
