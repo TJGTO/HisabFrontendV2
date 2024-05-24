@@ -5,16 +5,28 @@ import { ISearchUserModifiedObj } from "../../gamedetails/domain";
 import { createMembershipRecords } from "../service";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
+import OptionsDialog from "./optionsDialog";
 import { fetchmembershipcards } from "../../../lib/slices/membership";
 import Swal from "sweetalert2";
 
 function Searchbox() {
   const dispatch = useDispatch<AppDispatch>();
   const [open, setopen] = useState<boolean>(false);
+  const [openOptions, setopenOptions] = useState<boolean>(false);
   const [loader, setloader] = useState<boolean>(false);
+  const [fromDate, setfromDate] = useState<string>("");
+  const [toDate, settoDate] = useState<string>("");
 
   const closeDialog = () => {
     setopen(false);
+  };
+  const closeOPtionsDialog = () => {
+    setopenOptions(false);
+  };
+
+  const onsaveOptions = () => {
+    setopen(true);
+    setopenOptions(false);
   };
 
   const onsubmitmembership = async (userlist: ISearchUserModifiedObj[]) => {
@@ -27,13 +39,11 @@ function Searchbox() {
         };
       }
     );
-    const validToDate = new Date();
-    validToDate.setDate(validToDate.getDate() + 30);
     const reqbody: CreateMembershipReqBody = {
       membershipId: "664266129f04623deb00110e",
       membershipName: "WFG Membership",
-      validfrom: new Date().toString(),
-      validto: validToDate.toString(),
+      validfrom: fromDate,
+      validto: toDate,
       users: usersmap,
     };
     try {
@@ -94,7 +104,8 @@ function Searchbox() {
       <button
         onClick={(e) => {
           e.preventDefault();
-          setopen(true);
+          //setopen(true);
+          setopenOptions(true);
         }}
         className="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
@@ -121,6 +132,15 @@ function Searchbox() {
         dialogTitle={"Add Users"}
         onClose={closeDialog}
         onsave={onsubmitmembership}
+      />
+      <OptionsDialog
+        open={openOptions}
+        onClose={closeOPtionsDialog}
+        fromDate={fromDate}
+        toDate={toDate}
+        setfromDate={setfromDate}
+        settoDate={settoDate}
+        onsave={onsaveOptions}
       />
     </form>
   );

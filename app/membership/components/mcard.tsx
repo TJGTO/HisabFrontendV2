@@ -7,6 +7,7 @@ import { fetchmembershipcards } from "../../../lib/slices/membership";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { members, extendmembershipReq } from "../domain";
+import OptionsDialog from "./optionsDialog";
 import { extendMembership, removeMembership } from "../service";
 
 function Mcard({
@@ -19,23 +20,34 @@ function Mcard({
   profilePictureURL,
 }: members) {
   const [open, setopen] = useState<boolean>(false);
+  const [openOptions, setopenOptions] = useState<boolean>(false);
   const [headerTest, setheaderTest] = useState<string>("");
   const [action, setaction] = useState<string>("");
+  const [fromDate, setfromDate] = useState<string>("");
+  const [toDate, settoDate] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
+
   const closeConfirmDialog = () => {
     setopen(false);
   };
+  const closeOPtionsDialog = () => {
+    setopenOptions(false);
+  };
+  const onsaveOptions = () => {
+    setopenOptions(false);
+    if (action == "extend") {
+      setopen(true);
+      setheaderTest("Do you want to extend?");
+    }
+  };
   const submitextendmembership = async () => {
-    const validToDate = new Date();
-    validToDate.setDate(validToDate.getDate() + 30);
     const reqbody: extendmembershipReq = {
-      validfrom: new Date().toString(),
-      validto: validToDate.toString(),
+      validfrom: fromDate,
+      validto: toDate,
       cardId: cardId,
     };
     let response;
     try {
-      // setloader(true);
       if (action == "extend") {
         response = await extendMembership(reqbody);
         Swal.fire({
@@ -55,9 +67,7 @@ function Mcard({
       }
 
       dispatch(fetchmembershipcards());
-      // setloader(false);
     } catch (error) {
-      // setloader(false);
       Swal.fire({
         icon: "error",
         title: "Failed to update the record",
@@ -97,8 +107,7 @@ function Mcard({
         <div className="flex mt-4 md:mt-6">
           <a
             onClick={(e) => {
-              setopen(true);
-              setheaderTest("Do you want to extend?");
+              setopenOptions(true);
               setaction("extend");
             }}
             className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
@@ -123,6 +132,15 @@ function Mcard({
         titleText=""
         onClose={closeConfirmDialog}
         onConfirm={submitextendmembership}
+      />
+      <OptionsDialog
+        open={openOptions}
+        onClose={closeOPtionsDialog}
+        fromDate={fromDate}
+        toDate={toDate}
+        setfromDate={setfromDate}
+        settoDate={settoDate}
+        onsave={onsaveOptions}
       />
     </div>
   );

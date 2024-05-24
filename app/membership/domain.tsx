@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface usersObj {
   userId: string;
   userName: string;
@@ -31,4 +33,14 @@ export interface extendmembershipReq {
   cardId: string;
   validfrom: string;
   validto: string;
+}
+
+export interface optionsDialogProps {
+  open: boolean;
+  onClose: () => void;
+  fromDate: string;
+  toDate: string;
+  setfromDate: React.Dispatch<React.SetStateAction<string>>;
+  settoDate: React.Dispatch<React.SetStateAction<string>>;
+  onsave: () => void;
 }
