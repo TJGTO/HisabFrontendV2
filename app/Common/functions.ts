@@ -54,8 +54,11 @@ export const fromatDate = (
   return momentDate.format(formatOfDate);
 };
 
-export const getCurrentDate = () => {
-  const today = new Date();
+export const getCurrentDate = (date?: string | Date, counter?: number) => {
+  const today = date ? new Date(date) : new Date();
+  if (counter && counter > 0) {
+    today.setDate(today.getDate() + counter);
+  }
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
