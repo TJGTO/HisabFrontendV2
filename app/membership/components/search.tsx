@@ -16,6 +16,7 @@ function Searchbox() {
   const [loader, setloader] = useState<boolean>(false);
   const [fromDate, setfromDate] = useState<string>("");
   const [toDate, settoDate] = useState<string>("");
+  const [amount, setamount] = useState<string>("");
 
   const closeDialog = () => {
     setopen(false);
@@ -44,6 +45,7 @@ function Searchbox() {
       membershipName: "WFG Membership",
       validfrom: fromDate,
       validto: toDate,
+      amount: amount,
       users: usersmap,
     };
     try {
@@ -138,6 +140,8 @@ function Searchbox() {
         onClose={closeOPtionsDialog}
         fromDate={fromDate}
         toDate={toDate}
+        amount={amount}
+        setamount={setamount}
         setfromDate={setfromDate}
         settoDate={settoDate}
         onsave={onsaveOptions}

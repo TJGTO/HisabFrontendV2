@@ -36,6 +36,7 @@ function McardSection() {
                 userId={item.userId}
                 validfrom={item.validfrom}
                 validto={item.validto}
+                membershipCardId={item.membershipCardId}
                 profilePictureURL={item.profilePictureURL}
               />
             ))}

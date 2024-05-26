@@ -11,12 +11,14 @@ export interface CreateMembershipReqBody {
   membershipName: string;
   users: usersObj[];
   validfrom: string;
+  amount: string;
   validto: string;
 }
 
 export interface members {
   cardId: string;
   membershipName: string;
+  membershipCardId: string;
   userName: string;
   userId: string;
   profilePictureURL: string;
@@ -33,6 +35,7 @@ export interface extendmembershipReq {
   cardId: string;
   validfrom: string;
   validto: string;
+  amount: string;
 }
 
 export interface optionsDialogProps {
@@ -40,6 +43,8 @@ export interface optionsDialogProps {
   onClose: () => void;
   fromDate: string;
   toDate: string;
+  amount: string;
+  setamount: React.Dispatch<React.SetStateAction<string>>;
   setfromDate: React.Dispatch<React.SetStateAction<string>>;
   settoDate: React.Dispatch<React.SetStateAction<string>>;
   onsave: () => void;

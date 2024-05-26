@@ -33,6 +33,7 @@ import {
   resetFlags,
   fetchPermissionData,
 } from "../../../lib/slices/profileSection";
+import MembershipDetailsDialog from "./membershipdetailsDialog";
 import EditProfileDialog from "./editProfileDialog";
 import EditAddressDialog from "./editAddressDialog";
 import { RootState, AppDispatch } from "../../../lib/store";
@@ -44,6 +45,8 @@ function ProfileSection({ userid }: { userid?: string }) {
   const [openfullImageDialog, setopenfullImageDialog] =
     useState<boolean>(false);
   const [openbadgesDialog, setopenbadgesDialog] = useState<boolean>(false);
+  const [openmembershidetailsDialog, setopenmembershidetailsDialog] =
+    useState<boolean>(false);
   const userProfile = useSelector(
     (state: RootState) => state.profileSection.userProfile
   );
@@ -130,6 +133,9 @@ function ProfileSection({ userid }: { userid?: string }) {
   const closeEditPictureDialog = () => {
     setopenpictureDialog(false);
   };
+  const closeMembershipDetailsDialog = () => {
+    setopenmembershidetailsDialog(false);
+  };
   const fireALertWithValue = (value: string | undefined) => {
     Swal.fire(value ? value : "");
   };
@@ -201,9 +207,10 @@ function ProfileSection({ userid }: { userid?: string }) {
                         userProfile.membershipDetails &&
                         userProfile?.membershipDetails[0]
                       ) {
-                        fireALertWithValue(
-                          `Membership Valid upto ${userProfile?.membershipDetails[0].validto}`
-                        );
+                        setopenmembershidetailsDialog(true);
+                        // fireALertWithValue(
+                        //   `Membership Valid upto ${userProfile?.membershipDetails[0].validto}`
+                        // );
                       }
                     }}
                   >
@@ -335,6 +342,13 @@ function ProfileSection({ userid }: { userid?: string }) {
         onClose={closefullImageDialog}
         imageurl={currentImageUrl}
       />
+      {userProfile?.membershipDetails && (
+        <MembershipDetailsDialog
+          open={openmembershidetailsDialog}
+          onClose={closeMembershipDetailsDialog}
+          membershipData={userProfile.membershipDetails[0]}
+        />
+      )}
     </div>
   );
 }
