@@ -9,6 +9,8 @@ function OptionsDialog({
   onClose,
   fromDate,
   toDate,
+  amount,
+  setamount,
   setfromDate,
   settoDate,
   onsave,
@@ -17,6 +19,7 @@ function OptionsDialog({
     if (open) {
       setfromDate("");
       settoDate("");
+      setamount("");
     }
   }, [open]);
   const handleClose = () => {
@@ -72,6 +75,22 @@ function OptionsDialog({
                     onChange={(e) => {
                       e.preventDefault();
                       settoDate(e.target.value);
+                    }}
+                    className="bg-gray-50 border w-full border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col md:flex-row gap-3">
+                <div className="w-full">
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Amount ( ₹ )
+                  </label>
+                  <input
+                    id="price"
+                    type="number"
+                    onChange={(e) => {
+                      e.preventDefault();
+                      setamount(e.target.value);
                     }}
                     className="bg-gray-50 border w-full border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />

@@ -26,6 +26,7 @@ export interface membership {
   userName: string;
   validfrom: string;
   validto: string;
+  membershipCardId: string;
 }
 export interface updateProfileObj {
   firstName?: String;
@@ -45,7 +46,9 @@ export interface updateProfileObj {
   membershipDetails?: membership[];
   activemembership?: boolean;
 }
-
+export interface membershipdetailsDialogProps extends settingDialogProps {
+  membershipData: membership;
+}
 export interface stateObj {
   _id: String;
   stateName: String;

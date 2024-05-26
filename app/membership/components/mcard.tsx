@@ -17,6 +17,7 @@ function Mcard({
   userId,
   validfrom,
   validto,
+  membershipCardId,
   profilePictureURL,
 }: members) {
   const [open, setopen] = useState<boolean>(false);
@@ -25,6 +26,7 @@ function Mcard({
   const [action, setaction] = useState<string>("");
   const [fromDate, setfromDate] = useState<string>("");
   const [toDate, settoDate] = useState<string>("");
+  const [amount, setamount] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
 
   const closeConfirmDialog = () => {
@@ -45,6 +47,7 @@ function Mcard({
       validfrom: fromDate,
       validto: toDate,
       cardId: cardId,
+      amount: amount,
     };
     let response;
     try {
@@ -99,6 +102,9 @@ function Mcard({
           {userName}
         </h5>
         <span className="text-sm text-gray-500 dark:text-gray-400">
+          {membershipCardId}
+        </span>
+        <span className="text-sm text-gray-500 dark:text-gray-400">
           From - {validfrom}
         </span>
         <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -138,6 +144,8 @@ function Mcard({
         onClose={closeOPtionsDialog}
         fromDate={fromDate}
         toDate={toDate}
+        amount={amount}
+        setamount={setamount}
         setfromDate={setfromDate}
         settoDate={settoDate}
         onsave={onsaveOptions}
