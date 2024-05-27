@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { usersObj, CreateMembershipReqBody } from "../domain";
+import { usersObj, CreateMembershipReqBody, searchBoxProps } from "../domain";
 import AdduserDialog from "../../Common/AddUser/adduser";
 import { ISearchUserModifiedObj } from "../../gamedetails/domain";
 import { createMembershipRecords } from "../service";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 import OptionsDialog from "./optionsDialog";
+import { initcapString } from "../../Common/functions";
 import { fetchmembershipcards } from "../../../lib/slices/membership";
 import Swal from "sweetalert2";
 
-function Searchbox() {
+function Searchbox({ paginationdata }: searchBoxProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [open, setopen] = useState<boolean>(false);
   const [openOptions, setopenOptions] = useState<boolean>(false);
@@ -35,7 +36,7 @@ function Searchbox() {
       (item: ISearchUserModifiedObj) => {
         return {
           userId: item._id,
-          userName: item.name,
+          userName: initcapString(item.name),
           profilePictureURL: item.profilepictureurl,
         };
       }
@@ -57,7 +58,7 @@ function Searchbox() {
         showConfirmButton: false,
         timer: 1500,
       });
-      dispatch(fetchmembershipcards());
+      dispatch(fetchmembershipcards(paginationdata));
       setloader(false);
       setopen(false);
     } catch (error) {

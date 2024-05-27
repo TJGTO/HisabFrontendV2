@@ -1,5 +1,9 @@
 import { AxiosWithAuth, Axios, AxiosWithAuthFromData } from "../../lib/axios";
-import { CreateMembershipReqBody, extendmembershipReq } from "./domain";
+import {
+  CreateMembershipReqBody,
+  extendmembershipReq,
+  fetchMenbershipCardsReqBody,
+} from "./domain";
 
 async function createMembershipRecords(data: CreateMembershipReqBody) {
   try {
@@ -33,10 +37,11 @@ async function createMembershipRecords(data: CreateMembershipReqBody) {
   }
 }
 
-async function getmembershipcards() {
+async function getmembershipcards(data: fetchMenbershipCardsReqBody) {
   try {
-    let response: any = await AxiosWithAuth.get(
-      "membership/getmembershiprecords/active"
+    let response: any = await AxiosWithAuth.post(
+      "membership/getmembershiprecords",
+      data
     );
     if (response.data && response.data.success) {
       return {

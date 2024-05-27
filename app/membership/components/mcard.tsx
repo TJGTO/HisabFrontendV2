@@ -6,7 +6,12 @@ import ConfirmDialog from "../../Common/ConfirmDialog/confirmDialog";
 import { fetchmembershipcards } from "../../../lib/slices/membership";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../lib/store";
-import { members, extendmembershipReq } from "../domain";
+import {
+  members,
+  extendmembershipReq,
+  mcardprops,
+  maxUserNameLength,
+} from "../domain";
 import OptionsDialog from "./optionsDialog";
 import { extendMembership, removeMembership } from "../service";
 
@@ -17,9 +22,10 @@ function Mcard({
   userId,
   validfrom,
   validto,
+  paginationdata,
   membershipCardId,
   profilePictureURL,
-}: members) {
+}: mcardprops) {
   const [open, setopen] = useState<boolean>(false);
   const [openOptions, setopenOptions] = useState<boolean>(false);
   const [headerTest, setheaderTest] = useState<string>("");
@@ -28,7 +34,11 @@ function Mcard({
   const [toDate, settoDate] = useState<string>("");
   const [amount, setamount] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
-
+  const truncatedUserName = userName
+    ? userName.length > maxUserNameLength
+      ? `${userName.slice(0, maxUserNameLength)}...`
+      : userName
+    : "";
   const closeConfirmDialog = () => {
     setopen(false);
   };
@@ -69,7 +79,7 @@ function Mcard({
         });
       }
 
-      dispatch(fetchmembershipcards());
+      dispatch(fetchmembershipcards(paginationdata));
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -99,7 +109,7 @@ function Mcard({
           {userName && createSortFromForAvator(userName.toString())}
         </Avatar>
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-          {userName}
+          {truncatedUserName}
         </h5>
         <span className="text-sm text-gray-500 dark:text-gray-400">
           {membershipCardId}
