@@ -123,3 +123,16 @@ export const downloadExcelFile = (excelData: ArrayBuffer) => {
   link.click();
   document.body.removeChild(link);
 };
+
+export function initcapString(inputString: string) {
+  /**
+   * Convert a string to initcap format, where the first letter of each word is capitalized and the rest are lowercase.
+   *
+   * @param {string} inputString - The input string to be converted.
+   * @returns {string} - The string in initcap format.
+   */
+  return inputString
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}

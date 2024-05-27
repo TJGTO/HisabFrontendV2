@@ -25,10 +25,12 @@ export interface members {
   validfrom: string;
   validto: string;
 }
+
 export interface MembershipStoreState {
   membershipList: members[];
   fetchLoader: boolean;
   fetchError: boolean;
+  totalCount: number;
 }
 
 export interface extendmembershipReq {
@@ -49,3 +51,21 @@ export interface optionsDialogProps {
   settoDate: React.Dispatch<React.SetStateAction<string>>;
   onsave: () => void;
 }
+
+export type cardtype = "active" | "inactive";
+
+export interface fetchMenbershipCardsReqBody {
+  flag: cardtype;
+  skip: number;
+  limit: number;
+}
+
+export interface searchBoxProps {
+  paginationdata: fetchMenbershipCardsReqBody;
+}
+
+export interface mcardprops extends members {
+  paginationdata: fetchMenbershipCardsReqBody;
+}
+
+export const maxUserNameLength = 15;
