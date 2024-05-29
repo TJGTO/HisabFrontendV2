@@ -21,6 +21,9 @@ function McardSection() {
   const fetchLoader = useSelector(
     (state: RootState) => state.membership.fetchLoader
   );
+  const searching = useSelector(
+    (state: RootState) => state.membership.searching
+  );
   const [flag, setflag] = useState<cardtype>("active");
   const [skip, setskip] = useState<number>(0);
   const [page, setpage] = useState<number>(1);
@@ -65,13 +68,15 @@ function McardSection() {
           </>
         )}
       </div>
-      <CustomTableFooter
-        page={page}
-        pageSize={pageSize}
-        totalPages={totalPages}
-        setpage={setpage}
-        setpageSize={setpageSize}
-      />
+      {!searching && (
+        <CustomTableFooter
+          page={page}
+          pageSize={pageSize}
+          totalPages={totalPages}
+          setpage={setpage}
+          setpageSize={setpageSize}
+        />
+      )}
     </div>
   );
 }

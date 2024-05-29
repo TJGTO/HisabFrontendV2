@@ -31,6 +31,7 @@ export interface MembershipStoreState {
   fetchLoader: boolean;
   fetchError: boolean;
   totalCount: number;
+  searching: boolean;
 }
 
 export interface extendmembershipReq {
@@ -60,6 +61,9 @@ export interface fetchMenbershipCardsReqBody {
   limit: number;
 }
 
+export interface searchMembershipCardsBody extends fetchMenbershipCardsReqBody {
+  searchString: string;
+}
 export interface searchBoxProps {
   paginationdata: fetchMenbershipCardsReqBody;
 }
