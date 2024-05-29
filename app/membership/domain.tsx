@@ -31,6 +31,7 @@ export interface MembershipStoreState {
   fetchLoader: boolean;
   fetchError: boolean;
   totalCount: number;
+  searching: boolean;
 }
 
 export interface extendmembershipReq {

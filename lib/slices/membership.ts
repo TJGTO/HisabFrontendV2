@@ -14,6 +14,7 @@ const initialState: MembershipStoreState = {
   fetchLoader: false,
   fetchError: false,
   totalCount: 0,
+  searching: false,
 };
 
 export const fetchmembershipcards = createAsyncThunk(
@@ -89,13 +90,25 @@ const membershipModelSlice = createSlice({
       state.fetchLoader = false;
       state.fetchError = true;
     });
-    builder.addCase(searchrecords.fulfilled, (state, action) => {
+    builder.addCase(searchrecords.pending, (state, action) => {
       //state.fetchLoader = false;
+      state.searching = true;
+      state.fetchLoader = true;
+    });
+    builder.addCase(searchrecords.fulfilled, (state, action) => {
+      state.fetchLoader = false;
       if (action.payload && action.payload.success) {
-        console.log(action.payload);
+        let fetchedCards = action.payload.cards;
+
+        //we have whole new set of page
+        state.membershipList = [...fetchedCards];
       } else if (action.payload) {
         //state.fetchError = true;
       }
+    });
+    builder.addCase(searchrecords.rejected, (state, action) => {
+      state.fetchLoader = false;
+      //state.fetchError = true;
     });
   },
 });
