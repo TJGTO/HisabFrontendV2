@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { usersObj, CreateMembershipReqBody, searchBoxProps } from "../domain";
+import {
+  usersObj,
+  CreateMembershipReqBody,
+  searchBoxProps,
+  searchMembershipCardsBody,
+} from "../domain";
 import AdduserDialog from "../../Common/AddUser/adduser";
 import { ISearchUserModifiedObj } from "../../gamedetails/domain";
 import { createMembershipRecords } from "../service";
@@ -7,12 +12,16 @@ import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
 import OptionsDialog from "./optionsDialog";
 import { initcapString } from "../../Common/functions";
-import { fetchmembershipcards } from "../../../lib/slices/membership";
+import {
+  fetchmembershipcards,
+  searchrecords,
+} from "../../../lib/slices/membership";
 import Swal from "sweetalert2";
 
 function Searchbox({ paginationdata }: searchBoxProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [open, setopen] = useState<boolean>(false);
+  const [searchString, setsearchString] = useState<string>("");
   const [openOptions, setopenOptions] = useState<boolean>(false);
   const [loader, setloader] = useState<boolean>(false);
   const [fromDate, setfromDate] = useState<string>("");
@@ -71,12 +80,31 @@ function Searchbox({ paginationdata }: searchBoxProps) {
       });
     }
   };
+  const onSubmitSearch = () => {
+    let reqbody: searchMembershipCardsBody = {
+      searchString: searchString,
+      flag: "active",
+      skip: 0,
+      limit: 10,
+    };
+    dispatch(searchrecords(reqbody));
+  };
   return (
-    <form className="flex items-center max-w-sm mx-auto">
+    <form
+      className="flex items-center max-w-sm mx-auto"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmitSearch();
+      }}
+    >
       <label className="sr-only">Search</label>
       <div className="relative w-full">
         <input
           type="text"
+          onChange={(e) => {
+            e.preventDefault();
+            setsearchString(e.target.value);
+          }}
           id="simple-search"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Search a member by name..."

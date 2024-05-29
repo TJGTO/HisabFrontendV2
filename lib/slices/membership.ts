@@ -1,7 +1,13 @@
 import { MembershipStoreState, members } from "../../app/membership/domain";
-import { getmembershipcards } from "../../app/membership/service";
+import {
+  getmembershipcards,
+  searchmembershipcards,
+} from "../../app/membership/service";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchMenbershipCardsReqBody } from "../../app/membership/domain";
+import {
+  fetchMenbershipCardsReqBody,
+  searchMembershipCardsBody,
+} from "../../app/membership/domain";
 
 const initialState: MembershipStoreState = {
   membershipList: [],
@@ -15,6 +21,18 @@ export const fetchmembershipcards = createAsyncThunk(
   async (body: fetchMenbershipCardsReqBody) => {
     try {
       const response = await getmembershipcards(body);
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  }
+);
+
+export const searchrecords = createAsyncThunk(
+  "membershipModel/searchmembershipcards",
+  async (body: searchMembershipCardsBody) => {
+    try {
+      const response = await searchmembershipcards(body);
       return response;
     } catch (err) {
       throw err;
@@ -70,6 +88,14 @@ const membershipModelSlice = createSlice({
     builder.addCase(fetchmembershipcards.rejected, (state, action) => {
       state.fetchLoader = false;
       state.fetchError = true;
+    });
+    builder.addCase(searchrecords.fulfilled, (state, action) => {
+      //state.fetchLoader = false;
+      if (action.payload && action.payload.success) {
+        console.log(action.payload);
+      } else if (action.payload) {
+        //state.fetchError = true;
+      }
     });
   },
 });

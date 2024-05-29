@@ -60,6 +60,9 @@ export interface fetchMenbershipCardsReqBody {
   limit: number;
 }
 
+export interface searchMembershipCardsBody extends fetchMenbershipCardsReqBody {
+  searchString: string;
+}
 export interface searchBoxProps {
   paginationdata: fetchMenbershipCardsReqBody;
 }
