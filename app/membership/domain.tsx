@@ -59,12 +59,15 @@ export interface fetchMenbershipCardsReqBody {
   flag: cardtype;
   skip: number;
   limit: number;
+  searchString?: string;
 }
 
 export interface searchMembershipCardsBody extends fetchMenbershipCardsReqBody {
   searchString: string;
 }
 export interface searchBoxProps {
+  setskip: React.Dispatch<React.SetStateAction<number>>;
+  setpage: React.Dispatch<React.SetStateAction<number>>;
   paginationdata: fetchMenbershipCardsReqBody;
 }
 

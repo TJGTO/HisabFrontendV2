@@ -4,6 +4,7 @@ import {
   CreateMembershipReqBody,
   searchBoxProps,
   searchMembershipCardsBody,
+  fetchMenbershipCardsReqBody,
 } from "../domain";
 import AdduserDialog from "../../Common/AddUser/adduser";
 import { ISearchUserModifiedObj } from "../../gamedetails/domain";
@@ -15,10 +16,11 @@ import { initcapString } from "../../Common/functions";
 import {
   fetchmembershipcards,
   searchrecords,
+  resetMembershipData,
 } from "../../../lib/slices/membership";
 import Swal from "sweetalert2";
 
-function Searchbox({ paginationdata }: searchBoxProps) {
+function Searchbox({ paginationdata, setpage, setskip }: searchBoxProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [open, setopen] = useState<boolean>(false);
   const [searchString, setsearchString] = useState<string>("");
@@ -81,13 +83,16 @@ function Searchbox({ paginationdata }: searchBoxProps) {
     }
   };
   const onSubmitSearch = () => {
-    let reqbody: searchMembershipCardsBody = {
+    let reqbody: fetchMenbershipCardsReqBody = {
       searchString: searchString,
       flag: "active",
       skip: 0,
       limit: 10,
     };
-    dispatch(searchrecords(reqbody));
+    setpage(1);
+    setskip(0);
+    dispatch(fetchmembershipcards(reqbody));
+    dispatch(resetMembershipData());
   };
   return (
     <form
@@ -108,7 +113,6 @@ function Searchbox({ paginationdata }: searchBoxProps) {
           id="simple-search"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Search a member by name..."
-          required
         />
       </div>
       <button

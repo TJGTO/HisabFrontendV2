@@ -43,7 +43,11 @@ function McardSection() {
   }, [page]);
   return (
     <div className="mt-3">
-      <Searchbox paginationdata={{ flag, skip, limit: pageSize }} />
+      <Searchbox
+        paginationdata={{ flag, skip, limit: pageSize }}
+        setpage={setpage}
+        setskip={setskip}
+      />
       <div className="grid grid-cols-2 md:grid-cols-5 gap-2 m-3">
         {fetchLoader ? (
           <PageLoader />
@@ -68,15 +72,13 @@ function McardSection() {
           </>
         )}
       </div>
-      {!searching && (
-        <CustomTableFooter
-          page={page}
-          pageSize={pageSize}
-          totalPages={totalPages}
-          setpage={setpage}
-          setpageSize={setpageSize}
-        />
-      )}
+      <CustomTableFooter
+        page={page}
+        pageSize={pageSize}
+        totalPages={totalPages}
+        setpage={setpage}
+        setpageSize={setpageSize}
+      />
     </div>
   );
 }
