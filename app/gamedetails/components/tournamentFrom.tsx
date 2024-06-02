@@ -6,6 +6,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Errormessage from "../../Common/FormComponents/errormessage";
 import FileUploadSection from "../../Common/FormComponents/fileUploadSection";
 import { IRegisterTournamentProps, tournamentFormSchema } from "../domain";
+import { RootState } from "../../../lib/store";
+import { useSelector } from "react-redux";
 
 function TournamentForm({
   file,
@@ -20,7 +22,9 @@ function TournamentForm({
   } = useForm({
     resolver: yupResolver(tournamentFormSchema),
   });
-
+  const gameDetails = useSelector(
+    (state: RootState) => state.gameModel.gameDetails
+  );
   const onSubmitofForm = (data: any) => {
     console.log("data", data);
     onsubmitfn(data);
@@ -83,11 +87,25 @@ function TournamentForm({
             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option value="">{"Please Select"}</option>
-            <option value="Regular Player">{"Regular Player"}</option>
-            <option value="Non-Regular Player">{"Non-Regular Player"}</option>
-            <option value="outsider">{"outsider"}</option>
-            <option value="Regular Owner">{"Regular Owner"}</option>
-            <option value="Non-Regular Owner">{"Non-Regular Owner"}</option>
+            {gameDetails &&
+              gameDetails.paymentOptions?.map((x, index) => (
+                <>
+                  <option value={x.paymentType} key={index}>
+                    {x.paymentType}
+                  </option>
+                </>
+              ))}
+            {gameDetails && gameDetails.paymentOptions?.length == 0 && (
+              <>
+                <option value="Regular Player">{"Regular Player"}</option>
+                <option value="Non-Regular Player">
+                  {"Non-Regular Player"}
+                </option>
+                <option value="outsider">{"outsider"}</option>
+                <option value="Regular Owner">{"Regular Owner"}</option>
+                <option value="Non-Regular Owner">{"Non-Regular Owner"}</option>
+              </>
+            )}
           </select>
         </div>
         {errors && errors.player_type && (

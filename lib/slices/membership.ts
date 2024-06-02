@@ -44,7 +44,17 @@ export const searchrecords = createAsyncThunk(
 const membershipModelSlice = createSlice({
   name: "membershipModel",
   initialState,
-  reducers: {},
+  reducers: {
+    resetMembershipData: (state) => {
+      state.membershipList = [];
+    },
+    updatemembershipCard: (state, action) => {
+      let index = state.membershipList.findIndex(
+        (x) => x.cardId == action.payload._id
+      );
+      state.membershipList[index] = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchmembershipcards.pending, (state) => {
       state.fetchLoader = true;
@@ -113,4 +123,6 @@ const membershipModelSlice = createSlice({
   },
 });
 
+export const { resetMembershipData, updatemembershipCard } =
+  membershipModelSlice.actions;
 export default membershipModelSlice.reducer;

@@ -3,7 +3,10 @@ import { createSortFromForAvator, stringToColor } from "../../Common/functions";
 import Avatar from "@mui/material/Avatar";
 import Swal from "sweetalert2";
 import ConfirmDialog from "../../Common/ConfirmDialog/confirmDialog";
-import { fetchmembershipcards } from "../../../lib/slices/membership";
+import {
+  fetchmembershipcards,
+  updatemembershipCard,
+} from "../../../lib/slices/membership";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../../lib/store";
 import {
@@ -79,7 +82,7 @@ function Mcard({
         });
       }
 
-      dispatch(fetchmembershipcards(paginationdata));
+      dispatch(updatemembershipCard(response?.data));
     } catch (error) {
       Swal.fire({
         icon: "error",
