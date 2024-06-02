@@ -8,7 +8,10 @@ import { fetchMenbershipCardsReqBody, cardtype } from "../domain";
 import PageLoader from "../../Common/Loader/pageLoader";
 import { RootState, AppDispatch } from "../../../lib/store";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchmembershipcards } from "../../../lib/slices/membership";
+import {
+  fetchmembershipcards,
+  resetMembershipData,
+} from "../../../lib/slices/membership";
 
 function McardSection() {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,7 +34,7 @@ function McardSection() {
   const totalPages = Math.ceil(totalCount / pageSize);
   console.log("membershipList", membershipList);
   useEffect(() => {
-    if (membershipList.length <= (page - 1) * pageSize) {
+    if (page != 1 && membershipList.length <= (page - 1) * pageSize) {
       setskip((page - 1) * pageSize);
       let obj: fetchMenbershipCardsReqBody = {
         flag: flag,
@@ -41,6 +44,18 @@ function McardSection() {
       dispatch(fetchmembershipcards(obj));
     }
   }, [page]);
+  useEffect(() => {
+    let obj: fetchMenbershipCardsReqBody = {
+      flag: flag,
+      skip: (page - 1) * pageSize,
+      limit: pageSize,
+    };
+    dispatch(fetchmembershipcards(obj));
+
+    return () => {
+      dispatch(resetMembershipData());
+    };
+  }, []);
   return (
     <div className="mt-3">
       <Searchbox
