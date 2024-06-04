@@ -95,6 +95,7 @@ function AdduserDialog({
           </div>
           <div className="w-full">
             <form
+              id="searchUsers"
               className="max-w-lg mx-auto"
               onSubmit={(e) => {
                 e.preventDefault();
