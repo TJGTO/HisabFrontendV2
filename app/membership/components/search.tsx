@@ -95,13 +95,7 @@ function Searchbox({ paginationdata, setpage, setskip }: searchBoxProps) {
     dispatch(resetMembershipData());
   };
   return (
-    <form
-      className="flex items-center max-w-sm mx-auto"
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmitSearch();
-      }}
-    >
+    <div id="searchCards" className="flex items-center max-w-sm mx-auto">
       <label className="sr-only">Search</label>
       <div className="relative w-full">
         <input
@@ -116,7 +110,10 @@ function Searchbox({ paginationdata, setpage, setskip }: searchBoxProps) {
         />
       </div>
       <button
-        type="submit"
+        onClick={(e) => {
+          e.preventDefault();
+          onSubmitSearch();
+        }}
         className="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
         <svg
@@ -179,7 +176,7 @@ function Searchbox({ paginationdata, setpage, setskip }: searchBoxProps) {
         settoDate={settoDate}
         onsave={onsaveOptions}
       />
-    </form>
+    </div>
   );
 }
 
