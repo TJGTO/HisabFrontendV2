@@ -72,11 +72,11 @@ function Searchbox({ paginationdata, setpage, setskip }: searchBoxProps) {
       dispatch(fetchmembershipcards(paginationdata));
       setloader(false);
       setopen(false);
-    } catch (error) {
+    } catch (error: any) {
       setloader(false);
       Swal.fire({
         icon: "error",
-        title: "Failed to create the membership record",
+        title: error.message ? error.message : "Failed to create the record",
         showConfirmButton: false,
         timer: 1500,
       });
