@@ -1,8 +1,13 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { paymentDetailsDialogProps } from "../domain";
 import CloseIcon from "@mui/icons-material/Close";
+import { RootState } from "../../../lib/store";
+import { useSelector } from "react-redux";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { copyToClipboard } from "../../Common/functions";
+import CollectionTable from "./collectionTable";
 import Dialog from "@mui/material/Dialog";
 import Swal from "sweetalert2";
 
@@ -15,6 +20,11 @@ function UpiDetailsDialog({
   paymentOptions,
 }: paymentDetailsDialogProps) {
   console.log("paymentOptions", paymentOptions);
+  const permissionMatrix = useSelector(
+    (state: RootState) => state.gameModel.permissionMatrix
+  );
+  const [openCollectionTable, setopenCollectionTable] =
+    useState<boolean>(false);
   const paymentNORef = useRef(null);
   const handleClose = () => {
     onClose();
@@ -122,6 +132,30 @@ function UpiDetailsDialog({
                 </button>
               </div>
             </div>
+            {permissionMatrix?.editSetting && (
+              <div className="flex gap-3">
+                <div className="flex-1">
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Collection Details
+                  </label>
+                </div>
+                <div
+                  className="flex-none"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setopenCollectionTable(!openCollectionTable);
+                  }}
+                >
+                  {openCollectionTable ? (
+                    <KeyboardArrowUpIcon className="bg-blue-500" />
+                  ) : (
+                    <KeyboardArrowDownIcon className="bg-blue-500" />
+                  )}
+                </div>
+              </div>
+            )}
+
+            {openCollectionTable && <CollectionTable />}
           </div>
         </div>
       </div>
