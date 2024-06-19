@@ -6,6 +6,7 @@ export type TableHeadObj = {
 export type TableProps = {
   tablehead: Array<TableHeadObj>;
   tablerows: Array<JSX.Element>;
+  paginationNotNeeded?: boolean;
 };
 
 export interface IFooterProps {

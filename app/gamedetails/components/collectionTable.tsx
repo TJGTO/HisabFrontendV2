@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Typography } from "@mui/material";
 import { RootState } from "../../../lib/store";
 import { useSelector } from "react-redux";
+import CustomTable from "../../Common/Table/CustomTable";
 
 function CollectionTable() {
   const gameDetails = useSelector(
     (state: RootState) => state.gameModel.gameDetails
   );
+  const [tablerows, settablerows] = useState<Array<JSX.Element>>([]);
+  const tableheadArr = [
+    { id: 1, label: "Type" },
+    { id: 2, label: "PHP" },
+    { id: 3, label: "Count" },
+    { id: 4, label: "Collection" },
+  ];
+  useEffect(() => {
+    if (gameDetails) {
+      createTableRows();
+    }
+  }, [gameDetails]);
 
   let totalPrice = 0;
   const getPlayersCount = (type: string) => {
@@ -13,42 +27,116 @@ function CollectionTable() {
       (x) => x.player_type == type && x.status == "Approved"
     ).length;
   };
-  const playersTotalCollection = (type: string, price: number) => {
-    const count = getPlayersCount(type);
-
+  const playersTotalCollection = (count: number | undefined, price: number) => {
     totalPrice += count ? count * price : 0;
     return count ? count * price : 0;
   };
-  return (
-    <div className="w-full text-gray-900 dark:text-white">
-      <thead>
-        <tr>
-          <th className="border px-4 py-2">Type</th>
-          <th className="border px-4 py-2">PHP</th>
-          <th className="border px-4 py-2">Count</th>
-          <th className="border px-4 py-2">Collection</th>
-        </tr>
-      </thead>
-      <tbody className="w-full">
-        {gameDetails?.paymentOptions?.map((x, index) => (
-          <tr key={index}>
-            <td className="border px-4 py-2">{x.paymentType}</td>
-            <td className="border px-4 py-2">{x.price}</td>
-            <td className="border px-4 py-2">
-              {getPlayersCount(x.paymentType)}
+  const createTableRows = (): void => {
+    let arr: JSX.Element[] = [];
+    gameDetails?.paymentOptions?.forEach(({ paymentType, price }, index) => {
+      const isLast = index === gameDetails?.players.length - 1;
+      const count = getPlayersCount(paymentType);
+      let classes = "p-2 border-b border-blue-gray-50";
+      const row: JSX.Element = (
+        <>
+          <tr>
+            <td className={classes}>
+              <div className="flex flex-col">
+                <Typography
+                  color="blue-gray"
+                  className="font-normal dark:text-white"
+                >
+                  {paymentType}
+                </Typography>
+              </div>
             </td>
-            <td className="border px-4 py-2">
-              {playersTotalCollection(x.paymentType, x.price)}
+            <td className={classes}>
+              <div className="flex flex-col">
+                <Typography
+                  color="blue-gray"
+                  className="font-normal dark:text-white"
+                >
+                  {price}
+                </Typography>
+              </div>
+            </td>
+            <td className={classes}>
+              <div className="flex flex-col">
+                <Typography
+                  color="blue-gray"
+                  className="font-normal dark:text-white"
+                >
+                  {count}
+                </Typography>
+              </div>
+            </td>
+            <td className={classes}>
+              <div className="flex flex-col">
+                <Typography
+                  color="blue-gray"
+                  className="font-normal dark:text-white"
+                >
+                  {playersTotalCollection(count, price)}
+                </Typography>
+              </div>
             </td>
           </tr>
-        ))}
+        </>
+      );
+      arr.push(row);
+    });
+    ///push the last row where we will show the total
+    arr.push(
+      <>
         <tr>
-          <td className="border px-4 py-2"></td>
-          <td className="border px-4 py-2"></td>
-          <td className="border px-4 py-2">Total</td>
-          <td className="border px-4 py-2">{totalPrice}</td>
+          <td className="p-2">
+            <div className="flex flex-col">
+              <Typography
+                color="blue-gray"
+                className="font-normal dark:text-white"
+              ></Typography>
+            </div>
+          </td>
+          <td className="p-2">
+            <div className="flex flex-col">
+              <Typography
+                color="blue-gray"
+                className="font-normal dark:text-white"
+              ></Typography>
+            </div>
+          </td>
+          <td className="p-2">
+            <div className="flex flex-col">
+              <Typography
+                color="blue-gray"
+                className="font-normal dark:text-white"
+              >
+                {"Total"}
+              </Typography>
+            </div>
+          </td>
+          <td className="p-2">
+            <div className="flex flex-col">
+              <Typography
+                color="blue-gray"
+                className="font-normal dark:text-white"
+              >
+                {totalPrice}
+              </Typography>
+            </div>
+          </td>
         </tr>
-      </tbody>
+      </>
+    );
+    settablerows([...arr]);
+  };
+  return (
+    <div className="w-full text-gray-900 dark:text-white">
+      <CustomTable
+        tablehead={tableheadArr}
+        tablerows={tablerows}
+        paginationNotNeeded={true}
+      />
     </div>
   );
 }

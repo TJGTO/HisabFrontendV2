@@ -48,7 +48,7 @@ function UpiDetailsDialog({
   };
   return (
     <Dialog onClose={handleClose} open={open} maxWidth={"md"}>
-      <div className="bg-gray-50 dark:bg-gray-900">
+      <div className="w-full bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <div className="flex gap-3 justify-between">
@@ -154,8 +154,9 @@ function UpiDetailsDialog({
                 </div>
               </div>
             )}
-
-            {openCollectionTable && <CollectionTable />}
+            <div className="w-72 overflow-x-auto">
+              {openCollectionTable && <CollectionTable />}
+            </div>
           </div>
         </div>
       </div>

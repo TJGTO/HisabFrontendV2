@@ -6,20 +6,32 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { TableProps } from "./domain";
 import { Typography } from "@mui/material";
 
-function CustomTable({ tablehead, tablerows }: TableProps) {
+function CustomTable({
+  tablehead,
+  tablerows,
+  paginationNotNeeded,
+}: TableProps) {
   const [visibleRows, setVisibleRows] = useState<Array<JSX.Element>>([]);
   const [page, setpage] = useState<number>(1);
   const [pageSize, setpageSize] = useState<number>(5);
   const totalPages = Math.ceil(tablerows.length / pageSize);
 
   useEffect(() => {
-    let cutoffRows = tablerows.slice((page - 1) * pageSize, page * pageSize);
-    setVisibleRows(cutoffRows);
+    if (paginationNotNeeded) {
+      setVisibleRows(tablerows);
+    } else {
+      let cutoffRows = tablerows.slice((page - 1) * pageSize, page * pageSize);
+      setVisibleRows(cutoffRows);
+    }
   }, [page, tablerows, pageSize]);
 
   useEffect(() => {
-    let cutoffRows = tablerows.slice(0, 1 * pageSize);
-    setVisibleRows(cutoffRows);
+    if (paginationNotNeeded) {
+      setVisibleRows(tablerows);
+    } else {
+      let cutoffRows = tablerows.slice(0, 1 * pageSize);
+      setVisibleRows(cutoffRows);
+    }
   }, []);
 
   return (
@@ -47,13 +59,15 @@ function CustomTable({ tablehead, tablerows }: TableProps) {
         </thead>
         <tbody>{visibleRows}</tbody>
       </table>
-      <CustomTableFooter
-        page={page}
-        pageSize={pageSize}
-        totalPages={totalPages}
-        setpage={setpage}
-        setpageSize={setpageSize}
-      />
+      {!paginationNotNeeded && (
+        <CustomTableFooter
+          page={page}
+          pageSize={pageSize}
+          totalPages={totalPages}
+          setpage={setpage}
+          setpageSize={setpageSize}
+        />
+      )}
     </div>
   );
 }
