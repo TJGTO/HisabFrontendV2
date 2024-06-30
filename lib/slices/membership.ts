@@ -15,6 +15,7 @@ const initialState: MembershipStoreState = {
   fetchError: false,
   totalCount: 0,
   searching: false,
+  flag: "active",
 };
 
 export const fetchmembershipcards = createAsyncThunk(
@@ -53,6 +54,9 @@ const membershipModelSlice = createSlice({
         (x) => x.cardId == action.payload._id
       );
       state.membershipList[index] = action.payload;
+    },
+    setFlag: (state, action) => {
+      state.flag = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -123,6 +127,6 @@ const membershipModelSlice = createSlice({
   },
 });
 
-export const { resetMembershipData, updatemembershipCard } =
+export const { resetMembershipData, updatemembershipCard, setFlag } =
   membershipModelSlice.actions;
 export default membershipModelSlice.reducer;

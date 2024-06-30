@@ -24,15 +24,14 @@ function McardSection() {
   const fetchLoader = useSelector(
     (state: RootState) => state.membership.fetchLoader
   );
-  const searching = useSelector(
-    (state: RootState) => state.membership.searching
-  );
-  const [flag, setflag] = useState<cardtype>("active");
+
+  const flag = useSelector((state: RootState) => state.membership.flag);
+
   const [skip, setskip] = useState<number>(0);
   const [page, setpage] = useState<number>(1);
   const [pageSize, setpageSize] = useState<number>(10);
   const totalPages = Math.ceil(totalCount / pageSize);
-  console.log("membershipList", membershipList);
+
   useEffect(() => {
     if (page != 1 && membershipList.length <= (page - 1) * pageSize) {
       setskip((page - 1) * pageSize);

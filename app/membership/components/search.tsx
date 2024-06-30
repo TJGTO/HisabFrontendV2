@@ -3,7 +3,6 @@ import {
   usersObj,
   CreateMembershipReqBody,
   searchBoxProps,
-  searchMembershipCardsBody,
   fetchMenbershipCardsReqBody,
 } from "../domain";
 import AdduserDialog from "../../Common/AddUser/adduser";
@@ -15,9 +14,10 @@ import OptionsDialog from "./optionsDialog";
 import { initcapString } from "../../Common/functions";
 import {
   fetchmembershipcards,
-  searchrecords,
+  setFlag,
   resetMembershipData,
 } from "../../../lib/slices/membership";
+import { Typography, Avatar, Tooltip } from "@mui/material";
 import Swal from "sweetalert2";
 
 function Searchbox({ paginationdata, setpage, setskip }: searchBoxProps) {
@@ -29,6 +29,8 @@ function Searchbox({ paginationdata, setpage, setskip }: searchBoxProps) {
   const [fromDate, setfromDate] = useState<string>("");
   const [toDate, settoDate] = useState<string>("");
   const [amount, setamount] = useState<string>("");
+
+  const flag = useSelector((state: RootState) => state.membership.flag);
 
   const closeDialog = () => {
     setopen(false);
@@ -85,7 +87,7 @@ function Searchbox({ paginationdata, setpage, setskip }: searchBoxProps) {
   const onSubmitSearch = () => {
     let reqbody: fetchMenbershipCardsReqBody = {
       searchString: searchString,
-      flag: "active",
+      flag: flag,
       skip: 0,
       limit: 10,
     };
@@ -95,8 +97,21 @@ function Searchbox({ paginationdata, setpage, setskip }: searchBoxProps) {
     dispatch(resetMembershipData());
   };
   return (
-    <div id="searchCards" className="flex items-center max-w-sm mx-auto">
-      <label className="sr-only">Search</label>
+    <div id="searchCards" className="flex items-center max-w-sm mx-auto gap-2">
+      <div>
+        <select
+          id="position"
+          value={flag}
+          className="bg-gray-50 w-14 rounded-lg border border-gray-300 text-gray-900 sm:text-sm focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          onChange={(e) => {
+            dispatch(setFlag(e.target.value));
+          }}
+        >
+          <option value="active">{"Active"}</option>
+          <option value="inactive">{"Inactive"}</option>
+        </select>
+      </div>
+
       <div className="relative w-full">
         <input
           type="text"
@@ -114,7 +129,7 @@ function Searchbox({ paginationdata, setpage, setskip }: searchBoxProps) {
           e.preventDefault();
           onSubmitSearch();
         }}
-        className="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        className="p-2.5 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
         <svg
           className="w-4 h-4"
@@ -139,7 +154,7 @@ function Searchbox({ paginationdata, setpage, setskip }: searchBoxProps) {
           //setopen(true);
           setopenOptions(true);
         }}
-        className="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        className="p-2.5 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
         {/* <AddIcon fontSize="5px" /> */}
         <svg

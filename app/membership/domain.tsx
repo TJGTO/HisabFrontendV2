@@ -26,12 +26,15 @@ export interface members {
   validto: string;
 }
 
+export type cardtype = "active" | "inactive";
+
 export interface MembershipStoreState {
   membershipList: members[];
   fetchLoader: boolean;
   fetchError: boolean;
   totalCount: number;
   searching: boolean;
+  flag: cardtype;
 }
 
 export interface extendmembershipReq {
@@ -52,8 +55,6 @@ export interface optionsDialogProps {
   settoDate: React.Dispatch<React.SetStateAction<string>>;
   onsave: () => void;
 }
-
-export type cardtype = "active" | "inactive";
 
 export interface fetchMenbershipCardsReqBody {
   flag: cardtype;
