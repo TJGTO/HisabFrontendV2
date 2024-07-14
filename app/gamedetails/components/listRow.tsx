@@ -118,8 +118,8 @@ function ListRow({
           </Typography>
         </div>
       </td>
-      {otherFormFields?.map((x) => (
-        <td className={classes}>
+      {otherFormFields?.map((x, index) => (
+        <td className={classes} key={index}>
           <div className="flex flex-col">
             <Typography
               color="blue-gray"

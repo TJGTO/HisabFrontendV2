@@ -48,8 +48,8 @@ function TournamentForm({
     >
       {gameDetails &&
         gameDetails.otherFormFields &&
-        gameDetails.otherFormFields.map((x) => (
-          <div>
+        gameDetails.otherFormFields.map((x, index) => (
+          <div key={index}>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {x.name} {x.required && <Requiredsign />}
             </label>
