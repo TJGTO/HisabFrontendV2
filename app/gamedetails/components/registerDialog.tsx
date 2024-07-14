@@ -34,17 +34,22 @@ function RegisterInGameDialog({
     formData.append("gameid", gameid);
     dispatch(registerSlot(formData));
   };
-  const updateTournamentRegistration = async (data: any) => {
+  const updateTournamentRegistration = async (data: {
+    [key: string]: string;
+  }) => {
     const formData = new FormData();
     let blobdata = file as Blob;
     formData.append(`file`, blobdata);
-    formData.append("position", data.position);
-    formData.append("foodtype", data.foodtype);
-    formData.append("player_type", data.player_type);
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    // formData.append("position", "Keeper");
     formData.append("gameid", gameid);
     formData.append("matchType", "Tournament");
+    console.log(formData);
     dispatch(registerSlot(formData));
   };
+
   const getFileFromInput = (fileObj: File) => {
     setfile(fileObj);
   };

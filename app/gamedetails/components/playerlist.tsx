@@ -81,16 +81,18 @@ function Playerist({ gameid }: { gameid: string }) {
   };
   const setTableHeaderColumns = () => {
     if (gameDetails && gameDetails.matchType == "Tournament") {
+      let count = 3;
       let ObjArr = [
         { id: 1, label: "SL No." },
         { id: 2, label: "Player" },
-        { id: 3, label: "Position" },
-        { id: 4, label: "Age" },
-        { id: 5, label: "Status" },
-        { id: 6, label: "Food" },
-        { id: 7, label: "Type" },
-        { id: 8, label: "Actions" },
+        { id: 3, label: "Age" },
       ];
+      gameDetails.otherFormFields?.forEach((element, index) => {
+        count = count + 1;
+        ObjArr.push({ id: count + index, label: element.name });
+      });
+      ObjArr.push({ id: count + 1, label: "Status" });
+      ObjArr.push({ id: count + 1, label: "Actions" });
       setTableHeaderArr(ObjArr);
     } else {
       setTableHeaderArr([
@@ -160,12 +162,10 @@ function Playerist({ gameid }: { gameid: string }) {
           age,
           paymentImageurl,
           phoneNumber,
-          position,
+          dynamicFields,
           player_id,
           status,
           team,
-          player_type,
-          foodtype,
         },
         index
       ) => {
@@ -179,14 +179,13 @@ function Playerist({ gameid }: { gameid: string }) {
             age={age}
             paymentImageurl={paymentImageurl}
             phoneNumber={phoneNumber}
-            position={position ? position.toString() : ""}
             classes={classes}
             gameId={gameid}
             player_id={player_id}
             status={status}
             team={team}
-            player_type={player_type}
-            foodtype={foodtype}
+            dynamicFields={dynamicFields}
+            otherFormFields={gameDetails.otherFormFields}
             matchType={gameDetails.matchType || ""}
           />
         );

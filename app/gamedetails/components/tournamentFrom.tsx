@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { generateSchema } from "../../Common/functions";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Requiredsign from "../../Common/FormComponents/requiredsign";
 import CircularProgress from "@mui/material/CircularProgress";
 import Errormessage from "../../Common/FormComponents/errormessage";
 import FileUploadSection from "../../Common/FormComponents/fileUploadSection";
-import { IRegisterTournamentProps, tournamentFormSchema } from "../domain";
+import { IRegisterTournamentProps, IFormFields } from "../domain";
 import { RootState } from "../../../lib/store";
 import { useSelector } from "react-redux";
 
@@ -15,6 +16,18 @@ function TournamentForm({
   registerSlotLoader,
   onsubmitfn,
 }: IRegisterTournamentProps) {
+  const [fields, setFields] = useState<IFormFields[]>([]);
+  const gameDetails = useSelector(
+    (state: RootState) => state.gameModel.gameDetails
+  );
+  useEffect(() => {
+    if (gameDetails && gameDetails?.otherFormFields) {
+      setFields([...gameDetails?.otherFormFields]);
+    }
+  }, [gameDetails]);
+
+  const tournamentFormSchema = generateSchema(fields);
+
   const {
     register,
     handleSubmit,
@@ -22,9 +35,7 @@ function TournamentForm({
   } = useForm({
     resolver: yupResolver(tournamentFormSchema),
   });
-  const gameDetails = useSelector(
-    (state: RootState) => state.gameModel.gameDetails
-  );
+
   const onSubmitofForm = (data: any) => {
     console.log("data", data);
     onsubmitfn(data);
@@ -35,83 +46,37 @@ function TournamentForm({
       action="#"
       onSubmit={handleSubmit(onSubmitofForm)}
     >
-      <div>
-        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-          Position <Requiredsign />
-        </label>
-        <div className="flex w-full">
-          <select
-            id="position"
-            {...register("position")}
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            <option value="">{"Please Select"}</option>
-            <option value="Defence">{"Defence"}</option>
-            <option value="Midfield">{"Midfield"}</option>
-            <option value="Attack">{"Attack"}</option>
-            <option value="Keeper">{"Keeper"}</option>
-          </select>
-        </div>
-        {errors && errors.position && (
-          <Errormessage message={errors.position.message} />
-        )}
-      </div>
-      <div>
-        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-          Food Type
-          <Requiredsign />
-        </label>
-        <div className="flex w-full">
-          <select
-            id="foodtype"
-            {...register("foodtype")}
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            <option value="">{"Please Select"}</option>
-            <option value="Veg">{"Veg"}</option>
-            <option value="Non-Veg">{"Non-Veg"}</option>
-          </select>
-        </div>
-        {errors && errors.foodtype && (
-          <Errormessage message={errors.foodtype.message} />
-        )}
-      </div>
-      <div>
-        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-          Play as <Requiredsign />
-        </label>
-        <div className="flex w-full">
-          <select
-            id="player_type"
-            {...register("player_type")}
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            <option value="">{"Please Select"}</option>
-            {gameDetails &&
-              gameDetails.paymentOptions?.map((x, index) => (
-                <>
-                  <option value={x.paymentType} key={index}>
-                    {x.paymentType}
-                  </option>
-                </>
-              ))}
-            {gameDetails && gameDetails.paymentOptions?.length == 0 && (
-              <>
-                <option value="Regular Player">{"Regular Player"}</option>
-                <option value="Non-Regular Player">
-                  {"Non-Regular Player"}
-                </option>
-                <option value="outsider">{"outsider"}</option>
-                <option value="Regular Owner">{"Regular Owner"}</option>
-                <option value="Non-Regular Owner">{"Non-Regular Owner"}</option>
-              </>
+      {gameDetails &&
+        gameDetails.otherFormFields &&
+        gameDetails.otherFormFields.map((x, index) => (
+          <div key={index}>
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              {x.name} {x.required && <Requiredsign />}
+            </label>
+            <div className="flex w-full">
+              {x.type == "Dropdown" && (
+                <select
+                  id={x.name}
+                  {...register(x.name)}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="">{"Please Select"}</option>
+                  {x.values &&
+                    x.values?.map((y, index) => (
+                      <>
+                        <option value={y} key={index}>
+                          {y}
+                        </option>
+                      </>
+                    ))}
+                </select>
+              )}
+            </div>
+            {errors && errors[x.name] && (
+              <Errormessage message={errors[x.name]?.message} />
             )}
-          </select>
-        </div>
-        {errors && errors.player_type && (
-          <Errormessage message={errors.player_type.message} />
-        )}
-      </div>
+          </div>
+        ))}
       <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
         Upload Payment Screenshot <Requiredsign />
       </label>
