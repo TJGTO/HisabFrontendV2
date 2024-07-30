@@ -23,9 +23,14 @@ function CollectionTable() {
 
   let totalPrice = 0;
   const getPlayersCount = (type: string) => {
-    return gameDetails?.players.filter(
-      (x) => x.player_type == type && x.status == "Approved"
-    ).length;
+    let count = 0;
+    gameDetails?.players.forEach((x) => {
+      let typeData = x.dynamicFields?.find((item) => item.name == "Type");
+      if (typeData && typeData.value == type) {
+        count++;
+      }
+    });
+    return count;
   };
   const playersTotalCollection = (count: number | undefined, price: number) => {
     totalPrice += count ? count * price : 0;

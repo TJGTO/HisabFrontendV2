@@ -1,5 +1,7 @@
 import useAuth from "./customHooks/useAuth";
 import Swal from "sweetalert2";
+import * as yup from "yup";
+import { IFormFields } from "../gamedetails/domain";
 import { useRouter } from "next/navigation";
 import { addressObj } from "../profile/domain";
 import moment from "moment";
@@ -136,3 +138,21 @@ export function initcapString(inputString: string) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 }
+
+export const generateSchema = (
+  fields: IFormFields[]
+): yup.ObjectSchema<Record<string, yup.AnySchema>> => {
+  const shape: Record<string, yup.AnySchema> = fields.reduce(
+    (schema, field) => {
+      let validator = yup.string().trim();
+      if (field.required) {
+        validator = validator.required(`${field.name} is required`);
+      }
+      schema[field.name] = validator;
+      return schema;
+    },
+    {} as Record<string, yup.AnySchema>
+  );
+
+  return yup.object().shape(shape);
+};

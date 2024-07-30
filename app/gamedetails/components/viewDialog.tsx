@@ -88,13 +88,15 @@ function ViewDialog({
     formData.append("player_id", player_id);
     sendRequest(formData);
   };
-  const updateTournamentRegistration = async (data: any) => {
+  const updateTournamentRegistration = async (data: {
+    [key: string]: string;
+  }) => {
     const formData = new FormData();
     let blobdata = file as Blob;
     formData.append(`file`, blobdata);
-    formData.append("position", data.position);
-    formData.append("foodtype", data.foodtype);
-    formData.append("player_type", data.player_type);
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
     formData.append("gameid", gameid);
     formData.append("matchType", "Tournament");
     formData.append("player_id", player_id);

@@ -30,14 +30,13 @@ function ListRow({
   slno,
   paymentImageurl,
   phoneNumber,
-  position,
   classes,
   gameId,
   player_id,
   status,
   team,
-  player_type,
-  foodtype,
+  dynamicFields,
+  otherFormFields,
   matchType,
 }: PlayerObjinGameList) {
   const dispatch = useDispatch<AppDispatch>();
@@ -111,13 +110,7 @@ function ListRow({
           </div>
         </Link>
       </td>
-      <td className={classes}>
-        <div className="flex flex-col">
-          <Typography color="blue-gray" className="font-normal dark:text-white">
-            {position}
-          </Typography>
-        </div>
-      </td>
+
       <td className={classes}>
         <div className="flex flex-col">
           <Typography color="blue-gray" className="font-normal dark:text-white">
@@ -125,6 +118,21 @@ function ListRow({
           </Typography>
         </div>
       </td>
+      {otherFormFields?.map((x, index) => (
+        <td className={classes} key={index}>
+          <div className="flex flex-col">
+            <Typography
+              color="blue-gray"
+              className="font-normal dark:text-white"
+            >
+              {dynamicFields
+                ? dynamicFields.find((item) => item.name == x.name)?.value
+                : ""}
+            </Typography>
+          </div>
+        </td>
+      ))}
+
       {/* <td className={classes}>
         <div className={`w-max ${colorListforStatusBG[status]} p-2 rounded-lg`}>
           {" "}
@@ -152,20 +160,6 @@ function ListRow({
           </div>
         </div>
       </td>
-      {matchType && matchType == "Tournament" && (
-        <td className={classes}>
-          <Typography color="blue-gray" className="font-normal dark:text-white">
-            {foodtype || ""}
-          </Typography>
-        </td>
-      )}
-      {matchType && matchType == "Tournament" && (
-        <td className={classes}>
-          <Typography color="blue-gray" className="font-normal dark:text-white">
-            {player_type || ""}
-          </Typography>
-        </td>
-      )}
       {matchType && matchType != "Tournament" && (
         <td className={classes}>
           <Typography color="blue-gray" className="font-normal dark:text-white">

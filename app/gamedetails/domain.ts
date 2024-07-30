@@ -77,6 +77,12 @@ export interface IPaymentOptionsObj {
   paymentType: string;
   price: number;
 }
+export interface IFormFields {
+  name: string;
+  type: string;
+  required: boolean;
+  values?: string[];
+}
 export interface activeGamesObj {
   gameId: string;
   venue: string;
@@ -93,6 +99,7 @@ export interface activeGamesObj {
   matchType?: string;
   creator?: ICreator;
   paymentOptions?: IPaymentOptionsObj[];
+  otherFormFields?: IFormFields[];
 }
 
 type Status =
@@ -116,6 +123,10 @@ export interface Iplayers {
   team?: string;
   player_type?: string;
   foodtype?: string;
+  dynamicFields?: Array<{
+    name: string;
+    value: string;
+  }>;
 }
 
 export interface IgameDetailsObj extends activeGamesObj {
@@ -219,16 +230,18 @@ export type PlayerObjinGameList = {
   age: string;
   paymentImageurl: string[];
   phoneNumber: string;
-  position: string;
   classes: string;
   gameId: string;
   player_id: string;
   status: Status;
   team?: string;
-  player_type?: string;
-  foodtype?: string;
   matchType?: string;
   slno?: number;
+  dynamicFields?: Array<{
+    name: string;
+    value: string;
+  }>;
+  otherFormFields?: IFormFields[];
 };
 export type IUpdateTeamReqObj = {
   gameId: string;
