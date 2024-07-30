@@ -304,6 +304,27 @@ async function downloadExcelofPlayers(gameid: string) {
     }
   }
 }
+async function geRabonaCupPlayers(data: any) {
+  let response: any = await AxiosWithAuth.post(
+    "game/getRabonacupteamPlayers",
+    data
+  );
+
+  if (response.data && response.data.success) {
+    return {
+      success: true,
+      players: response.data.data,
+    };
+  }
+  return {
+    success: false,
+    message: `${
+      response.data.message
+        ? response.data.message
+        : "Failed to fetch the matches"
+    }`,
+  };
+}
 export {
   createaGame,
   updateTeamsofPlayers,
@@ -316,5 +337,6 @@ export {
   getMatchPermissions,
   addPlayersInGame,
   downloadExcelofPlayers,
+  geRabonaCupPlayers,
   uploadPaymentSnapAfterAddedByAdmin,
 };
