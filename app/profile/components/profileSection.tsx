@@ -266,13 +266,13 @@ function ProfileSection({ userid }: { userid?: string }) {
             </>
           )}
         </div>
-        {userProfile?.email && (
+        {userProfile?.email && !userid && (
           <div className="flex justify-center gap-2 mt-4 w-60">
             <MailOutlineIcon />
             {userProfile?.email}
           </div>
         )}
-        {userProfile?.phone_no && (
+        {userProfile?.phone_no && !userid && (
           <div className="flex justify-center gap-2 mt-4 w-60">
             <LocalPhoneIcon />
             {userProfile?.phone_no}
