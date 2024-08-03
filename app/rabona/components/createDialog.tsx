@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Dialog from "@mui/material/Dialog";
+import Swal from "sweetalert2";
 import CircularProgress from "@mui/material/CircularProgress";
 import { addRabonaCupPlayers } from "../../gamedetails/service";
 import FileUploadSection from "../../Common/FormComponents/fileUploadSection";
@@ -41,6 +42,12 @@ function CreateDialog({
     let results: any = await addRabonaCupPlayers(formData);
     setfetchLoader(false);
     handleClose();
+    Swal.fire({
+      icon: !results.success ? "error" : "success",
+      title: results.message,
+      showConfirmButton: false,
+      timer: 1500,
+    });
   };
 
   return (
