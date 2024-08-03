@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import FullviewpictureDialog from "../../Common/fullviewpictureDialog";
 import { createSortFromForAvator, stringToColor } from "../../Common/functions";
 import Avatar from "@mui/material/Avatar";
 
@@ -8,7 +9,11 @@ function Mcard({ cardId, userName, userId, teamName, profilePictureURL }: any) {
       ? `${userName.slice(0, 15)}...`
       : userName
     : "";
-
+  const [openfullImageDialog, setopenfullImageDialog] =
+    useState<boolean>(false);
+  const closefullImageDialog = () => {
+    setopenfullImageDialog(false);
+  };
   const gotoMembersProfile = () => {
     window.open(`${window.location.origin}/profile/${userId}`, "_blank");
   };
@@ -28,6 +33,9 @@ function Mcard({ cardId, userName, userId, teamName, profilePictureURL }: any) {
             "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
             profilePictureURL
           }
+          onClick={(e) => {
+            setopenfullImageDialog(true);
+          }}
         >
           {userName && createSortFromForAvator(userName.toString())}
         </Avatar>
@@ -49,6 +57,15 @@ function Mcard({ cardId, userName, userId, teamName, profilePictureURL }: any) {
           </a>
         </div>
       </div>
+      <FullviewpictureDialog
+        open={openfullImageDialog}
+        headerText={userName && userName.toString()}
+        onClose={closefullImageDialog}
+        imageurl={
+          "https://wfgimagebucket.s3.amazonaws.com/profilepictures/" +
+          profilePictureURL
+        }
+      />
     </div>
   );
 }

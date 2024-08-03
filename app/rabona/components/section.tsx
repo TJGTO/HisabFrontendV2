@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import CreateDialog from "./createDialog";
 import PageLoader from "../../Common/Loader/pageLoader";
 import { geRabonaCupPlayers } from "../../gamedetails/service";
 import Mcard from "./card";
@@ -33,33 +34,11 @@ function RabonaCupSection() {
   const [flag, setflag] = useState<string>("");
   const [fetchLoader, setfetchLoader] = useState<boolean>(false);
   const [playersList, setplayersList] = useState<any[]>([]);
-  const membershipList: any = [
-    {
-      userId: "65ea0153be409b7547632b60",
-      userName: "Abhisek Dev",
-      profilePictureURL: "Abhisek_Dev_2024-03-07_18%3A05%3A05.439Z",
-      membershipCardId: "WFG_2024_0001",
-      teamName: "Legends Fc",
-      cardId: "665330312c59b48755854b86",
-    },
-    {
-      userId: "65d247210f219a7bbd921e61",
-      userName: "Souparna Ghosh",
-      profilePictureURL: "Souparna_Ghosh_2024-03-10_11%3A29%3A55.409Z",
-      teamName: "Underdogs",
-      membershipCardId: "WFG_2024_0002",
-      cardId: "6653319840b6ba4e9c07f034",
-    },
-    {
-      userId: "65d247210f219a7bbd921e61",
-      userName: "Souparna Ghosh",
-      profilePictureURL: "Souparna_Ghosh_2024-03-10_11%3A29%3A55.409Z",
-      teamName: "Underdogs",
-      membershipCardId: "WFG_2024_0002",
-      cardId: "6653319840b6ba4e9c07f034",
-    },
-  ];
+  const [open, setopen] = useState<boolean>(false);
 
+  const closeCreateDialog = () => {
+    setopen(false);
+  };
   const onSubmitSearch = async () => {
     let reqbody: any = {
       gameid: "669b72fd7d8cdb2be0102bc2",
@@ -120,6 +99,31 @@ function RabonaCupSection() {
           </svg>
           <span className="sr-only">Search</span>
         </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            setopen(true);
+            //setopenOptions(true);
+          }}
+          className="p-2.5 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          {/* <AddIcon fontSize="5px" /> */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
+          </svg>
+          <span className="sr-only">Add</span>
+        </button>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-5 gap-2 m-3">
         {fetchLoader ? (
@@ -139,6 +143,11 @@ function RabonaCupSection() {
           </>
         )}
       </div>
+      <CreateDialog
+        open={open}
+        onClose={closeCreateDialog}
+        teamsList={TeamsList}
+      />
     </>
   );
 }
