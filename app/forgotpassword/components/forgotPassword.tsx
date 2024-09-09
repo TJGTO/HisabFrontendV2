@@ -1,73 +1,63 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import useAuth from "@/app/Common/customHooks/useAuth";
 import Swal from "sweetalert2";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import useAuth from "@/app/Common/customHooks/useAuth";
+import Errormessage from "../../Common/FormComponents/errormessage";
 import WFGLogo from "../../Common/logo";
 import { redirect } from "next/navigation";
-import { useSelector, useDispatch } from "react-redux";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Errormessage from "../../Common/FormComponents/errormessage";
-import { loginSchema } from "../domain";
+import { useRouter } from "next/navigation";
+import { forgotPasswordSchema, IForgotPasswordrequestBody } from "../domain";
+import { useForm } from "react-hook-form";
+//import { changePassword } from "../service";
 import CircularProgress from "@mui/material/CircularProgress";
-import { loginOfUser } from "../../../lib/slices/authorization";
-import { RootState, AppDispatch } from "../../../lib/store";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-function LoginForm() {
+function ForgotPassword() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(forgotPasswordSchema),
   });
   const router = useRouter();
-  const [submitted, setsubmitted] = useState<boolean>(false);
   const [isLoggedIn, token] = useAuth();
-
   useEffect(() => {
     if (isLoggedIn) {
       redirect("/dashboard");
     }
   }, [isLoggedIn]);
 
-  const loginLoader = useSelector(
-    (state: RootState) => state.authorization.loginLoader
-  );
-  const userDetail = useSelector(
-    (state: RootState) => state.authorization.userDetail
-  );
-  const loginMessage = useSelector(
-    (state: RootState) => state.authorization.loginMessage
-  );
-  const dispatch = useDispatch<AppDispatch>();
-  useEffect(() => {
-    if (submitted && !loginLoader && userDetail) {
-      Swal.fire({
-        icon: "success",
-        title: loginMessage,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      setsubmitted(false);
-      router.push("/dashboard");
-    }
-    if (submitted && !loginLoader && !userDetail) {
-      Swal.fire({
-        icon: "error",
-        title: loginMessage,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      setsubmitted(false);
-    }
-  }, [loginLoader, userDetail]);
-  const onSubmit = (data: any) => {
-    setsubmitted(true);
-    dispatch(loginOfUser(data));
+  const [loader, setloader] = useState<boolean>(false);
+  const onSubmit = async (data: any) => {
+    let obj: IForgotPasswordrequestBody = {
+      email: data.email,
+    };
+    // try {
+    //   setloader(true);
+    //   let success: boolean = false;
+    //   let response = await changePassword(obj);
+    //   setloader(false);
+    //   if (response.success) {
+    //     success = true;
+    //     router.push("/login");
+    //   }
+    //   Swal.fire({
+    //     icon: !success ? "error" : "success",
+    //     title: response.message,
+    //     showConfirmButton: false,
+    //     timer: 1500,
+    //   });
+    // } catch (error: any) {
+    //   setloader(false);
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: error.message,
+    //     showConfirmButton: false,
+    //     timer: 1500,
+    //   });
+    // }
+    console.log(obj);
   };
   return (
     <div>
@@ -77,7 +67,7 @@ function LoginForm() {
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <div className="flex gap-3 justify-between">
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                  Login
+                  Fogot Password
                 </h1>
                 <WFGLogo />
               </div>
@@ -95,30 +85,13 @@ function LoginForm() {
                     id="email"
                     autoComplete="nope"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@company.com"
                     {...register("email")}
                   />
                   {errors && errors.email && (
                     <Errormessage message={errors.email.message} />
                   )}
                 </div>
-
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    placeholder="••••••••"
-                    {...register("password")}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  />
-                  {errors && errors.password && (
-                    <Errormessage message={errors.password.message} />
-                  )}
-                </div>
-                {loginLoader ? (
+                {loader ? (
                   <button
                     type="submit"
                     disabled={true}
@@ -132,34 +105,13 @@ function LoginForm() {
                     disabled={false}
                     className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Login
+                    Submit
                   </button>
                 )}
-
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Don&rsquo;t have an account?{" "}
+                  Go back to Login?{" "}
                   <Link
-                    href="/registration"
-                    className="font-medium text-blue-700 hover:underline"
-                  >
-                    {" "}
-                    Register here
-                  </Link>
-                </p>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Change Password?{" "}
-                  <Link
-                    href="/resetpassword"
-                    className="font-medium text-blue-700 hover:underline"
-                  >
-                    {" "}
-                    Click here
-                  </Link>
-                </p>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Forgot Password?{" "}
-                  <Link
-                    href="/forgotpassword"
+                    href="/login"
                     className="font-medium text-blue-700 hover:underline"
                   >
                     {" "}
@@ -175,4 +127,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default ForgotPassword;

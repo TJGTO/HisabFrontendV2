@@ -5,7 +5,12 @@ import Provider from "./storeProvider";
 import NavBar from "./nav/nav";
 import Footer from "./Footer/footer";
 
-const authorizationRoutes = ["/registration", "/login", , "/resetpassword"];
+const authorizationRoutes = [
+  "/registration",
+  "/login",
+  "/resetpassword",
+  "forgotpassword",
+];
 function RootDesign({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   return (
