@@ -13,12 +13,15 @@ const authorizationRoutes = [
 ];
 function RootDesign({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const isAuthorizationRoute =
+    authorizationRoutes.includes(pathname) ||
+    pathname.startsWith("/forgotpassword/");
   return (
     <>
-      {!authorizationRoutes.includes(pathname) && <NavBar />}
+      {!isAuthorizationRoute && <NavBar />}
       <Provider>
         <div>{children}</div>
-        {!authorizationRoutes.includes(pathname) && <Footer />}
+        {!isAuthorizationRoute && <Footer />}
       </Provider>
     </>
   );
