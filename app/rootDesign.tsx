@@ -9,7 +9,7 @@ const authorizationRoutes = [
   "/registration",
   "/login",
   "/resetpassword",
-  "forgotpassword",
+  "/forgotpassword",
 ];
 function RootDesign({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
