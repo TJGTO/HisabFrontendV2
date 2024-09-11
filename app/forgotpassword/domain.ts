@@ -24,6 +24,6 @@ export interface IForgotPasswordrequestBody {
 
 export interface ISetPasswordrequestBody {
   email: string;
-  tempId: string;
+  fotp: string;
   newpassword: string;
 }

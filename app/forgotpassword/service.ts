@@ -1,5 +1,5 @@
 import { Axios } from "../../lib/axios";
-import { IForgotPasswordrequestBody } from "./domain";
+import { IForgotPasswordrequestBody, ISetPasswordrequestBody } from "./domain";
 async function updateFotp(data: IForgotPasswordrequestBody) {
   try {
     let response: any = await Axios.post("/user/updatefotp", data);
@@ -27,4 +27,35 @@ async function updateFotp(data: IForgotPasswordrequestBody) {
   }
 }
 
-export { updateFotp };
+async function checkOtpAndChangePassword(data: ISetPasswordrequestBody) {
+  try {
+    let response: any = await Axios.post(
+      "/user/checkotpandupdatepassword",
+      data
+    );
+
+    if (response.data && response.data.success) {
+      return {
+        success: true,
+        message: response.data.message,
+        data: response.data.data,
+      };
+    } else {
+      return {
+        success: false,
+        message: `${
+          response.data.message
+            ? response.data.message
+            : `Failed to update the password`
+        }`,
+      };
+    }
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error(`Failed to update otp`);
+    }
+  }
+}
+export { updateFotp, checkOtpAndChangePassword };

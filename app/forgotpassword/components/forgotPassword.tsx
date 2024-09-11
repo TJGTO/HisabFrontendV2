@@ -117,7 +117,10 @@ function ForgotPassword() {
                   </p>
                 </form>
               ) : (
-                <SucessSections message="Check you email for the link" />
+                <SucessSections
+                  message="Check you email for the link"
+                  success={true}
+                />
               )}
             </div>
           </div>
