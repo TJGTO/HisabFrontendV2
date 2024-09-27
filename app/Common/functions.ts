@@ -156,3 +156,21 @@ export const generateSchema = (
 
   return yup.object().shape(shape);
 };
+
+export function stripHtmlTags(html: string): string {
+  // Create a temporary DOM element to parse the HTML
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = html;
+
+  // Remove all image tags
+  const images = tempDiv.getElementsByTagName("img");
+  while (images.length > 0) {
+    const parentNode = images[0].parentNode;
+    if (parentNode) {
+      parentNode.removeChild(images[0]);
+    }
+  }
+
+  // Extract and return the text content
+  return tempDiv.textContent || tempDiv.innerText || "";
+}

@@ -48,12 +48,14 @@ const CreateNewsAPP: React.FC<ICreateEditArticleProps> = ({ newsId, mode }) => {
       dispatch(resetFlags());
     };
   }, []);
+
   useEffect(() => {
     if (newsId && mode == "edit") {
       settitle(currentAirticleDetail?.title || "");
       setContent(currentAirticleDetail?.description || "");
     }
   }, [currentAirticleDetail]);
+
   useEffect(() => {
     if (!AirticleLoader && AirticleMessage) {
       Swal.fire({
@@ -72,6 +74,7 @@ const CreateNewsAPP: React.FC<ICreateEditArticleProps> = ({ newsId, mode }) => {
       }, 1600);
     }
   }, [AirticleLoader, AirticleMessage]);
+
   const onSubmitForm = () => {
     if (!title) {
       settitleError(true);

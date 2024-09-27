@@ -69,3 +69,9 @@ export interface likedislikeCompProps {
   newsId: string;
   fireReqloginDialog: () => void;
 }
+
+export interface asktheArticleDialog {
+  open: boolean;
+  onClose: () => void;
+  articleContent: string;
+}

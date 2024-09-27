@@ -19,7 +19,6 @@ function UpiDetailsDialog({
   price,
   paymentOptions,
 }: paymentDetailsDialogProps) {
-  console.log("paymentOptions", paymentOptions);
   const permissionMatrix = useSelector(
     (state: RootState) => state.gameModel.permissionMatrix
   );
