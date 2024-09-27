@@ -139,7 +139,7 @@ function Likedislikesection({
     }
   };
   return (
-    <div className="grid grid-cols-3 gap-4 mb-2 items-center">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-2 items-center">
       <div className="flex gap-4 mb-2">
         <Tooltip title="Like">
           <div
@@ -197,7 +197,7 @@ function Likedislikesection({
           </Tooltip>
         )}
       </div>
-      <div></div>
+      <div className="hidden sm:block"></div>
       <Tooltip title="Ask Question to article">
         <div>
           {" "}
