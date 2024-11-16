@@ -25,7 +25,7 @@ function CollectionTable() {
   const getPlayersCount = (type: string) => {
     let count = 0;
     gameDetails?.players.forEach((x) => {
-      let typeData = x.dynamicFields?.find((item) => item.name == "Type");
+      let typeData = x.dynamicFields?.find((item) => item.name == "Status");
       if (typeData && typeData.value == type) {
         count++;
       }
