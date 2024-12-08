@@ -100,12 +100,12 @@ function ListRow({
               >
                 {name}
               </Typography>
-              {/* <Typography
+              <Typography
                 color="blue-gray"
                 className="font-normal opacity-70 dark:text-white"
               >
                 {phoneNumber}
-              </Typography> */}
+              </Typography>
             </div>
           </div>
         </Link>
