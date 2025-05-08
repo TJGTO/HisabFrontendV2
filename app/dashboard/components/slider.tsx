@@ -11,17 +11,17 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 function Slider() {
   const slides: Array<SlidingImageObject> = [
     {
-      URL: "https://wfgimagebucket.s3.ap-south-1.amazonaws.com/Banners/1000259850.jpg",
+      URL: "https://res.cloudinary.com/dta8vrzdy/image/upload/v1746730478/1000319440_idexll.jpg",
     },
     {
-      URL: "https://firebasestorage.googleapis.com/v0/b/wfgkol2023.appspot.com/o/sliderPictures%2FWhatsApp123.jpeg?alt=media&token=cc9de9e1-4c48-4b5f-8814-94fe46ba2691",
+      URL: "https://res.cloudinary.com/dta8vrzdy/image/upload/v1746730479/1000319441_sa1lau.jpg",
     },
     {
-      URL: "https://firebasestorage.googleapis.com/v0/b/wfgkol2023.appspot.com/o/sliderPictures%2FIMG-20231210-WA0013.jpg?alt=media&token=6d632b6e-c68d-45c5-bc29-7fd4286d5ccc",
+      URL: "https://res.cloudinary.com/dta8vrzdy/image/upload/v1746730479/1000319442_oohvzk.jpg",
     },
-    {
-      URL: "https://firebasestorage.googleapis.com/v0/b/wfgkol2023.appspot.com/o/sliderPictures%2FWhatsApp1234.jpeg?alt=media&token=a241f350-357f-46b3-9d3b-a2a4962d690b",
-    },
+    // {
+    //   URL: "https://firebasestorage.googleapis.com/v0/b/wfgkol2023.appspot.com/o/sliderPictures%2FWhatsApp1234.jpeg?alt=media&token=a241f350-357f-46b3-9d3b-a2a4962d690b",
+    // },
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
