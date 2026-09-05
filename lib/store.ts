@@ -5,6 +5,8 @@ import profileSectionReducer from "./slices/profileSection";
 import gameModelReducer from "./slices/gamemodule";
 import airticleModelSlice from "./slices/airticle";
 import membershipModelSlice from "./slices/membership";
+import jerseyConfigReducer from "./slices/jerseyConfig";
+import jerseyOrderReducer from "./slices/jerseyOrder";
 
 export const makeStore = () => {
   return configureStore({
@@ -15,6 +17,8 @@ export const makeStore = () => {
       gameModel: gameModelReducer,
       airticle: airticleModelSlice,
       membership: membershipModelSlice,
+      jerseyConfig: jerseyConfigReducer,
+      jerseyOrder: jerseyOrderReducer,
     },
   });
 };

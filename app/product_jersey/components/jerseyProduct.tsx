@@ -1,49 +1,225 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import Swal from "sweetalert2";
-import WFGLogo from "../../Common/logo";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../../lib/store";
+import { fetchJerseyConfig } from "../../../lib/slices/jerseyConfig";
+import { submitJerseyOrder, resetJerseyOrderError } from "../../../lib/slices/jerseyOrder";
 import {
-  SIZES,
-  SIZE_CHART,
-  FABRICS,
-  COLORS,
-  getJerseyImageSrc,
-  type Size,
-  type Fabric,
-  type Color,
-} from "../config";
+  IJerseyOrderFormData,
+  IJerseyConfirmedOrder,
+  IJerseyOrderPayload,
+} from "../domain";
+import OrderFormDialog from "./orderFormDialog";
+import PaymentDialog from "./paymentDialog";
+import OrderConfirmation from "./orderConfirmation";
+import PageLoader from "../../Common/Loader/pageLoader";
+
+const PINCODE_REGEX = /^[1-9][0-9]{5}$/;
+// No file-storage integration yet — screenshots aren't actually uploaded
+// anywhere. This static link is stored as a placeholder until real upload
+// (S3/Drive) is wired up.
+const STATIC_SCREENSHOT_URL = "https://placehold.co/400x600?text=Payment+Screenshot";
 
 function JerseyProduct() {
-  const [color, setColor] = useState<Color>("black");
-  const [fabric, setFabric] = useState<Fabric>("premium");
-  const [size, setSize] = useState<Size | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const { config, loading, error } = useSelector(
+    (state: RootState) => state.jerseyConfig
+  );
+  const { submitting: submittingPayment, error: paymentError } = useSelector(
+    (state: RootState) => state.jerseyOrder
+  );
+
+  useEffect(() => {
+    if (!config) {
+      dispatch(fetchJerseyConfig());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const [color, setColor] = useState<string>("");
+  const [fabric, setFabric] = useState<string>("");
+  const [size, setSize] = useState<string | null>(null);
   const [sizeError, setSizeError] = useState(false);
   const [showSizeChart, setShowSizeChart] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [pickupLocation, setPickupLocation] = useState<string | null>(null);
+  const [pickupError, setPickupError] = useState(false);
+  const [customAddress, setCustomAddress] = useState("");
+  const [customAddressError, setCustomAddressError] = useState(false);
+  const [customPincode, setCustomPincode] = useState("");
+  const [customPincodeError, setCustomPincodeError] = useState(false);
+  const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false);
+  const [submittingOrder, setSubmittingOrder] = useState(false);
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
+  const [orderFormData, setOrderFormData] = useState<IJerseyOrderFormData | null>(null);
+  const [finalAmount, setFinalAmount] = useState<number | null>(null);
+  const [matchedReferrer, setMatchedReferrer] = useState<string | undefined>(undefined);
+  const [confirmedOrder, setConfirmedOrder] = useState<IJerseyConfirmedOrder | null>(null);
 
-  const selectedFabric = FABRICS.find((f) => f.id === fabric)!;
+  // seed the color/fabric pickers with the first option once config arrives
+  useEffect(() => {
+    if (config) {
+      if (!color) setColor(config.colors[0]?.id ?? "");
+      if (!fabric) setFabric(config.fabrics[0]?.id ?? "");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config]);
 
-  const handleSizeSelect = (s: Size) => {
+  if (loading) {
+    return <PageLoader />;
+  }
+
+  if (!config) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-6 text-center">
+        <p className="text-sm font-medium text-red-500">
+          {error || "Couldn't load this product right now."} Please refresh the page.
+        </p>
+      </div>
+    );
+  }
+
+  const getJerseyImageSrc = (c: string) =>
+    config.imagePathTemplate.replace("{color}", c);
+
+  const selectedFabric = config.fabrics.find((f) => f.id === fabric) ?? config.fabrics[0];
+  const selectedColor = config.colors.find((c) => c.id === color) ?? config.colors[0];
+  const isHomeDelivery = pickupLocation === "home-delivery";
+  const deliveryFee = isHomeDelivery ? config.homeDeliveryFee : 0;
+  const productSubtotal = selectedFabric.price * quantity;
+  const total = productSubtotal + deliveryFee;
+  const pickupLabel = isHomeDelivery
+    ? `Home Delivery — ${customAddress}${customPincode ? `, ${customPincode}` : ""}`
+    : config.pickupLocations.find((l) => l.id === pickupLocation)?.name ?? "";
+
+  const handleSizeSelect = (s: string) => {
     setSize(s);
     setSizeError(false);
   };
 
+  const handlePickupSelect = (id: string) => {
+    setPickupLocation(id);
+    setPickupError(false);
+  };
+
   const handleProceedToBuy = () => {
+    let hasError = false;
     if (!size) {
       setSizeError(true);
-      return;
+      hasError = true;
     }
-    const colorLabel = COLORS.find((c) => c.id === color)?.label;
-    const total = selectedFabric.price * quantity;
-    Swal.fire({
-      icon: "success",
-      title: "Added to your order",
-      html: `WFG Home Jersey 2026 &middot; ${colorLabel} &middot; ${selectedFabric.label} &middot; Size <b>${size}</b> &middot; Qty <b>${quantity}</b><br/>Total: <b>₹${total}</b>`,
-      confirmButtonColor: "#0E7C4A",
+    if (!pickupLocation) {
+      setPickupError(true);
+      hasError = true;
+    } else if (pickupLocation === "home-delivery") {
+      if (!customAddress.trim()) {
+        setCustomAddressError(true);
+        hasError = true;
+      }
+      if (!PINCODE_REGEX.test(customPincode)) {
+        setCustomPincodeError(true);
+        hasError = true;
+      }
+    }
+    if (hasError) return;
+    setIsOrderDialogOpen(true);
+  };
+
+  const handleOrderSubmit = (data: IJerseyOrderFormData) => {
+    setSubmittingOrder(true);
+    // No order-placement API is wired up yet; this simulates a brief save
+    // before moving on to payment, so the flow can be demoed end-to-end.
+    setTimeout(() => {
+      const matchedReferral = data.referralCode
+        ? config.referralCodes.find(
+            (r) =>
+              r.code.trim().toLowerCase() === data.referralCode!.trim().toLowerCase()
+          )
+        : undefined;
+      // Referral discount applies to the jersey price only, never the delivery fee.
+      const discountedSubtotal = matchedReferral
+        ? Math.round(productSubtotal * (1 - matchedReferral.playershare / 100))
+        : productSubtotal;
+      const amount = discountedSubtotal + deliveryFee;
+
+      setSubmittingOrder(false);
+      setOrderFormData(data);
+      setMatchedReferrer(matchedReferral?.referrer);
+      setFinalAmount(amount);
+      setIsOrderDialogOpen(false);
+      dispatch(resetJerseyOrderError());
+      setIsPaymentDialogOpen(true);
+    }, 500);
+  };
+
+  const handlePaymentSubmit = async (screenshot: File) => {
+    if (!orderFormData || finalAmount === null) return;
+
+    const payload: IJerseyOrderPayload = {
+      name: orderFormData.name,
+      jerseyName: orderFormData.jerseyName,
+      jerseyNumber: orderFormData.jerseyNumber,
+      phone: orderFormData.phone,
+      referralCode: orderFormData.referralCode,
+      referrer: matchedReferrer,
+      color: selectedColor.label,
+      fabric: selectedFabric.label,
+      size: size ?? "",
+      quantity,
+      pickupLabel,
+      total: finalAmount,
+      paymentScreenshotUrl: STATIC_SCREENSHOT_URL,
+      paymentScreenshotFileName: screenshot.name,
+    };
+
+    const resultAction = await dispatch(submitJerseyOrder(payload));
+    const saved =
+      submitJerseyOrder.fulfilled.match(resultAction) &&
+      resultAction.payload?.success;
+
+    if (!saved) return; // error is surfaced via the slice's error state
+
+    setIsPaymentDialogOpen(false);
+    setConfirmedOrder({
+      customer: orderFormData,
+      summary: {
+        color: selectedColor.label,
+        fabric: selectedFabric.label,
+        size: size ?? "",
+        quantity,
+        total: finalAmount,
+        pickupLabel,
+      },
+      imageSrc: getJerseyImageSrc(color),
+      screenshotName: screenshot.name,
+      referrer: matchedReferrer,
     });
   };
+
+  const handlePlaceAnother = () => {
+    setColor(config.colors[0]?.id ?? "");
+    setFabric(config.fabrics[0]?.id ?? "");
+    setSize(null);
+    setQuantity(1);
+    setPickupLocation(null);
+    setCustomAddress("");
+    setCustomPincode("");
+    setOrderFormData(null);
+    setFinalAmount(null);
+    setMatchedReferrer(undefined);
+    setConfirmedOrder(null);
+  };
+
+  if (confirmedOrder) {
+    return (
+      <OrderConfirmation
+        order={confirmedOrder}
+        timeline={config.orderTimeline}
+        onPlaceAnother={handlePlaceAnother}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -52,7 +228,7 @@ function JerseyProduct() {
         <div className="lg:sticky lg:top-10 lg:self-start">
           <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-50 to-neutral-100 p-6">
             <span className="absolute left-5 top-5 rounded-full bg-[#F5B700] px-3 py-1 text-xs font-bold text-neutral-900">
-              From ₹{Math.min(...FABRICS.map((f) => f.price))}
+              From ₹{Math.min(...config.fabrics.map((f) => f.price))}
             </span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -65,7 +241,7 @@ function JerseyProduct() {
           {/* Color selector */}
           <div className="mt-5 flex items-center gap-3">
             <span className="text-sm font-semibold text-neutral-800">Color</span>
-            {COLORS.map((c) => (
+            {config.colors.map((c) => (
               <button
                 key={c.id}
                 onClick={() => setColor(c.id)}
@@ -79,9 +255,7 @@ function JerseyProduct() {
                 style={{ backgroundColor: c.swatch }}
               />
             ))}
-            <span className="text-sm text-neutral-500">
-              {COLORS.find((c) => c.id === color)?.label}
-            </span>
+            <span className="text-sm text-neutral-500">{selectedColor.label}</span>
           </div>
         </div>
 
@@ -94,14 +268,14 @@ function JerseyProduct() {
             WFG Home Jersey 2026
           </h1>
           <p className="mt-2 text-neutral-500">
-            Official Weekend Football Group yearly jersey 
+            Official Weekend Football Group yearly jersey
           </p>
 
           {/* Fabric selector */}
           <div className="mt-5">
             <span className="text-sm font-semibold text-neutral-800">Fabric Type</span>
             <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {FABRICS.map((f) => (
+              {config.fabrics.map((f) => (
                 <button
                   key={f.id}
                   onClick={() => setFabric(f.id)}
@@ -140,7 +314,7 @@ function JerseyProduct() {
             </div>
 
             <div className="mt-3 flex flex-wrap gap-2">
-              {SIZES.map((s) => (
+              {config.sizes.map((s) => (
                 <button
                   key={s}
                   onClick={() => handleSizeSelect(s)}
@@ -171,11 +345,15 @@ function JerseyProduct() {
                     </tr>
                   </thead>
                   <tbody>
-                    {SIZES.map((s) => (
+                    {config.sizes.map((s) => (
                       <tr key={s} className="border-t border-neutral-200">
                         <td className="px-3 py-2 font-semibold text-neutral-800">{s}</td>
-                        <td className="px-3 py-2 text-neutral-600">{SIZE_CHART[s].chest}</td>
-                        <td className="px-3 py-2 text-neutral-600">{SIZE_CHART[s].length}</td>
+                        <td className="px-3 py-2 text-neutral-600">
+                          {config.sizeChart[s]?.chest}
+                        </td>
+                        <td className="px-3 py-2 text-neutral-600">
+                          {config.sizeChart[s]?.length}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -209,11 +387,115 @@ function JerseyProduct() {
           </div>
 
           {/* Total */}
-          <div className="mt-6 flex items-center justify-between rounded-lg bg-neutral-100 px-4 py-3">
-            <span className="text-sm font-medium text-neutral-600">Total</span>
-            <span className="text-lg font-bold text-neutral-900">
-              ₹{selectedFabric.price * quantity}
-            </span>
+          <div className="mt-6 rounded-lg bg-neutral-100 px-4 py-3">
+            {isHomeDelivery && (
+              <div className="mb-2 flex items-center justify-between border-b border-neutral-200 pb-2 text-sm text-neutral-600">
+                <span>Home delivery charge</span>
+                <span>₹{config.homeDeliveryFee}</span>
+              </div>
+            )}
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-neutral-600">Total</span>
+              <span className="text-lg font-bold text-neutral-900">₹{total}</span>
+            </div>
+          </div>
+
+          {/* Pickup location */}
+          <div className="mt-6">
+            <span className="text-sm font-semibold text-neutral-800">Choose Pickup Location</span>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              {config.pickupLocations.map((loc) => (
+                <button
+                  key={loc.id}
+                  onClick={() => handlePickupSelect(loc.id)}
+                  className={`rounded-xl border p-3 text-left transition-colors ${
+                    pickupLocation === loc.id
+                      ? "border-[#0E7C4A] bg-emerald-50"
+                      : "border-neutral-300 bg-white hover:border-neutral-400"
+                  }`}
+                >
+                  <span className="block text-sm font-semibold text-neutral-800">
+                    {loc.name}
+                  </span>
+                  <a
+                    href={loc.mapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="mt-1 inline-block text-xs font-medium text-[#0E7C4A] underline underline-offset-2"
+                  >
+                    View on map
+                  </a>
+                </button>
+              ))}
+              <button
+                onClick={() => handlePickupSelect("home-delivery")}
+                className={`rounded-xl border p-3 text-left transition-colors ${
+                  pickupLocation === "home-delivery"
+                    ? "border-[#0E7C4A] bg-emerald-50"
+                    : "border-neutral-300 bg-white hover:border-neutral-400"
+                }`}
+              >
+                <span className="block text-sm font-semibold text-neutral-800">
+                  Home Delivery
+                </span>
+                <span className="mt-1 block text-xs text-neutral-500">
+                  Delivered to your address &middot; +₹{config.homeDeliveryFee}
+                </span>
+              </button>
+            </div>
+
+            {pickupLocation === "home-delivery" && (
+              <div className="mt-3 space-y-3 rounded-lg border border-neutral-200 bg-neutral-50 p-3">
+                <p className="text-xs font-medium text-[#0E7C4A]">
+                  Home delivery charge: ₹{config.homeDeliveryFee}
+                </p>
+                <div>
+                  <label className="text-xs font-medium text-neutral-600">Address</label>
+                  <textarea
+                    value={customAddress}
+                    onChange={(e) => {
+                      setCustomAddress(e.target.value);
+                      setCustomAddressError(false);
+                    }}
+                    rows={2}
+                    placeholder="House no, street, locality"
+                    className="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-[#0E7C4A] focus:outline-none focus:ring-1 focus:ring-[#0E7C4A]"
+                  />
+                  {customAddressError && (
+                    <p className="mt-1 text-xs font-medium text-red-500">
+                      Please enter your address
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-neutral-600">Pincode</label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={6}
+                    value={customPincode}
+                    onChange={(e) => {
+                      setCustomPincode(e.target.value.replace(/\D/g, ""));
+                      setCustomPincodeError(false);
+                    }}
+                    placeholder="6-digit pincode"
+                    className="mt-1 block w-full max-w-[160px] rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900 focus:border-[#0E7C4A] focus:outline-none focus:ring-1 focus:ring-[#0E7C4A]"
+                  />
+                  {customPincodeError && (
+                    <p className="mt-1 text-xs font-medium text-red-500">
+                      Please enter a valid 6-digit pincode
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {pickupError && (
+              <p className="mt-2 text-xs font-medium text-red-500">
+                Please select a pickup location
+              </p>
+            )}
           </div>
 
           {/* CTA */}
@@ -224,7 +506,7 @@ function JerseyProduct() {
             Proceed to Buy
           </button>
           <p className="mt-3 text-center text-xs text-neutral-400">
-            Free delivery across Kolkata &middot; 7-day easy exchange
+            Pickup only &middot; 7-day easy exchange
           </p>
 
           {/* Description */}
@@ -240,6 +522,34 @@ function JerseyProduct() {
           </div>
         </div>
       </main>
+
+      <OrderFormDialog
+        open={isOrderDialogOpen}
+        onClose={() => setIsOrderDialogOpen(false)}
+        onSubmitOrder={handleOrderSubmit}
+        submitting={submittingOrder}
+        referralCodes={config.referralCodes}
+        summary={{
+          color: selectedColor.label,
+          fabric: selectedFabric.label,
+          size: size ?? "",
+          quantity,
+          productSubtotal,
+          deliveryFee,
+          total,
+          pickupLabel,
+        }}
+      />
+
+      <PaymentDialog
+        open={isPaymentDialogOpen}
+        onClose={() => setIsPaymentDialogOpen(false)}
+        onSubmitPayment={handlePaymentSubmit}
+        submitting={submittingPayment}
+        error={paymentError}
+        amount={finalAmount ?? total}
+        upiId={config.upiId}
+      />
     </div>
   );
 }
