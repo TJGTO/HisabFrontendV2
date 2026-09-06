@@ -1,5 +1,9 @@
-import { Axios } from "../../lib/axios";
-import { IJerseyRemoteConfig, IJerseyOrderPayload } from "./domain";
+import { Axios, AxiosWithAuthFromData } from "../../lib/axios";
+import {
+  IJerseyRemoteConfig,
+  IJerseyOrderPayload,
+  IJerseyUploadedScreenshot,
+} from "./domain";
 
 async function getJerseyConfig() {
   let response: any = await Axios.get("config/jerseyconfig");
@@ -31,4 +35,24 @@ async function createJerseyOrder(payload: IJerseyOrderPayload) {
   };
 }
 
-export { getJerseyConfig, createJerseyOrder };
+async function uploadJerseyScreenshot(file: File) {
+  const formData = new FormData();
+  formData.append("file", file);
+  let response: any = await AxiosWithAuthFromData.post(
+    "jerseyorder/uploadscreenshot",
+    formData
+  );
+
+  if (response.data && response.data.success) {
+    return {
+      success: true,
+      screenshot: response.data.data as IJerseyUploadedScreenshot,
+    };
+  }
+  return {
+    success: false,
+    message: `${response.data?.message}`,
+  };
+}
+
+export { getJerseyConfig, createJerseyOrder, uploadJerseyScreenshot };

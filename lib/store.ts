@@ -7,6 +7,7 @@ import airticleModelSlice from "./slices/airticle";
 import membershipModelSlice from "./slices/membership";
 import jerseyConfigReducer from "./slices/jerseyConfig";
 import jerseyOrderReducer from "./slices/jerseyOrder";
+import jerseyDashboardReducer from "./slices/jerseyDashboard";
 
 export const makeStore = () => {
   return configureStore({
@@ -19,6 +20,7 @@ export const makeStore = () => {
       membership: membershipModelSlice,
       jerseyConfig: jerseyConfigReducer,
       jerseyOrder: jerseyOrderReducer,
+      jerseyDashboard: jerseyDashboardReducer,
     },
   });
 };

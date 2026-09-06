@@ -16,10 +16,6 @@ import OrderConfirmation from "./orderConfirmation";
 import PageLoader from "../../Common/Loader/pageLoader";
 
 const PINCODE_REGEX = /^[1-9][0-9]{5}$/;
-// No file-storage integration yet — screenshots aren't actually uploaded
-// anywhere. This static link is stored as a placeholder until real upload
-// (S3/Drive) is wired up.
-const STATIC_SCREENSHOT_URL = "https://placehold.co/400x600?text=Payment+Screenshot";
 
 function JerseyProduct() {
   const dispatch = useDispatch<AppDispatch>();
@@ -30,7 +26,16 @@ function JerseyProduct() {
     (state: RootState) => state.jerseyOrder
   );
 
+  // Forces the very first client render to match the server-rendered HTML
+  // exactly (always the loader), regardless of how fast the config fetch
+  // resolves. Redux-driven content only appears after this flips to true in
+  // an effect, which React guarantees runs strictly after hydration commits
+  // — otherwise a fast-resolving fetch can race ahead of hydration and
+  // cause a "server HTML didn't match" error.
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
     if (!config) {
       dispatch(fetchJerseyConfig());
     }
@@ -66,7 +71,7 @@ function JerseyProduct() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config]);
 
-  if (loading) {
+  if (!mounted || loading) {
     return <PageLoader />;
   }
 
@@ -153,7 +158,7 @@ function JerseyProduct() {
     }, 500);
   };
 
-  const handlePaymentSubmit = async (screenshot: File) => {
+  const handlePaymentSubmit = async (screenshotUrl: string, screenshotFileName: string) => {
     if (!orderFormData || finalAmount === null) return;
 
     const payload: IJerseyOrderPayload = {
@@ -169,8 +174,8 @@ function JerseyProduct() {
       quantity,
       pickupLabel,
       total: finalAmount,
-      paymentScreenshotUrl: STATIC_SCREENSHOT_URL,
-      paymentScreenshotFileName: screenshot.name,
+      paymentScreenshotUrl: screenshotUrl,
+      paymentScreenshotFileName: screenshotFileName,
     };
 
     const resultAction = await dispatch(submitJerseyOrder(payload));
@@ -188,11 +193,13 @@ function JerseyProduct() {
         fabric: selectedFabric.label,
         size: size ?? "",
         quantity,
+        productSubtotal,
+        deliveryFee,
         total: finalAmount,
         pickupLabel,
       },
       imageSrc: getJerseyImageSrc(color),
-      screenshotName: screenshot.name,
+      screenshotName: screenshotFileName,
       referrer: matchedReferrer,
     });
   };
@@ -333,6 +340,12 @@ function JerseyProduct() {
                 Please select a size to continue
               </p>
             )}
+
+            <p className="mt-3 rounded-lg bg-red-50 px-3 py-3 text-base font-semibold text-red-700">
+              <span className="font-bold">Tip:</span> These jerseys are
+              dry-fit with a snug, athletic cut &mdash; we recommend sizing up
+              by one size for a more comfortable fit.
+            </p>
 
             {showSizeChart && (
               <div className="mt-4 overflow-hidden rounded-lg border border-neutral-200">
@@ -516,8 +529,6 @@ function JerseyProduct() {
               <li>• 100% breathable polyester mesh, built for matchday intensity</li>
               <li>• Moisture-wicking fabric keeps you dry through 90 minutes</li>
               <li>• Embroidered WFG crest, printed name &amp; number on back</li>
-              <li>• Regular fit &mdash; true to size, see size chart above</li>
-              <li>• Machine wash cold, do not bleach</li>
             </ul>
           </div>
         </div>

@@ -9,7 +9,11 @@ type JerseyConfigState = {
 };
 
 const initialState: JerseyConfigState = {
-  loading: false,
+  // Starts true: the fetch is only dispatched from a client-side effect, so
+  // both the server-rendered HTML and the first client paint (before that
+  // effect fires) would otherwise show the "couldn't load" error state
+  // rather than a loading spinner.
+  loading: true,
   config: null,
   error: null,
 };

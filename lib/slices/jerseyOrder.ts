@@ -1,15 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createJerseyOrder } from "../../app/product_jersey/service";
-import { IJerseyOrderPayload } from "../../app/product_jersey/domain";
+import { createJerseyOrder, uploadJerseyScreenshot } from "../../app/product_jersey/service";
+import { IJerseyOrderPayload, IJerseyUploadedScreenshot } from "../../app/product_jersey/domain";
 
 type JerseyOrderState = {
   submitting: boolean;
   error: string | null;
+  uploading: boolean;
+  uploadError: string | null;
+  uploadedScreenshot: IJerseyUploadedScreenshot | null;
 };
 
 const initialState: JerseyOrderState = {
   submitting: false,
   error: null,
+  uploading: false,
+  uploadError: null,
+  uploadedScreenshot: null,
 };
 
 export const submitJerseyOrder = createAsyncThunk(
@@ -24,12 +30,28 @@ export const submitJerseyOrder = createAsyncThunk(
   }
 );
 
+export const uploadPaymentScreenshot = createAsyncThunk(
+  "jerseyOrder/uploadPaymentScreenshot",
+  async (file: File) => {
+    try {
+      const response = await uploadJerseyScreenshot(file);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
 const jerseyOrderSlice = createSlice({
   name: "jerseyOrder",
   initialState,
   reducers: {
     resetJerseyOrderError: (state) => {
       state.error = null;
+    },
+    resetUploadedScreenshot: (state) => {
+      state.uploadedScreenshot = null;
+      state.uploadError = null;
     },
   },
   extraReducers: (builder) => {
@@ -47,8 +69,26 @@ const jerseyOrderSlice = createSlice({
       state.submitting = false;
       state.error = action.error?.message || "Failed to save order";
     });
+
+    builder.addCase(uploadPaymentScreenshot.pending, (state) => {
+      state.uploading = true;
+      state.uploadError = null;
+      state.uploadedScreenshot = null;
+    });
+    builder.addCase(uploadPaymentScreenshot.fulfilled, (state, action) => {
+      state.uploading = false;
+      if (action.payload && action.payload.success && action.payload.screenshot) {
+        state.uploadedScreenshot = action.payload.screenshot;
+      } else {
+        state.uploadError = action.payload?.message || "Failed to upload screenshot";
+      }
+    });
+    builder.addCase(uploadPaymentScreenshot.rejected, (state, action) => {
+      state.uploading = false;
+      state.uploadError = action.error?.message || "Failed to upload screenshot";
+    });
   },
 });
 
-export const { resetJerseyOrderError } = jerseyOrderSlice.actions;
+export const { resetJerseyOrderError, resetUploadedScreenshot } = jerseyOrderSlice.actions;
 export default jerseyOrderSlice.reducer;

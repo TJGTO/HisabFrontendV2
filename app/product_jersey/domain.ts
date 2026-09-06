@@ -73,6 +73,11 @@ export type IJerseyOrderPayload = {
   paymentScreenshotFileName: string;
 };
 
+export type IJerseyUploadedScreenshot = {
+  publicUrl: string;
+  fileName: string;
+};
+
 export type IJerseyReferralCode = {
   code: string;
   referrer: string;

@@ -11,6 +11,7 @@ const authorizationRoutes = [
   "/resetpassword",
   "/forgotpassword",
   "/product_jersey",
+  "/jersey_dashboard",
 ];
 function RootDesign({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
