@@ -105,8 +105,7 @@ function OrderFormDialog({
 
           <div>
             <label className="text-sm font-semibold text-neutral-800">
-              Name on Jersey
-              <Requiredsign />
+              Name on Jersey <span className="font-normal text-neutral-400">(Optional)</span>
             </label>
             <input
               {...register("jerseyName")}
@@ -119,8 +118,7 @@ function OrderFormDialog({
 
           <div>
             <label className="text-sm font-semibold text-neutral-800">
-              Number on Jersey
-              <Requiredsign />
+              Number on Jersey <span className="font-normal text-neutral-400">(Optional)</span>
             </label>
             <input
               {...register("jerseyNumber")}

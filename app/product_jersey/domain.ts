@@ -6,16 +6,14 @@ export const jerseyOrderSchema = yup
     jerseyName: yup
       .string()
       .trim()
-      .max(12, "Jersey name should be within 12 characters")
-      .required("Name on jersey is required"),
+      .max(12, "Jersey name should be within 12 characters"),
     jerseyNumber: yup
       .string()
       .trim()
       .matches(/^[0-9]{1,2}$/, {
         message: "Enter a valid jersey number (0-99)",
-        excludeEmptyString: false,
-      })
-      .required("Number on jersey is required"),
+        excludeEmptyString: true,
+      }),
     phone: yup
       .string()
       .matches(/^[6-9]\d{9}$/, {
@@ -29,8 +27,8 @@ export const jerseyOrderSchema = yup
 
 export type IJerseyOrderFormData = {
   name: string;
-  jerseyName: string;
-  jerseyNumber: string;
+  jerseyName?: string;
+  jerseyNumber?: string;
   phone: string;
   referralCode?: string;
 };
@@ -58,8 +56,8 @@ export type IJerseyConfirmedOrder = {
 // WFG_KOL_BACKEND/API/JerseyOrder/validationSchema.js
 export type IJerseyOrderPayload = {
   name: string;
-  jerseyName: string;
-  jerseyNumber: string;
+  jerseyName?: string;
+  jerseyNumber?: string;
   phone: string;
   referralCode?: string;
   referrer?: string;

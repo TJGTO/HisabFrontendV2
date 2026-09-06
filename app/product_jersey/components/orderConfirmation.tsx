@@ -13,8 +13,6 @@ function OrderConfirmation({ order, timeline, onPlaceAnother }: OrderConfirmatio
 
   const details: { label: string; value: string }[] = [
     { label: "Name", value: customer.name },
-    { label: "Name on Jersey", value: customer.jerseyName },
-    { label: "Number on Jersey", value: customer.jerseyNumber },
     { label: "Phone Number", value: customer.phone },
     { label: "Color", value: summary.color },
     { label: "Fabric Type", value: summary.fabric },
@@ -23,6 +21,12 @@ function OrderConfirmation({ order, timeline, onPlaceAnother }: OrderConfirmatio
     { label: "Pickup", value: summary.pickupLabel },
     { label: "Payment Screenshot", value: screenshotName },
   ];
+  if (customer.jerseyName) {
+    details.push({ label: "Name on Jersey", value: customer.jerseyName });
+  }
+  if (customer.jerseyNumber) {
+    details.push({ label: "Number on Jersey", value: customer.jerseyNumber });
+  }
   if (customer.referralCode) {
     details.push({
       label: "Referral Code",
