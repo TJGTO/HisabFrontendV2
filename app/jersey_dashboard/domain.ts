@@ -1,11 +1,12 @@
 export type IJerseyOrderRow = {
   _id: string;
   name: string;
-  jerseyName: string;
-  jerseyNumber: string;
+  jerseyName?: string;
+  jerseyNumber?: string;
   phone: string;
   referralCode?: string;
   referrer?: string;
+  design: string;
   color: string;
   fabric: string;
   size: string;
@@ -22,6 +23,7 @@ export type IJerseyDashboardStats = {
   totalSold: number;
   premiumSold: number;
   standardSold: number;
+  soldByDesign: Record<string, number>;
   totalRevenue: number;
   totalOrders: number;
   orders: IJerseyOrderRow[];

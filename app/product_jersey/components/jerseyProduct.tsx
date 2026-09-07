@@ -42,6 +42,7 @@ function JerseyProduct() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const [design, setDesign] = useState<string>("");
   const [color, setColor] = useState<string>("");
   const [fabric, setFabric] = useState<string>("");
   const [size, setSize] = useState<string | null>(null);
@@ -62,11 +63,12 @@ function JerseyProduct() {
   const [matchedReferrer, setMatchedReferrer] = useState<string | undefined>(undefined);
   const [confirmedOrder, setConfirmedOrder] = useState<IJerseyConfirmedOrder | null>(null);
 
-  // seed the color/fabric pickers with the first option once config arrives
+  // seed the design/color/fabric pickers with the first option once config arrives
   useEffect(() => {
     if (config) {
+      if (!design) setDesign(config.designs[0]?.id ?? "");
       if (!color) setColor(config.colors[0]?.id ?? "");
-      if (!fabric) setFabric(config.fabrics[0]?.id ?? "");
+      if (!fabric) setFabric(config.designs[0]?.fabrics[0]?.id ?? "");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config]);
@@ -85,11 +87,13 @@ function JerseyProduct() {
     );
   }
 
-  const getJerseyImageSrc = (c: string) =>
-    config.imagePathTemplate.replace("{color}", c);
-
-  const selectedFabric = config.fabrics.find((f) => f.id === fabric) ?? config.fabrics[0];
+  const selectedDesign = config.designs.find((d) => d.id === design) ?? config.designs[0];
   const selectedColor = config.colors.find((c) => c.id === color) ?? config.colors[0];
+  const selectedFabric =
+    selectedDesign.fabrics.find((f) => f.id === fabric) ?? selectedDesign.fabrics[0];
+
+  const getJerseyImageSrc = (c: string) =>
+    selectedDesign.imagePathTemplate.replace("{color}", c);
   const isHomeDelivery = pickupLocation === "home-delivery";
   const deliveryFee = isHomeDelivery ? config.homeDeliveryFee : 0;
   const productSubtotal = selectedFabric.price * quantity;
@@ -168,6 +172,7 @@ function JerseyProduct() {
       phone: orderFormData.phone,
       referralCode: orderFormData.referralCode,
       referrer: matchedReferrer,
+      design: selectedDesign.label,
       color: selectedColor.label,
       fabric: selectedFabric.label,
       size: size ?? "",
@@ -189,7 +194,8 @@ function JerseyProduct() {
     setConfirmedOrder({
       customer: orderFormData,
       summary: {
-        color: selectedColor.label,
+        design: selectedDesign.label,
+      color: selectedColor.label,
         fabric: selectedFabric.label,
         size: size ?? "",
         quantity,
@@ -205,8 +211,9 @@ function JerseyProduct() {
   };
 
   const handlePlaceAnother = () => {
+    setDesign(config.designs[0]?.id ?? "");
     setColor(config.colors[0]?.id ?? "");
-    setFabric(config.fabrics[0]?.id ?? "");
+    setFabric(config.designs[0]?.fabrics[0]?.id ?? "");
     setSize(null);
     setQuantity(1);
     setPickupLocation(null);
@@ -235,12 +242,12 @@ function JerseyProduct() {
         <div className="lg:sticky lg:top-10 lg:self-start">
           <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-50 to-neutral-100 p-6">
             <span className="absolute left-5 top-5 rounded-full bg-[#F5B700] px-3 py-1 text-xs font-bold text-neutral-900">
-              From ₹{Math.min(...config.fabrics.map((f) => f.price))}
+              From ₹{Math.min(...config.designs.flatMap((d) => d.fabrics.map((f) => f.price)))}
             </span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={getJerseyImageSrc(color)}
-              alt={`WFG Home Jersey 2026 - ${color}, front and back`}
+              alt={`${selectedDesign.label} - ${color}, front and back`}
               className="h-full w-full object-contain transition-transform duration-300 hover:scale-105"
             />
           </div>
@@ -272,17 +279,40 @@ function JerseyProduct() {
             Matchday Collection
           </p>
           <h1 className="mt-1 text-3xl font-bold text-neutral-900 sm:text-4xl">
-            WFG Home Jersey 2026
+            {selectedDesign.label}
           </h1>
           <p className="mt-2 text-neutral-500">
-            Official Weekend Football Group yearly jersey
+            Official Weekend Football Group jersey
           </p>
+
+          {/* Design selector */}
+          <div className="mt-5">
+            <span className="text-sm font-semibold text-neutral-800">Design</span>
+            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {config.designs.map((d) => (
+                <button
+                  key={d.id}
+                  onClick={() => setDesign(d.id)}
+                  className={`rounded-xl border p-3 text-left transition-colors ${
+                    design === d.id
+                      ? "border-[#0E7C4A] bg-emerald-50"
+                      : "border-neutral-300 bg-white hover:border-neutral-400"
+                  }`}
+                >
+                  <span className="text-sm font-semibold text-neutral-800">{d.label}</span>
+                  <p className="mt-1 text-xs text-neutral-500">
+                    From ₹{Math.min(...d.fabrics.map((f) => f.price))}
+                  </p>
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* Fabric selector */}
           <div className="mt-5">
             <span className="text-sm font-semibold text-neutral-800">Fabric Type</span>
             <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {config.fabrics.map((f) => (
+              {selectedDesign.fabrics.map((f) => (
                 <button
                   key={f.id}
                   onClick={() => setFabric(f.id)}
@@ -541,7 +571,8 @@ function JerseyProduct() {
         submitting={submittingOrder}
         referralCodes={config.referralCodes}
         summary={{
-          color: selectedColor.label,
+          design: selectedDesign.label,
+      color: selectedColor.label,
           fabric: selectedFabric.label,
           size: size ?? "",
           quantity,

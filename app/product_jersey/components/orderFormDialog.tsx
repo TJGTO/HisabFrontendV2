@@ -77,7 +77,7 @@ function OrderFormDialog({
           <div>
             <h2 className="text-xl font-bold text-neutral-900">Your Details</h2>
             <p className="mt-1 text-sm text-neutral-500">
-              WFG Home Jersey 2026 &middot; {summary.color} &middot; {summary.fabric} &middot;
+              {summary.design} &middot; {summary.color} &middot; {summary.fabric} &middot;
               Size {summary.size} &middot; Qty {summary.quantity}
             </p>
             <p className="mt-1 text-sm text-neutral-500">Pickup: {summary.pickupLabel}</p>

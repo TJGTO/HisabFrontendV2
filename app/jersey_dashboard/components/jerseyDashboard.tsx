@@ -100,18 +100,37 @@ function JerseyDashboard() {
           ))}
         </div>
 
+        {/* Sold by design */}
+        {Object.keys(stats.soldByDesign).length > 0 && (
+          <div className="mt-4">
+            <p className="text-sm font-medium text-neutral-500">Sold by Design</p>
+            <div className="mt-2 grid grid-cols-2 gap-4 lg:grid-cols-4">
+              {Object.entries(stats.soldByDesign).map(([designLabel, sold]) => (
+                <div
+                  key={designLabel}
+                  className="rounded-2xl border border-neutral-200 bg-white p-5"
+                >
+                  <p className="text-sm font-medium text-neutral-500">{designLabel}</p>
+                  <p className="mt-2 text-3xl font-bold text-neutral-900">{sold}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Orders table */}
         <div className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-white">
           <div className="border-b border-neutral-200 px-5 py-4">
             <h2 className="text-base font-bold text-neutral-900">Order Details</h2>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] text-left text-sm">
+            <table className="w-full min-w-[1000px] text-left text-sm">
               <thead className="bg-neutral-100 text-neutral-600">
                 <tr>
                   <th className="px-4 py-3 font-medium">Date</th>
                   <th className="px-4 py-3 font-medium">Customer</th>
                   <th className="px-4 py-3 font-medium">Jersey</th>
+                  <th className="px-4 py-3 font-medium">Design</th>
                   <th className="px-4 py-3 font-medium">Color</th>
                   <th className="px-4 py-3 font-medium">Fabric</th>
                   <th className="px-4 py-3 font-medium">Size</th>
@@ -125,7 +144,7 @@ function JerseyDashboard() {
               <tbody>
                 {stats.orders.length === 0 && (
                   <tr>
-                    <td colSpan={11} className="px-4 py-8 text-center text-neutral-400">
+                    <td colSpan={12} className="px-4 py-8 text-center text-neutral-400">
                       No orders yet
                     </td>
                   </tr>
@@ -143,6 +162,7 @@ function JerseyDashboard() {
                       <p className="text-neutral-900">{order.jerseyName}</p>
                       <p className="text-xs text-neutral-500">#{order.jerseyNumber}</p>
                     </td>
+                    <td className="px-4 py-3 text-neutral-600">{order.design}</td>
                     <td className="px-4 py-3 text-neutral-600">{order.color}</td>
                     <td className="px-4 py-3 text-neutral-600">{order.fabric}</td>
                     <td className="px-4 py-3 text-neutral-600">{order.size}</td>

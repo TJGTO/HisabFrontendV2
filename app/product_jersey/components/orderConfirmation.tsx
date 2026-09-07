@@ -14,6 +14,7 @@ function OrderConfirmation({ order, timeline, onPlaceAnother }: OrderConfirmatio
   const details: { label: string; value: string }[] = [
     { label: "Name", value: customer.name },
     { label: "Phone Number", value: customer.phone },
+    { label: "Design", value: summary.design },
     { label: "Color", value: summary.color },
     { label: "Fabric Type", value: summary.fabric },
     { label: "Size", value: summary.size },
@@ -65,13 +66,11 @@ function OrderConfirmation({ order, timeline, onPlaceAnother }: OrderConfirmatio
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imageSrc}
-              alt="WFG Home Jersey 2026"
+              alt={summary.design}
               className="h-20 w-20 rounded-xl border border-neutral-200 object-contain"
             />
             <div>
-              <h2 className="text-base font-bold text-neutral-900">
-                WFG Home Jersey 2026
-              </h2>
+              <h2 className="text-base font-bold text-neutral-900">{summary.design}</h2>
               <p className="text-sm text-neutral-500">Order Summary</p>
             </div>
           </div>

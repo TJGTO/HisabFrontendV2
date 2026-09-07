@@ -34,6 +34,7 @@ export type IJerseyOrderFormData = {
 };
 
 export type IJerseyOrderSummary = {
+  design: string;
   color: string;
   fabric: string;
   size: string;
@@ -61,6 +62,7 @@ export type IJerseyOrderPayload = {
   phone: string;
   referralCode?: string;
   referrer?: string;
+  design: string;
   color: string;
   fabric: string;
   size: string;
@@ -83,14 +85,30 @@ export type IJerseyReferralCode = {
   groupshare: number;
 };
 
+export type IJerseyFabric = {
+  id: string;
+  label: string;
+  price: number;
+  description: string;
+};
+
+export type IJerseyDesign = {
+  id: string;
+  label: string;
+  // {color} placeholder — see getJerseyImageSrc in jerseyProduct.tsx
+  imagePathTemplate: string;
+  // price depends on design, so each design carries its own fabric pricing
+  fabrics: IJerseyFabric[];
+};
+
 // Shape of the "config" field on the jersey_buy_2026 document served by
-// GET /config/jerseyconfig — see WFG_KOL_BACKEND/scripts/seed_jersey_config.mongodb.js
+// GET /config/jerseyconfig — see
+// WFG_KOL_BACKEND/scripts/update_config_multi_design.mongodb.js
 export type IJerseyRemoteConfig = {
   sizes: string[];
   sizeChart: Record<string, { chest: string; length: string }>;
-  fabrics: { id: string; label: string; price: number; description: string }[];
+  designs: IJerseyDesign[];
   colors: { id: string; label: string; swatch: string }[];
-  imagePathTemplate: string;
   pickupLocations: { id: string; name: string; mapUrl: string }[];
   homeDeliveryFee: number;
   upiId: string;
